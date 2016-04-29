@@ -286,6 +286,12 @@ class Strategy:
 	# 	df.plot(x='price_range',y='strategy_profit')
 	# 	plt.show()
 
+	def graph_output(self, df): 
+		"""
+		Creates two lists from dataframe columns ready for graphing in C3.js 
+		"""
+		pass
+
 	def convert(self, model): 
 		pass
 		# Convert entire strategy to other price model
