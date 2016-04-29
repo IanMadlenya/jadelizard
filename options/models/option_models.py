@@ -264,16 +264,18 @@ class Strategy:
 			else:
 				return (self.S0/400)
 		scale = scale()
-		return np.arange(start,end,scale)
+		price_range = np.arange(start,end,scale)
+		index = np.arange(0,len(price_range), 1)
+		return index, price_range
 
-	def dataframe_setup(self, price_range):
+	def dataframe_setup(self, index, price_range):
 		"""
 		Maps the value of the strategy at each price interval.
 		Takes as an argument the range produced by define_range.
 		"""
-		df = pd.DataFrame(index=price_range) 
-		df['strategy_value']=None
-		df.strategy_value = df.index.map(lambda x: self.strategy_value(x)["profit"])
+		df = pd.DataFrame(index=index) 
+		df['price_range']=price_range
+		df['strategy_profit'] = df.price_range.map(lambda x: self.strategy_value(x)["profit"])
 		return df
 
 	# def plot_profit(self, df): 
@@ -281,7 +283,7 @@ class Strategy:
 	# 	Takes as an argument the dataframe created by dataframe_setup and creates
 	# 	a graph using matplotlib. 
 	# 	"""
-	# 	df.plot()
+	# 	df.plot(x='price_range',y='strategy_profit')
 	# 	plt.show()
 
 	def convert(self, model): 
@@ -299,7 +301,8 @@ if __name__ == "__main__":
 	# new_strategy.add_leg("short", "call", 110, 1)
 	# new_strategy.add_leg("long", "put", 70, 1.5)
 	# new_strategy.add_leg("long", "call", 130, 1.5)
-	df = new_strategy.dataframe_setup(new_strategy.define_range())
+	cols = new_strategy.define_range()
+	df = new_strategy.dataframe_setup(cols[0], cols[1])
 	elapsed = time.time() - time1
 	print(elapsed)
 	print(df)
@@ -318,6 +321,9 @@ if __name__ == "__main__":
 	# df = a.dataframe_setup(price_range)
 	# print(df)
 	# a.plot_profit(df)
+
+
+
 
 
 
