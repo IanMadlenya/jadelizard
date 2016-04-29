@@ -2,38 +2,43 @@ import time
 import pandas as pd
 import numpy as np
 # import matplotlib.pyplot as plt
+import uuid
 from black_scholes_pricing import BlackScholes
 from binomial_pricing import BinomialTree
 
 """
-4/26
-
 First priority
-- Need to make r, sigma, q, S0 attributes of the Strategy class so that they are same for all options 
-	- Either make them class attributes in the init - probably the better method
-	- or adjust add_leg method so that only the first leg takes all inputs and the rest fetch values
-- "Remove Leg" function
-- Optimize attribute: if optimize = "speed", run fewer increments. if optimize = "detail", run more incrementss
 - CONVERT method to convert strategy from one price model to another
 - Create user input and limits for # steps, exercise type for Binomial model 
 
 - Fix Binomial theta
 - Work on scale for graphing - needs to take into account price model and the number of options in the strategy 
 
-
-
 - Set up Controller
 
 Second
 - Improve speed of Binomial method if possible and optimize scale 
 - Integrate basic controller 
-- Make Web app
 
 Luxury Goals / New Features
 - Create Default Strategy Templates 
 - Eliminate tracking error in BS models if possible
 - Implied Volatility Calculator
 - Exponentially Weighted Historical volatility (vs. Equally weighted h.v.)
+
+"""
+
+"""
+Speed Optimization and Increments: 
+- "Speed" vs "Detail" setting 
+- Number of Expiration Dates: if no recalculations have to be made, speed is almost 100 times faster 
+- Pricing Model: Black-Scholes is approx. 9x faster than Binomial Tree 
+- Number of Options in the strategy 
+- Keep track of number of expiration dates in the strategy in a list to prioritize speed? 
+- # of steps in Binomial Tree method - 10 steps is 5x faster than 25 steps
+
+Goal: rank all the different combinations of factors and come up with an algorithm that sets
+the scale based on all the different inputs. Max latency for any calculation should be 1 second. 
 
 """
 
@@ -98,32 +103,49 @@ class Strategy:
 	Underlying price, risk free rate, dividend rate, and volatility must be identical 
 	for all options in the strategy. 
 	"""
-	def __init__(self, model):
+	def __init__(self, model, S0, q, r, sigma):
 		self.legs = []
 		self.model = model
+		self.S0 = S0
+		self.q = q
+		self.r = r
+		self.sigma = sigma
 
-	def data(self, option, S0, T): 
+	def data(self, option): 
 		"""
 		Gets price and Greek values for an option. 
 		"""
-		return self.model(option, S0, T).data()
+		return self.model(option, self.S0, option.T).data()
 
-	def price(self, option, new_underlying_price, new_T): 
+	def price(self, option, new_underlying_price, new_T):
+		"""
+		For recalculating price of options in strategies with multiple expirations.
+		"""
 		return self.model(option, new_underlying_price, new_T).price() 
 
-	def add_leg(self, position, kind, S0, K, T, q, r, sigma):
+	def add_leg(self, position, kind, K, T):
 		"""
-		Adds options to the strategy.
+		Adds options to the strategy. 
+		Each leg is a dictionary with the original Option object, the original price and greek values
+		calculated with the set pricing model, its expiration (which is used to sort the list of legs), 
+		and a UUID. 
 		"""
 		def compare(item): 
 			return item["exp"]
-		new_leg = Option(position, kind, S0, K, T, q, r, sigma)
-		data = self.data(new_leg, S0, T)
+		new_leg = Option(position, kind, self.S0, K, T, self.q, self.r, self.sigma)
+		data = self.data(new_leg)
 		time_exp = T
-		self.legs.append({"option":new_leg, "data":data, "exp":time_exp})
+		self.legs.append({"option":new_leg, "data":data, "exp":time_exp, "id":str(uuid.uuid4())})
 		self.legs = sorted(self.legs, key=compare)
+		# Need to remove add functionality in web app if 6 legs present
 
-	def strategy_value(self, underlying_price): 
+	def remove_leg(self, _id):
+		for each in self.legs: 
+			if each["id"] == _id: 
+				self.legs.remove(each)
+				return "Leg removed"
+
+	def strategy_value(self, new_underlying_price): 
 		"""
 		This function returns three values: 
 
@@ -150,14 +172,14 @@ class Strategy:
 		for each in self.legs: 
 			original_price = each["data"]["price"]
 			if each["exp"] == first_exp: 
-				profit = each["option"].option_profit(underlying_price, original_price)
+				profit = each["option"].option_profit(new_underlying_price, original_price)
 				total_value += profit
 				total_profit += profit
 			else: 
 				position = each["option"].position 
 				if position == "long":
 					new_T = each["exp"]-first_exp
-					new_price = self.price(each["option"], underlying_price, new_T)
+					new_price = self.price(each["option"], new_underlying_price, new_T)
 					total_value += new_price
 					remaining_options += new_price
 					total_profit += new_price - original_price
@@ -198,6 +220,7 @@ class Strategy:
 		theta=0
 		vega=0
 		for each in self.legs: 
+			print(each["id"])
 			position = each["option"].position
 			if position == "long":
 				delta+=each["data"]["delta"]
@@ -219,37 +242,40 @@ class Strategy:
 		"vega":vega
 		}
 
-	def define_range(self, underlying_price): 
+	def define_range(self): 
 		"""
-		Creates the index (x-axis) values for the strategy.
+		Creates the index (x-axis) values for the strategy - 
+		from 1/100 to 2x the underlying value.
 		The scale of the axis depends on the value of the underlying.
 		"""
-		start = underlying_price*1e-2
-		end = underlying_price*2
+		start = self.S0*1e-2
+		end = self.S0*2
 		def scale(): 
-			if underlying_price<20:
+			if self.S0<20:
 				return .01
-			elif underlying_price<100: 
+			elif self.S0<100: 
 				return .05
-			elif underlying_price<500: 
+			elif self.S0<500: 
 				return .25
-			elif underlying_price<1000:
+			elif self.S0<1000:
 				return .50
-			elif underlying_price<5000:
+			elif self.S0<5000:
 				return 2.50
 			else:
-				return False 
+				return (self.S0/400)
 		scale = scale()
-		return np.arange(start,end,scale)
+		price_range = np.arange(start,end,scale)
+		index = np.arange(0,len(price_range), 1)
+		return index, price_range
 
-	def dataframe_setup(self, price_range):
+	def dataframe_setup(self, index, price_range):
 		"""
 		Maps the value of the strategy at each price interval.
 		Takes as an argument the range produced by define_range.
 		"""
-		df = pd.DataFrame(index=price_range) 
-		df['strategy_value']=None
-		df.strategy_value = df.index.map(lambda x: self.strategy_value(x)["profit"])
+		df = pd.DataFrame(index=index) 
+		df['price_range']=price_range
+		df['strategy_profit'] = df.price_range.map(lambda x: self.strategy_value(x)["profit"])
 		return df
 
 	# def plot_profit(self, df): 
@@ -257,7 +283,7 @@ class Strategy:
 	# 	Takes as an argument the dataframe created by dataframe_setup and creates
 	# 	a graph using matplotlib. 
 	# 	"""
-	# 	df.plot()
+	# 	df.plot(x='price_range',y='strategy_profit')
 	# 	plt.show()
 
 	def convert(self, model): 
@@ -266,11 +292,17 @@ class Strategy:
 
 if __name__ == "__main__":
 	time1 = time.time()
-	new_strategy = Strategy(BinomialTree)
-	new_strategy.add_leg("long", "call", 100, 100, 2, 0, .005, .25)
-	new_strategy.add_leg("short", "call", 100, 100, 1, 0, .005, .25)
-	price_range = new_strategy.define_range(100)
-	df = new_strategy.dataframe_setup(price_range)
+	new_strategy = Strategy(BlackScholes, 100, 0, .005, .25)
+	# Calendar spread with calls
+	new_strategy.add_leg("long", "call", 100, 2)
+	new_strategy.add_leg("short", "call", 100, 1)
+	# Double Diagonal
+	# new_strategy.add_leg("short", "put", 90, 1)
+	# new_strategy.add_leg("short", "call", 110, 1)
+	# new_strategy.add_leg("long", "put", 70, 1.5)
+	# new_strategy.add_leg("long", "call", 130, 1.5)
+	cols = new_strategy.define_range()
+	df = new_strategy.dataframe_setup(cols[0], cols[1])
 	elapsed = time.time() - time1
 	print(elapsed)
 	print(df)
@@ -289,6 +321,8 @@ if __name__ == "__main__":
 	# df = a.dataframe_setup(price_range)
 	# print(df)
 	# a.plot_profit(df)
+
+
 
 
 

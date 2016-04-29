@@ -6,6 +6,16 @@ var render = function(templateSelector, dropZone){
 	};
 };
 
+var demoCallback = function demoCallback(data){
+	var prices = data.data.map(function(item){
+		return item[0];
+	});
+	var strategyData = data.data.map(function(item){
+		return item[1];
+	});
+	
+};
+
 $(document).ready(function(){
 	render('#_nav', "#navbar_div")({});
 	// same as: 
@@ -13,6 +23,7 @@ $(document).ready(function(){
 	// var rendered = Mustache.render(template, {});
 	// $("#navbar_div").html(rendered);
 	render("#_strategy_data", "#data_div")({});
+	// make ajax request for demo view here
 
 
 });
