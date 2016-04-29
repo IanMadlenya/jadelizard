@@ -12,6 +12,9 @@ $(document).ready(function(){
 	// var template = $('#_nav').html();
 	// var rendered = Mustache.render(template, {});
 	// $("#navbar_div").html(rendered);
+	render("#_strategy_data", "#data_div")({});
+
+
 });
 
 

@@ -6,6 +6,7 @@
 		<title>Options Home</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="{% static 'c3/c3.min.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'options/css/base.css' %}">
 		<script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" 
 		crossorigin="anonymous"></script>
 		<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.1/mustache.min.js"></script>
@@ -19,23 +20,26 @@
 	<body>
 
 		<div class="container">
+
 			<div id="navbar_div">
 			</div>
 
 			<div class="row">		
-				<div class="col-sm-11">
+				<div class="col-sm-12">
 					<div id="d3_chart"></div>
 				</div>
 			</div> 
 
-			<div id="data_div">
+			<div id="data_div" style="margin-left:2em">
 			</div>
+
 		</div>
 
 		{% include "options/_nav.html"%}
+		{% include "options/_strategy_data.html"%}
+
 
 		{% comment %}
-		{% include "options/_strategy_data.html"%}
 		{% include "options/_chart.html"%}
 		{% endcomment %}
 
