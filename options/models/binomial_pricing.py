@@ -1,6 +1,6 @@
 from numpy import exp
 import numbers
-from basepricemodel import BasePriceModel
+from .basepricemodel import BasePriceModel
 
 # Need to fix greeks and make sure they are at least ballpark Tching Binomial tree values on BlackScholes calc
 # or values of a dedicated CRR tree calc

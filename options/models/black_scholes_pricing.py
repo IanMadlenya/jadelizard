@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.stats as ss
 from scipy import exp, log
-from basepricemodel import BasePriceModel
+from .basepricemodel import BasePriceModel
 
 """
 

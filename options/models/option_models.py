@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 # import matplotlib.pyplot as plt
 import uuid
-from black_scholes_pricing import BlackScholes
-from binomial_pricing import BinomialTree
+from .black_scholes_pricing import BlackScholes
+from .binomial_pricing import BinomialTree
 
 """
 First priority
@@ -245,7 +245,7 @@ class Strategy:
 	def define_range(self): 
 		"""
 		Creates the index (x-axis) values for the strategy - 
-		from 1/100 to 2x the underlying value.
+		from 0 to 2x the underlying value.
 		The scale of the axis depends on the value of the underlying.
 		"""
 		end = int(self.S0*2)+1
@@ -255,7 +255,7 @@ class Strategy:
 			elif self.S0<100: 
 				return .05
 			elif self.S0<500: 
-				return .25
+				return 1
 			elif self.S0<1000:
 				return .50
 			elif self.S0<5000:
@@ -263,7 +263,7 @@ class Strategy:
 			else:
 				return (self.S0/400)
 		scale = scale()
-		price_range = np.arange(start,end,scale)
+		price_range = np.arange(0,end,scale)
 		index = np.arange(0,len(price_range), 1)
 		return index, price_range
 
@@ -285,11 +285,17 @@ class Strategy:
 	# 	df.plot(x='price_range',y='strategy_profit')
 	# 	plt.show()
 
-	def graph_output(self, df): 
+	def graph_list_output(self, df): 
 		"""
-		Creates two lists from dataframe columns ready for graphing in C3.js 
+		Creates two lists from dataframe columns for graphing in C3
 		"""
-		pass
+		return list(df['price_range']), list(df['strategy_profit'])
+
+	def graph_json_output(self, df): 
+		"""
+		Returns JSON with price:value dictionaries for graphing in C3
+		"""
+		return df.to_json(orient='records')
 
 	def convert(self, model): 
 		pass
