@@ -248,8 +248,7 @@ class Strategy:
 		from 1/100 to 2x the underlying value.
 		The scale of the axis depends on the value of the underlying.
 		"""
-		start = self.S0*1e-2
-		end = self.S0*2
+		end = int(self.S0*2)+1
 		def scale(): 
 			if self.S0<20:
 				return .01
