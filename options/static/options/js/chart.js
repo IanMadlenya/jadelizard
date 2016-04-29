@@ -19,7 +19,8 @@ var d3_chart = c3.generate({
 		},
 
 		colors: {
-			Profit: '#15e596',
+			// Profit: '#86c26f',
+			Profit: '#275636',
 		},
 
 		selection: {
@@ -31,7 +32,7 @@ var d3_chart = c3.generate({
 	axis: {
 		x: {
 			label: {
-				text: "Price of Underlying Security at First Expiration",
+				text: "Value of Underlying Instrument at First Expiration",
 				position: "outer-middle"
 			},
 			tick: {
@@ -63,6 +64,13 @@ var d3_chart = c3.generate({
 		show: false,
 		select: {
 			r: 4
+		}
+	},
+
+	tooltip: {
+		format: {
+			title: function(x) {return "Underlying Instrument Value $" + x},
+			value: function (value) {return "$" + value.toFixed(2)},
 		}
 	},
 

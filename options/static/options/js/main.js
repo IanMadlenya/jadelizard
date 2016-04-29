@@ -6,16 +6,14 @@ var render = function(templateSelector, dropZone){
 	};
 };
 
-var demoCallback = function demoCallback(data){
-	var prices = data.data.map(function(item){
-		return item[0];
-	});
-	var strategyData = data.data.map(function(item){
-		return item[1];
-	});
-	
-};
+var strategyData = function(options){
+        $.ajax({
+            url: "/graphdata/",
+            method: "GET"
+        }).done(options.callback);
+    }
 
+// render navbar and strategy data 
 $(document).ready(function(){
 	render('#_nav', "#navbar_div")({});
 	// same as: 

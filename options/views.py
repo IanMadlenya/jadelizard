@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.generic import View
-# from models import option_models
-# from option_models import Strategy, Option
+from options.models import *
 
 class Index(View): 
 	template_name = "options/base.html"
@@ -17,5 +16,6 @@ class GraphData(View):
 		cols = new_strategy.define_range()
 		df = new_strategy.dataframe_setup(cols[0], cols[1])
 		df_json = df.to_json(orient='records')
+		return JsonResponse({'data':df_json})
 
 				
