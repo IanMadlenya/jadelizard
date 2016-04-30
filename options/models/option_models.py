@@ -276,8 +276,8 @@ class Strategy:
 		"""
 		Returns JSON copy of dataframe for graphing in C3
 		"""
-		cols = new_strategy.define_range()
-		df = new_strategy.dataframe_setup(cols[0], cols[1])
+		cols = self.define_range()
+		df = self.dataframe_setup(cols[0], cols[1])
 		return df.to_json(orient='records')
 
 	def convert(self, model): 
