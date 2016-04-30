@@ -283,14 +283,6 @@ class Strategy:
 		df['strategy_profit'] = df.price_range.map(lambda x: self.strategy_value(x)["profit"])
 		return df
 
-	# def plot_profit(self, df): 
-	# 	"""
-	# 	Takes as an argument the dataframe created by dataframe_setup and creates
-	# 	a graph using matplotlib. 
-	# 	"""
-	# 	df.plot(x='price_range',y='strategy_profit')
-	# 	plt.show()
-
 	def graph_list_output(self, df): 
 		"""
 		Creates two lists from dataframe columns for graphing in C3
@@ -307,24 +299,23 @@ class Strategy:
 		pass
 		# Convert entire strategy to other price model
 
-if __name__ == "__main__":
-	time1 = time.time()
-	new_strategy = Strategy(BlackScholes, 100, 0, .005, .25)
-	# Calendar spread with calls
-	new_strategy.add_leg("long", "call", 100, 2)
-	new_strategy.add_leg("short", "call", 100, 1)
-	# Double Diagonal
-	# new_strategy.add_leg("short", "put", 90, 1)
-	# new_strategy.add_leg("short", "call", 110, 1)
-	# new_strategy.add_leg("long", "put", 70, 1.5)
-	# new_strategy.add_leg("long", "call", 130, 1.5)
-	cols = new_strategy.define_range()
-	df = new_strategy.dataframe_setup(cols[0], cols[1])
-	elapsed = time.time() - time1
-	print(elapsed)
-	print(df)
-	# new_strategy.plot_profit(df)
-
+# if __name__ == "__main__":
+# 	time1 = time.time()
+# 	new_strategy = Strategy(BlackScholes, 100, 0, .005, .25)
+# 	# Calendar spread with calls
+# 	# new_strategy.add_leg("long", "call", 100, 2)
+# 	# new_strategy.add_leg("short", "call", 100, 1)
+# 	# Double Diagonal
+# 	# new_strategy.add_leg("short", "put", 90, 1)
+# 	# new_strategy.add_leg("short", "call", 110, 1)
+# 	# new_strategy.add_leg("long", "put", 70, 1.5)
+# 	# new_strategy.add_leg("long", "call", 130, 1.5)
+# 	cols = new_strategy.define_range()
+# 	df = new_strategy.dataframe_setup(cols[0], cols[1])
+# 	elapsed = time.time() - time1
+# 	print(elapsed)
+# 	print(df)
+	
 	#df.loc()[100]
 
 

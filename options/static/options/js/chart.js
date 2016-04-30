@@ -19,7 +19,7 @@ var d3_chart = c3.generate({
 		},
 
 		colors: {
-			strategy_profit: '#275636',
+			strategy_profit: '#f2c83d',
 		},
 
 		selection: {
@@ -35,13 +35,11 @@ var d3_chart = c3.generate({
 				position: "inner-middle"
 			},
 			tick: {
-				// culling: {
-				// 	max:5
-				// },
-				// count: 10,
-				// fit: true,
-				values: [0, 50, 100, 150],
-				format: d3.format("$"), 
+				culling: {
+					max:10
+				},
+				count: 40,
+				format: function(value) {return "$" + value.toFixed(2)},
 			},
 		},
 		y: {
