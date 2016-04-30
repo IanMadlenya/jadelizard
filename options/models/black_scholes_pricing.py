@@ -90,9 +90,6 @@ class BlackScholes(BasePriceModel):
 		}
 
 	def price(self): 
-		# return {
-		# 	"price":self.calculate_price()
-		# }
 		return self.calculate_price()
 
 

@@ -1,7 +1,6 @@
 import time 
 import pandas as pd
 import numpy as np
-# import matplotlib.pyplot as plt
 import uuid
 from .black_scholes_pricing import BlackScholes
 from .binomial_pricing import BinomialTree
@@ -10,8 +9,6 @@ from .binomial_pricing import BinomialTree
 First priority
 - CONVERT method to convert strategy from one price model to another
 - Fix Binomial theta
-- Need one function that runs all previous functions after strategy is created and legs are added, and spits out JSON
-(calls define_range, dataframe_setup, graph_json_output, strategy_value)
 
 Luxury Goals / New Features
 - Create Default Strategy Templates 
@@ -23,6 +20,8 @@ Luxury Goals / New Features
 
 class Option: 
 	"""
+	Option objects are the building blocks ("legs") for Options Strategies. 
+
 	Position - "long" or "short"
 	Kind - "call" or "put"
 	S0 - underlying price of security
@@ -281,9 +280,16 @@ class Strategy:
 		return df.to_json(orient='records')
 
 	def convert(self, model): 
-		pass
-		# Convert entire strategy to other price model
-
+		""" 
+		Converts the strategy to the price model given by the argument. 
+		Exercise type and steps are reset to default values. 
+		"""
+		self.model = model
+		self.exer_type=None
+		self.steps=None
+		for each in self.legs: 
+			option = each["option"]
+			each["data"] = self.data(option)
 
 # class LongCall(Strategy): 
 # 	def __init__(self): 
