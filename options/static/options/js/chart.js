@@ -32,11 +32,16 @@ var d3_chart = c3.generate({
 		x: {
 			label: {
 				text: "Value of Underlying Instrument at First Expiration",
-				position: "outer-middle"
+				position: "inner-middle"
 			},
 			tick: {
-				count: 11,
-				format: d3.format("$")
+				// culling: {
+				// 	max:5
+				// },
+				// count: 10,
+				// fit: true,
+				values: [0, 50, 100, 150],
+				format: d3.format("$"), 
 			},
 		},
 		y: {
@@ -54,6 +59,7 @@ var d3_chart = c3.generate({
 		x: {
 			lines: [
 				{value: 0},
+      			{value: 100, text: 'S0', position: 'start'},
 			]
 		},
 		y: {

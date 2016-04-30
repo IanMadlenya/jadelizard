@@ -250,18 +250,24 @@ class Strategy:
 		"""
 		end = int(self.S0*2)+1
 		def scale(): 
-			if self.S0<20:
-				return .01
-			elif self.S0<100: 
+			if self.S0<5: 
 				return .05
-			elif self.S0<500: 
-				return 1
-			elif self.S0<1000:
+			elif self.S0<10: 
+				return .10
+			elif self.S0<20: 
+				return .20
+			elif self.S0<50: 
+				return .25
+			elif self.S0<100: 
 				return .50
-			elif self.S0<5000:
+			elif self.S0<200: 
+				return 1
+			elif self.S0<500: 
 				return 2.50
+			elif self.S0<1000: 
+				return 5
 			else:
-				return (self.S0/400)
+				return False
 		scale = scale()
 		price_range = np.arange(0,end,scale)
 		index = np.arange(0,len(price_range), 1)
