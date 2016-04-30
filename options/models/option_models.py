@@ -9,36 +9,15 @@ from .binomial_pricing import BinomialTree
 """
 First priority
 - CONVERT method to convert strategy from one price model to another
-- Create user input and limits for # steps, exercise type for Binomial model 
 - Fix Binomial theta
 - Need one function that runs all previous functions after strategy is created and legs are added, and spits out JSON
 (calls define_range, dataframe_setup, graph_json_output, strategy_value)
-
-- Set up Controller
-
-Second
-- Improve speed of Binomial method if possible and optimize scale 
-- Integrate basic controller 
 
 Luxury Goals / New Features
 - Create Default Strategy Templates 
 - Eliminate tracking error in BS models if possible
 - Implied Volatility Calculator
 - Exponentially Weighted Historical volatility (vs. Equally weighted h.v.)
-
-"""
-
-"""
-Speed Optimization and Increments: 
-- "Speed" vs "Detail" setting 
-- Number of Expiration Dates: if no recalculations have to be made, speed is almost 100 times faster 
-- Pricing Model: Black-Scholes is approx. 9x faster than Binomial Tree 
-- Number of Options in the strategy 
-- Keep track of number of expiration dates in the strategy in a list to prioritize speed? 
-- # of steps in Binomial Tree method - 10 steps is 5x faster than 25 steps
-
-Goal: rank all the different combinations of factors and come up with an algorithm that sets
-the scale based on all the different inputs. Max latency for any calculation should be 1 second. 
 
 """
 
@@ -110,7 +89,7 @@ class Strategy:
 		self.q = q
 		self.r = r
 		self.sigma = sigma
-		self.exer_type='european' if self.model==BlackScholes else None
+		self.exer_type = None
 		self.steps = None
 
 	def binomial_settings(self, exer_type, steps):
@@ -260,21 +239,21 @@ class Strategy:
 		"""
 		end = int(self.S0*2)+1
 		def scale(): 
-			if self.S0<5: 
+			if self.S0<=5: 
 				return .05
-			elif self.S0<10: 
+			elif self.S0<=10: 
 				return .10
-			elif self.S0<20: 
+			elif self.S0<=20: 
 				return .20
-			elif self.S0<50: 
+			elif self.S0<=50: 
 				return .25
-			elif self.S0<100: 
+			elif self.S0<=100: 
 				return .50
-			elif self.S0<200: 
+			elif self.S0<=200: 
 				return 1
-			elif self.S0<500: 
+			elif self.S0<=500: 
 				return 2.50
-			elif self.S0<1000: 
+			elif self.S0<=1000: 
 				return 5
 			else:
 				return False
@@ -304,25 +283,6 @@ class Strategy:
 	def convert(self, model): 
 		pass
 		# Convert entire strategy to other price model
-
-# if __name__ == "__main__":
-# 	time1 = time.time()
-# 	new_strategy = Strategy(BlackScholes, 100, 0, .005, .25)
-# 	# Calendar spread with calls
-# 	# new_strategy.add_leg("long", "call", 100, 2)
-# 	# new_strategy.add_leg("short", "call", 100, 1)
-# 	# Double Diagonal
-# 	# new_strategy.add_leg("short", "put", 90, 1)
-# 	# new_strategy.add_leg("short", "call", 110, 1)
-# 	# new_strategy.add_leg("long", "put", 70, 1.5)
-# 	# new_strategy.add_leg("long", "call", 130, 1.5)
-# 	cols = new_strategy.define_range()
-# 	df = new_strategy.dataframe_setup(cols[0], cols[1])
-# 	elapsed = time.time() - time1
-# 	print(elapsed)
-# 	print(df)
-	
-	#df.loc()[100]
 
 
 # class LongCall(Strategy): 

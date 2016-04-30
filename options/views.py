@@ -12,7 +12,7 @@ class Index(View):
 
 class GraphData(View): 
 	def get(self, request): 
-		new_strategy = Strategy(BinomialTree, 100, .05, .005, .50)
+		new_strategy = Strategy(BinomialTree, 85, .05, .005, .50)
 		new_strategy.binomial_settings('american', 25)
 		# new_strategy.add_leg("long", "call", 100, 2)
 		# new_strategy.add_leg("short", "call", 100, 1)

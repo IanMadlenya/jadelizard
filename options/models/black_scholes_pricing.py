@@ -26,7 +26,7 @@ from .basepricemodel import BasePriceModel
 """
 
 class BlackScholes(BasePriceModel): 
-	def __init__(self, option, S0, T):
+	def __init__(self, option, S0, T, exer_type='european', steps=False):
 		super().__init__(option, S0, T) 
 		self.d1 = self.d1()
 		self.d2 = self.d2()
