@@ -10,9 +10,9 @@ from .binomial_pricing import BinomialTree
 First priority
 - CONVERT method to convert strategy from one price model to another
 - Create user input and limits for # steps, exercise type for Binomial model 
-
 - Fix Binomial theta
-- Work on scale for graphing - needs to take into account price model and the number of options in the strategy 
+- Need one function that runs all previous functions after strategy is created and legs are added, and spits out JSON
+(calls define_range, dataframe_setup, graph_json_output, strategy_value)
 
 - Set up Controller
 
@@ -110,18 +110,28 @@ class Strategy:
 		self.q = q
 		self.r = r
 		self.sigma = sigma
+		self.exer_type='european' if self.model==BlackScholes else None
+		self.steps = None
+
+	def binomial_settings(self, exer_type, steps):
+		"""
+		Sets exercise type and number of steps for binomial tree
+		"""
+		if self.model==BinomialTree:
+			self.exer_type=exer_type
+			self.steps=steps
 
 	def data(self, option): 
 		"""
 		Gets price and Greek values for an option. 
 		"""
-		return self.model(option, self.S0, option.T).data()
+		return self.model(option, self.S0, option.T, exer_type=self.exer_type, steps=self.steps).data()
 
 	def price(self, option, new_underlying_price, new_T):
 		"""
 		For recalculating price of options in strategies with multiple expirations.
 		"""
-		return self.model(option, new_underlying_price, new_T).price() 
+		return self.model(option, new_underlying_price, new_T, exer_type=self.exer_type, steps=self.steps).price() 
 
 	def add_leg(self, position, kind, K, T):
 		"""
@@ -283,16 +293,12 @@ class Strategy:
 		df['strategy_profit'] = df.price_range.map(lambda x: self.strategy_value(x)["profit"])
 		return df
 
-	def graph_list_output(self, df): 
+	def run_models(self): 
 		"""
-		Creates two lists from dataframe columns for graphing in C3
+		Returns JSON copy of dataframe for graphing in C3
 		"""
-		return list(df['price_range']), list(df['strategy_profit'])
-
-	def graph_json_output(self, df): 
-		"""
-		Returns JSON with price:value dictionaries for graphing in C3
-		"""
+		cols = new_strategy.define_range()
+		df = new_strategy.dataframe_setup(cols[0], cols[1])
 		return df.to_json(orient='records')
 
 	def convert(self, model): 
