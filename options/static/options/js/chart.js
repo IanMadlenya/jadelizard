@@ -1,7 +1,3 @@
-
-
-
-
 var d3_chart = c3.generate({
 
 	data: {
@@ -85,30 +81,22 @@ var d3_chart = c3.generate({
 		show: false,
 	},
 
-	// zoom: {
-	// 	enabled: true,
-	// 	rescaled: true,
-	// 	extent: [1,50]
-	// },
-
 	subchart: {
 		show: true,
 		size: {
 			height:35
 		}
 	},
-	zoom: {
-		enabled: true
-	},
 
 	area: {
 		zerobased: false
 	},
 
-	bindto: "#d3_chart", 
-	size: {
+		size: {
 		height:500
 	},
+
+	bindto: "#d3_chart", 
 
 });
 

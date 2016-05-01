@@ -7,8 +7,7 @@ from .binomial_pricing import BinomialTree
 
 """
 First priority
-- CONVERT method to convert strategy from one price model to another
-- Fix Binomial theta
+- Fix Binomial theta (and gamma?)
 
 Luxury Goals / New Features
 - Create Default Strategy Templates 
@@ -208,7 +207,6 @@ class Strategy:
 		theta=0
 		vega=0
 		for each in self.legs: 
-			print(each["id"])
 			position = each["option"].position
 			if position == "long":
 				delta+=each["data"]["delta"]

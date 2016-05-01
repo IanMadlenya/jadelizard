@@ -4,11 +4,26 @@ from django.views.generic import View
 from .models import (
 	Strategy, Option, BlackScholes, BinomialTree, InputCalc
 )
+from options.forms import NewStrategyForm, LegsForm
 
 class Index(View): 
 	template_name = "options/base.html"
 	def get(self, request): 
 		return render(request, self.template_name)
+
+class CreateStrategy: 
+	def get(self, request): 
+		context={"new_strategy_form":NewStrategyForm()}
+		pass
+
+class AddLeg: 
+	def get(self, request): 
+		pass
+
+class DeleteLeg: 
+	def get(self, request): 
+		pass
+
 
 class GraphData(View): 
 	def get(self, request): 
