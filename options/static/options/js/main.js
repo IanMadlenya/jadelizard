@@ -6,27 +6,41 @@ var render = function(templateSelector, dropZone){
 	};
 };
 
-var demoCallback = function demoCallback(data){
-	var prices = data.data.map(function(item){
-		return item[0];
+// Sends JSON data to C3 to be graphed
+var strategyData = function(options){
+		$.ajax({
+			url: "/options/graphdata",
+			method: "GET",
+			dataType: "json",
+			success: function(data){
+				data = JSON.parse(data);
+				d3_chart.load({
+					json: data,
+					keys: {
+						value: ['price_range', 'strategy_profit']
+					},
+				});
+			}
 	});
-	var strategyData = data.data.map(function(item){
-		return item[1];
-	});
-	
 };
 
 $(document).ready(function(){
+	// render navbar
 	render('#_nav', "#navbar_div")({});
-	// same as: 
-	// var template = $('#_nav').html();
-	// var rendered = Mustache.render(template, {});
-	// $("#navbar_div").html(rendered);
 	render("#_strategy_data", "#data_div")({});
-	// make ajax request for demo view here
-
+	// run function to send strategy data to C3
+	strategyData()
 
 });
+
+
+
+
+
+
+
+
+
 
 
 

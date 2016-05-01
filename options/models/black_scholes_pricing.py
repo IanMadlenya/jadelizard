@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.stats as ss
 from scipy import exp, log
-from basepricemodel import BasePriceModel
+from .basepricemodel import BasePriceModel
 
 """
 
@@ -26,7 +26,7 @@ from basepricemodel import BasePriceModel
 """
 
 class BlackScholes(BasePriceModel): 
-	def __init__(self, option, S0, T):
+	def __init__(self, option, S0, T, exer_type='european', steps=False):
 		super().__init__(option, S0, T) 
 		self.d1 = self.d1()
 		self.d2 = self.d2()
@@ -90,9 +90,6 @@ class BlackScholes(BasePriceModel):
 		}
 
 	def price(self): 
-		# return {
-		# 	"price":self.calculate_price()
-		# }
 		return self.calculate_price()
 
 

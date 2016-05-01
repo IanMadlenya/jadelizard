@@ -1,24 +1,13 @@
 import time 
 import pandas as pd
 import numpy as np
-# import matplotlib.pyplot as plt
 import uuid
-from black_scholes_pricing import BlackScholes
-from binomial_pricing import BinomialTree
+from .black_scholes_pricing import BlackScholes
+from .binomial_pricing import BinomialTree
 
 """
 First priority
-- CONVERT method to convert strategy from one price model to another
-- Create user input and limits for # steps, exercise type for Binomial model 
-
-- Fix Binomial theta
-- Work on scale for graphing - needs to take into account price model and the number of options in the strategy 
-
-- Set up Controller
-
-Second
-- Improve speed of Binomial method if possible and optimize scale 
-- Integrate basic controller 
+- Fix Binomial theta (and gamma?)
 
 Luxury Goals / New Features
 - Create Default Strategy Templates 
@@ -28,22 +17,10 @@ Luxury Goals / New Features
 
 """
 
-"""
-Speed Optimization and Increments: 
-- "Speed" vs "Detail" setting 
-- Number of Expiration Dates: if no recalculations have to be made, speed is almost 100 times faster 
-- Pricing Model: Black-Scholes is approx. 9x faster than Binomial Tree 
-- Number of Options in the strategy 
-- Keep track of number of expiration dates in the strategy in a list to prioritize speed? 
-- # of steps in Binomial Tree method - 10 steps is 5x faster than 25 steps
-
-Goal: rank all the different combinations of factors and come up with an algorithm that sets
-the scale based on all the different inputs. Max latency for any calculation should be 1 second. 
-
-"""
-
 class Option: 
 	"""
+	Option objects are the building blocks ("legs") for Options Strategies. 
+
 	Position - "long" or "short"
 	Kind - "call" or "put"
 	S0 - underlying price of security
@@ -110,18 +87,28 @@ class Strategy:
 		self.q = q
 		self.r = r
 		self.sigma = sigma
+		self.exer_type = None
+		self.steps = None
+
+	def binomial_settings(self, exer_type, steps):
+		"""
+		Sets exercise type and number of steps for binomial tree
+		"""
+		if self.model==BinomialTree:
+			self.exer_type=exer_type
+			self.steps=steps
 
 	def data(self, option): 
 		"""
 		Gets price and Greek values for an option. 
 		"""
-		return self.model(option, self.S0, option.T).data()
+		return self.model(option, self.S0, option.T, exer_type=self.exer_type, steps=self.steps).data()
 
 	def price(self, option, new_underlying_price, new_T):
 		"""
 		For recalculating price of options in strategies with multiple expirations.
 		"""
-		return self.model(option, new_underlying_price, new_T).price() 
+		return self.model(option, new_underlying_price, new_T, exer_type=self.exer_type, steps=self.steps).price() 
 
 	def add_leg(self, position, kind, K, T):
 		"""
@@ -220,7 +207,6 @@ class Strategy:
 		theta=0
 		vega=0
 		for each in self.legs: 
-			print(each["id"])
 			position = each["option"].position
 			if position == "long":
 				delta+=each["data"]["delta"]
@@ -245,26 +231,31 @@ class Strategy:
 	def define_range(self): 
 		"""
 		Creates the index (x-axis) values for the strategy - 
-		from 1/100 to 2x the underlying value.
+		from 0 to 2x the underlying value.
 		The scale of the axis depends on the value of the underlying.
 		"""
-		start = self.S0*1e-2
-		end = self.S0*2
+		end = int(self.S0*2)+1
 		def scale(): 
-			if self.S0<20:
-				return .01
-			elif self.S0<100: 
+			if self.S0<=5: 
 				return .05
-			elif self.S0<500: 
+			elif self.S0<=10: 
+				return .10
+			elif self.S0<=20: 
+				return .20
+			elif self.S0<=50: 
 				return .25
-			elif self.S0<1000:
+			elif self.S0<=100: 
 				return .50
-			elif self.S0<5000:
+			elif self.S0<=200: 
+				return 1
+			elif self.S0<=500: 
 				return 2.50
+			elif self.S0<=1000: 
+				return 5
 			else:
-				return (self.S0/400)
+				return False
 		scale = scale()
-		price_range = np.arange(start,end,scale)
+		price_range = np.arange(0,end,scale)
 		index = np.arange(0,len(price_range), 1)
 		return index, price_range
 
@@ -278,44 +269,25 @@ class Strategy:
 		df['strategy_profit'] = df.price_range.map(lambda x: self.strategy_value(x)["profit"])
 		return df
 
-	# def plot_profit(self, df): 
-	# 	"""
-	# 	Takes as an argument the dataframe created by dataframe_setup and creates
-	# 	a graph using matplotlib. 
-	# 	"""
-	# 	df.plot(x='price_range',y='strategy_profit')
-	# 	plt.show()
-
-	def graph_output(self, df): 
+	def run_models(self): 
 		"""
-		Creates two lists from dataframe columns ready for graphing in C3.js 
+		Returns JSON copy of dataframe for graphing in C3
 		"""
-		pass
+		cols = self.define_range()
+		df = self.dataframe_setup(cols[0], cols[1])
+		return df.to_json(orient='records')
 
 	def convert(self, model): 
-		pass
-		# Convert entire strategy to other price model
-
-if __name__ == "__main__":
-	time1 = time.time()
-	new_strategy = Strategy(BlackScholes, 100, 0, .005, .25)
-	# Calendar spread with calls
-	new_strategy.add_leg("long", "call", 100, 2)
-	new_strategy.add_leg("short", "call", 100, 1)
-	# Double Diagonal
-	# new_strategy.add_leg("short", "put", 90, 1)
-	# new_strategy.add_leg("short", "call", 110, 1)
-	# new_strategy.add_leg("long", "put", 70, 1.5)
-	# new_strategy.add_leg("long", "call", 130, 1.5)
-	cols = new_strategy.define_range()
-	df = new_strategy.dataframe_setup(cols[0], cols[1])
-	elapsed = time.time() - time1
-	print(elapsed)
-	print(df)
-	# new_strategy.plot_profit(df)
-
-	#df.loc()[100]
-
+		""" 
+		Converts the strategy to the price model given by the argument. 
+		Exercise type and steps are reset to default values. 
+		"""
+		self.model = model
+		self.exer_type=None
+		self.steps=None
+		for each in self.legs: 
+			option = each["option"]
+			each["data"] = self.data(option)
 
 # class LongCall(Strategy): 
 # 	def __init__(self): 

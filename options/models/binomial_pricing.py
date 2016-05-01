@@ -1,9 +1,6 @@
 from numpy import exp
 import numbers
-from basepricemodel import BasePriceModel
-
-# Need to fix greeks and make sure they are at least ballpark Tching Binomial tree values on BlackScholes calc
-# or values of a dedicated CRR tree calc
+from .basepricemodel import BasePriceModel
 
 """
 Lattice-Based Binomial Pricing Model for American or European Options
@@ -31,7 +28,7 @@ class BinomialTree(BasePriceModel):
 		num_steps = self.steps
 		val_cache = {}
 
-		dt = float(self.T) / num_steps
+		dt = self.T / num_steps
 		up_fact = exp(self.option.sigma * (dt ** 0.5))
 		down_fact = 1.0 / up_fact
 		cont_yield = 0 if callable(self.option.q) else self.option.q
@@ -80,7 +77,9 @@ class BinomialTree(BasePriceModel):
 		delta, theta, rho, vega, gamma = None, None, None, None, None
 		if greeks and sens_degree >= 1:
 			delta = (node_value(1, 1, 0) - node_value(1, 0, 1)) / (bin_S0 * up_fact - bin_S0 * down_fact)
-			theta = (node_value(2, 1, 1) - val) / (2 * dt)
+			# theta = (node_value(2, 1, 1) - val) / (2 * dt)
+			theta = ((node_value(2, 1, 1) - val) * (2 * dt))/2
+
 
 			rho = 1e-2*self.sensitivity('r', 0.0001, sens_degree=sens_degree - 1)
 			vega = 1e-2*self.sensitivity('sigma', 0.001, sens_degree=sens_degree - 1)

@@ -1,5 +1,5 @@
 class BasePriceModel:
-	def __init__(self, option, S0, T):
+	def __init__(self, option, S0, T, exer_type=None, steps=None):
 		self.option = option
 		self.S0 = S0
 		self.T = T
