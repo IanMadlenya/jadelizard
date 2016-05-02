@@ -71,6 +71,21 @@ class Option:
 			elif current_underlying_price < self.K: 
 				return option_price - (self.K - current_underlying_price)
 
+	@classmethod
+	def to_json(cls): 
+		return {"position":self.position, 
+				"kind":self.kind,
+				"S0":self.S0,
+				"K":self.K,
+				"T":self.T,
+				"q":self.q,
+				"r":self.r,
+				"sigma":self.sigma}
+
+	@classmethod
+	def from_json(cls, data):
+		return cls(data["position"], data["kind"], data["S0"], data["K"], data["T"], data["q"], data["r"], data["sigma"])
+
 class Strategy: 
 	"""
 	Dynamic container for a set of option legs with the same underlying.
@@ -90,7 +105,7 @@ class Strategy:
 		self.exer_type = None
 		self.steps = None
 
-	def binomial_settings(self, exer_type, steps):
+	def model_settings(self, exer_type, steps):
 		"""
 		Sets exercise type and number of steps for binomial tree
 		"""
@@ -236,24 +251,22 @@ class Strategy:
 		"""
 		end = int(self.S0*2)+1
 		def scale(): 
-			if self.S0<=5: 
+			if self.S0<5: 
 				return .05
-			elif self.S0<=10: 
+			elif self.S0<10: 
 				return .10
-			elif self.S0<=20: 
+			elif self.S0<20: 
 				return .20
-			elif self.S0<=50: 
+			elif self.S0<50: 
 				return .25
-			elif self.S0<=100: 
+			elif self.S0<100: 
 				return .50
-			elif self.S0<=200: 
+			elif self.S0<200: 
 				return 1
-			elif self.S0<=500: 
+			elif self.S0<500: 
 				return 2.50
 			elif self.S0<=1000: 
 				return 5
-			else:
-				return False
 		scale = scale()
 		price_range = np.arange(0,end,scale)
 		index = np.arange(0,len(price_range), 1)
@@ -288,6 +301,30 @@ class Strategy:
 		for each in self.legs: 
 			option = each["option"]
 			each["data"] = self.data(option)
+
+	@classmethod
+	def to_json(cls): 
+		return {
+		"model":self.model.__name__,
+		"S0":self.S0,
+		"q":self.q,
+		"r":self.r,
+		"sigma":self.sigma,
+		"exer_type":self.exer_type,
+		"steps":self.steps,
+		"legs": [{"data":leg["data"], "id": leg["id"], "option":leg["option"].to_json()} for leg in self.legs]
+		}
+
+	@classmethod
+	def from_json(cls, data): 
+		strategy = cls(data["model"], data["S0"], data["q"], data["r"], data["sigma"])
+		strategy.exer_type = data["exer_type"]
+		strategy.steps = data["steps"]
+		legs = data["legs"]
+		strategy.legs = [{"data":leg["data"], "id":leg["id"], "option":Option.from_json(leg["option"])} for leg in legs]
+		return strategy
+
+
 
 # class LongCall(Strategy): 
 # 	def __init__(self): 

@@ -31,7 +31,25 @@ $(document).ready(function(){
 	// run function to send strategy data to C3
 	strategyData()
 
+	$('#stgy_btn').on('click','a', function(event){
+		$('#stgy_modal').modal(options)
+		$('#stgy_modal').modal('show')
+
+	});
+
+	$('#stgy_form').on('submit', function(event){
+		var data = $(this).serialize();
+		$.ajax({
+			url: "/options/stgyform",
+			method: "POST",
+			'data':data,
+			'success':function(data){
+				console.log(data)
+			}
+		});
+	})
 });
+
 
 
 

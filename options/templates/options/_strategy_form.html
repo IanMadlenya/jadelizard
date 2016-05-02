@@ -1,0 +1,62 @@
+
+<div class="modal fade" id="stgy_modal" tabindex="-1" role="dialog" 
+ aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        
+        <div class="modal-header">
+            <button type="button" class="close" 
+               data-dismiss="modal">
+                   <span aria-hidden="true">&times;</span>
+                   <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+                New Options Strategy 
+            </h4>
+            <h6>
+            	All fields are required. Enter all values in decimal format. 
+            </h6>
+        </div>
+        
+        <div class="modal-body">
+            
+            <form id= "stgy_form" class="form-horizontal" role="form">
+              <div class="form-group">
+                <label  class="col-sm-2 control-label"><i>S0</i></label>
+                <div class="col-sm-10">
+                    <input name="S0" class="form-control" placeholder="Price of Underlying Instrument"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><i>&sigma;</i></label>
+                <div class="col-sm-10">
+                    <input name="sigma" class="form-control" placeholder="Volatility of Underlying Instrument"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><i>q</i></label>
+                <div class="col-sm-10">
+                    <input name="q" class="form-control" placeholder="Continuously Compounded Dividend Yield"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><i>r</i></label>
+                <div class="col-sm-10">
+                    <input name="r" class="form-control" placeholder="Risk-Free Rate of Return"/>
+                </div>
+              </div>
+            </form>
+            
+            
+            
+            </div>
+            
+            <div class="modal-footer">
+                <button type="submit" form="stgy_form" class="btn btn-primary">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
