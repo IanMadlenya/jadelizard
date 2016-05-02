@@ -20,24 +20,34 @@ class NewStrategy(View):
 			q = form.data.get("q")
 			r = form.data.get("r")
 			sigma = form.data.get("sigma")
-			print(data)
 			request.session["current_strategy"] = Strategy(request.session["current_model"], S0, q, r, sigma).to_json()
 			return JsonResponse({"status":"success"})
 		return JsonResponse({"status":"Invalid or Missing Input"})
 
 class AddLeg(View): 
-	def get(self, request): 
-		pass
+	def post(self, request): 
+		form = LegsForm(request.POST)
+		if form.is_valid(): 
+			position = form.data.get("position")
+			kind = form.data.get("kind")
+			K = form.data.get("K")
+			T = form.data.get("T")
+			print(form.data)
+			strategy = request.session["current_strategy"].from_json()
+			strategy.add_leg(position, kind, K, T)
+			request.session["current_strategy"] = strategy.to_json()
+			return JsonResponse({"status":"success"})
+		return JsonResponse({"status":"Invalid or Missing Input"})
+
 
 class DeleteLeg(View): 
 	def get(self, request): 
 		pass
 
-
 class GraphData(View): 
 	def get(self, request): 
-		new_strategy = Strategy(BlackScholes, 100, .05, .005, .50)
-		new_strategy.convert(BinomialTree)
+		new_strategy = Strategy("BlackScholes", 100, .05, .005, .50)
+		# new_strategy.convert(BinomialTree)
 		new_strategy.model_settings('european', 25)
 		# new_strategy.add_leg("long", "call", 100, 2)
 		# new_strategy.add_leg("short", "call", 100, 1)

@@ -25,19 +25,20 @@ var strategyData = function(options){
 };
 
 $(document).ready(function(){
-	// render navbar
+	// display navbar
 	render('#_nav', "#navbar_div")({});
 	render("#_strategy_data", "#data_div")({});
 	// run function to send strategy data to C3
 	strategyData()
 
+	// display strategy modal on click 
 	$('#stgy_btn').on('click','a', function(event){
-		$('#stgy_modal').modal(options)
-		$('#stgy_modal').modal('show')
-
+		$('#stgy_modal').modal('toggle')
 	});
 
+	// send strategy form data to views on submit
 	$('#stgy_form').on('submit', function(event){
+		event.preventDefault();
 		var data = $(this).serialize();
 		$.ajax({
 			url: "/options/stgyform",
@@ -47,8 +48,45 @@ $(document).ready(function(){
 				console.log(data)
 			}
 		});
-	})
-});
+
+	$('#stgy_modal').on('hidden.bs.modal', function () {
+    $(this).find("input,textarea,select").val('').end();
+	});
+
+	$('#stgy_modal').modal('hide')
+
+	});
+
+	// display strategy legs modal on click
+	$('#legs_btn').on('click','a', function(event){
+		$('#legs_modal').modal('toggle')
+	});
+
+	// send legs form data to views on submit
+	$('#legs_form').on('submit', function(event){
+		event.preventDefault();
+		var data = $(this).serialize();
+		$.ajax({
+			url: "/options/legsform",
+			method: "POST",
+			'data':data,
+			'success':function(data){
+				console.log(data)
+			}
+		});
+
+		$('#legs_modal').on('hidden.bs.modal', function () {
+    		$(this).find("input,textarea,select").val('').end();
+		});
+
+		$('#legs_modal').modal('hide')
+
+	});
+
+})
+
+
+
 
 
 

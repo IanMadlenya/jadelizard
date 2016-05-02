@@ -9,11 +9,19 @@ from .binomial_pricing import BinomialTree
 First priority
 - Fix Binomial theta (and gamma?)
 
+- Need yield, volatility, risk free rate as percentage inputs. 
+- Need to create one modal to manage all legs - can keep same form IDs and code, but include the forms inside 
+the same big modal that is rendered when the respective button is clicked 
+- If no strategy is present, instead of rendering legs modal, render small text modal with error msg 
+
 Luxury Goals / New Features
 - Create Default Strategy Templates 
 - Eliminate tracking error in BS models if possible
 - Implied Volatility Calculator
 - Exponentially Weighted Historical volatility (vs. Equally weighted h.v.)
+- Use Redis to store strategy information in short-term in-memory storage and eliminate session storage
+- Integrated add leg / update / delete form with (+) button to add new form fields for up to 6 forms. 
+	This is a big modal with multiple forms integrated into the modal.
 
 """
 
@@ -71,8 +79,7 @@ class Option:
 			elif current_underlying_price < self.K: 
 				return option_price - (self.K - current_underlying_price)
 
-	@classmethod
-	def to_json(cls): 
+	def to_json(self): 
 		return {"position":self.position, 
 				"kind":self.kind,
 				"S0":self.S0,
@@ -95,9 +102,12 @@ class Strategy:
 	Underlying price, risk free rate, dividend rate, and volatility must be identical 
 	for all options in the strategy. 
 	"""
-	def __init__(self, model, S0, q, r, sigma):
+
+	pricing_models = {"BlackScholes":BlackScholes, "BinomialTree":BinomialTree}
+
+	def __init__(self, model_name, S0, q, r, sigma):
 		self.legs = []
-		self.model = model
+		self.model = self.pricing_models.get(model_name)
 		self.S0 = S0
 		self.q = q
 		self.r = r
@@ -302,8 +312,7 @@ class Strategy:
 			option = each["option"]
 			each["data"] = self.data(option)
 
-	@classmethod
-	def to_json(cls): 
+	def to_json(self): 
 		return {
 		"model":self.model.__name__,
 		"S0":self.S0,

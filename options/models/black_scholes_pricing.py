@@ -32,19 +32,16 @@ class BlackScholes(BasePriceModel):
 		self.d2 = self.d2()
 
 	def d1(self):
-		return (np.log(self.S0/self.option.K) + (self.option.r - self.option.q + self.option.sigma**2 / 2) \
-			* self.T)/(self.option.sigma * np.sqrt(self.T))
+		return (np.log(self.S0/self.option.K) + (self.option.r - self.option.q + self.option.sigma**2 / 2) * self.T)/(self.option.sigma * np.sqrt(self.T))
 	
 	def d2(self):
 		return self.d1 - self.option.sigma*np.sqrt(self.T)
 
 	def calculate_price(self):
 		if self.option.kind=="call":
-			return self.S0 * exp(-self.option.q * self.T) * ss.norm.cdf(self.d1) - \
-			self.option.K * exp(-self.option.r * self.T) * ss.norm.cdf(self.d2)
+			return self.S0 * exp(-self.option.q * self.T) * ss.norm.cdf(self.d1) - self.option.K * exp(-self.option.r * self.T) * ss.norm.cdf(self.d2)
 		elif self.option.kind=="put":
-		   return self.option.K * exp(-self.option.r * self.T) * ss.norm.cdf(-self.d2) - \
-		   self.S0 * exp(-self.option.q * self.T) * ss.norm.cdf(-self.d1)
+		   return self.option.K * exp(-self.option.r * self.T) * ss.norm.cdf(-self.d2) - self.S0 * exp(-self.option.q * self.T) * ss.norm.cdf(-self.d1)
 
 	def delta(self):
 		N = ss.norm.cdf  
