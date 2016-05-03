@@ -7,19 +7,20 @@ from .models import (
 from options.forms import NewStrategyForm, LegsForm
 
 class Index(View): 
+	default_model=BlackScholes.__name__
 	template_name = "options/base.html"
 	def get(self, request): 
-		request.session["current_model"]=BlackScholes.__name__
+		request.session["current_model"] = default_model
 		return render(request, self.template_name)
 
 class NewStrategy(View): 
 	def post(self, request): 
 		form = NewStrategyForm(request.POST)
 		if form.is_valid():
-			S0 = form.data.get("S0")
-			q = form.data.get("q")
-			r = form.data.get("r")
-			sigma = form.data.get("sigma")
+			S0 = form.cleaned_data.get("S0")
+			q = form.cleaned_data.get("q")
+			r = form.cleaned_data.get("r")
+			sigma = form.cleaned_data.get("sigma")
 			request.session["current_strategy"] = Strategy(request.session["current_model"], S0, q, r, sigma).to_json()
 			return JsonResponse({"status":"success"})
 		return JsonResponse({"status":"Invalid or Missing Input"})
@@ -28,17 +29,15 @@ class AddLeg(View):
 	def post(self, request): 
 		form = LegsForm(request.POST)
 		if form.is_valid(): 
-			position = form.data.get("position")
-			kind = form.data.get("kind")
-			K = form.data.get("K")
-			T = form.data.get("T")
-			print(form.data)
-			strategy = request.session["current_strategy"].from_json()
+			position = form.cleaned_data.get("position")
+			kind = form.cleaned_data.get("kind")
+			K = form.cleaned_data.get("K")
+			T = form.cleaned_data.get("T")
+			strategy = Strategy.from_json(request.session["current_strategy"])
 			strategy.add_leg(position, kind, K, T)
 			request.session["current_strategy"] = strategy.to_json()
 			return JsonResponse({"status":"success"})
 		return JsonResponse({"status":"Invalid or Missing Input"})
-
 
 class DeleteLeg(View): 
 	def get(self, request): 

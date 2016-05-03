@@ -54,7 +54,6 @@ $(document).ready(function(){
 	});
 
 	$('#stgy_modal').modal('hide')
-
 	});
 
 	// display strategy legs modal on click

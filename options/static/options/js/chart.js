@@ -15,7 +15,7 @@ var d3_chart = c3.generate({
 		},
 
 		colors: {
-			strategy_profit: '#f2c83d',
+			strategy_profit: '#000000'
 		},
 
 		selection: {
@@ -84,7 +84,7 @@ var d3_chart = c3.generate({
 	subchart: {
 		show: true,
 		size: {
-			height:35
+			height:50
 		}
 	},
 
@@ -92,8 +92,8 @@ var d3_chart = c3.generate({
 		zerobased: false
 	},
 
-		size: {
-		height:500
+	size: {
+		height:640
 	},
 
 	bindto: "#d3_chart", 

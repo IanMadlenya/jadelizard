@@ -9,10 +9,15 @@ from .binomial_pricing import BinomialTree
 First priority
 - Fix Binomial theta (and gamma?)
 
+- TOP PRIORITY: 
+	1. Implement Decimal Object for everything
+	2. Add calculator in Django form to divide input by 365 so user input can be in days
+
 - Need yield, volatility, risk free rate as percentage inputs. 
 - Need to create one modal to manage all legs - can keep same form IDs and code, but include the forms inside 
 the same big modal that is rendered when the respective button is clicked 
-- If no strategy is present, instead of rendering legs modal, render small text modal with error msg 
+- If no strategy is present, instead of rendering legs modal, render small text modal with error msg
+- Use session to send value for S0 to JavaScript to plot vertical x= line 
 
 Luxury Goals / New Features
 - Create Default Strategy Templates 
