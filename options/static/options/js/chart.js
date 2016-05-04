@@ -15,7 +15,7 @@ var d3_chart = c3.generate({
 		},
 
 		colors: {
-			strategy_profit: '#000000'
+			strategy_profit: '#0073e5'
 		},
 
 		selection: {
@@ -53,7 +53,6 @@ var d3_chart = c3.generate({
 		x: {
 			lines: [
 				{value: 0},
-      			{value: 100, text: 'S0', position: 'start'},
 			]
 		},
 		y: {
@@ -73,7 +72,12 @@ var d3_chart = c3.generate({
 	tooltip: {
 		format: {
 			title: function(x) {return "Underlying Value $" + x},
-			value: function (value) {return "$" + value.toFixed(2)},
+			value: function (value, id) {return "$" + value.toFixed(2)},
+			name: function(id) {
+				if(id==='strategy_profit'){
+					return "Strategy Profit"
+				}
+			}
 		}
 	},
 

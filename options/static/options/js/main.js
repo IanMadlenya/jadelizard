@@ -13,30 +13,39 @@ var strategyData = function(options){
 			method: "GET",
 			dataType: "json",
 			success: function(data){
-				data = JSON.parse(data);
+				var S0 = data.S0;
+				var data = JSON.parse(data.data);
 				d3_chart.load({
 					json: data,
 					keys: {
 						value: ['price_range', 'strategy_profit']
 					},
 				});
-			}
+				d3_chart.xgrids([{value: S0, text: 'S0'},])
+			},	
+			statusCode: {
+				412: function() {
+					$('#no_strategy_modal').modal('toggle')
+				},
+				422: function() {
+					$('#empty_modal').modal('toggle')
+				},
+			},
 	});
 };
 
 $(document).ready(function(){
-	// display navbar
 	render('#_nav', "#navbar_div")({});
 	render("#_strategy_data", "#data_div")({});
-	// run function to send strategy data to C3
-	strategyData()
 
-	// display strategy modal on click 
+	$("#graph_btn").on('click', function(event){
+		strategyData()
+	});
+
 	$('#stgy_btn').on('click','a', function(event){
 		$('#stgy_modal').modal('toggle')
 	});
 
-	// send strategy form data to views on submit
 	$('#stgy_form').on('submit', function(event){
 		event.preventDefault();
 		var data = $(this).serialize();
@@ -44,43 +53,74 @@ $(document).ready(function(){
 			url: "/options/stgyform",
 			method: "POST",
 			'data':data,
-			'success':function(data){
+			success:function(data){
 				console.log(data)
 			}
 		});
 
 	$('#stgy_modal').on('hidden.bs.modal', function () {
-    $(this).find("input,textarea,select").val('').end();
+    $(this).find(".field-input").val('').end();
 	});
 
 	$('#stgy_modal').modal('hide')
 	});
 
-	// display strategy legs modal on click
-	$('#legs_btn').on('click','a', function(event){
-		$('#legs_modal').modal('toggle')
+	$('#legs_btn').on('click', function(event){
+		render('#legs_form_script', '#add_leg_div')({});
+		$.ajax({
+			url: "/options/displaylegs",
+			method: "GET",
+			dataType: "json",
+			success: function(data){
+				if(data.length===0){
+					render('#legs_empty_message', '#manage_legs_div')({});
+				}
+				else{
+					var template = $("#legs_manage_script").html()
+					var rendered = Mustache.render(template, {data:data})
+					$('#manage_legs_div').html(rendered);
+				}
+			}
+		})
 	});
 
-	// send legs form data to views on submit
-	$('#legs_form').on('submit', function(event){
+	$('#add_leg_div').on('submit', '#legs_form', function(event){
 		event.preventDefault();
 		var data = $(this).serialize();
 		$.ajax({
 			url: "/options/legsform",
 			method: "POST",
 			'data':data,
-			'success':function(data){
+			success: function(data){
 				console.log(data)
 			}
 		});
 
 		$('#legs_modal').on('hidden.bs.modal', function () {
-    		$(this).find("input,textarea,select").val('').end();
+    		$(this).find(".field-input").val('').end();
 		});
 
-		$('#legs_modal').modal('hide')
+		// $('#legs_modal').modal('hide')
 
 	});
+
+	$('#manage_legs_div').on('submit', '.delete_leg_form', function(event){
+		event.preventDefault();
+		var id_ = $(this).data('id');
+		console.log($(this).serialize()),
+		$.ajax({
+			url: "/options/deleteleg",
+			method: "POST",
+			data: $(this).serialize(),
+			success: function(data){
+				var template = $("#legs_manage_script").html()
+				var rendered = Mustache.render(template, {data:data})
+				$('#manage_legs_div').html(rendered);
+				console.log(data)
+			}
+		});
+	});
+
 
 })
 

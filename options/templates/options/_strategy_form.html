@@ -22,36 +22,35 @@
         <div class="modal-body">
             
             <form id= "stgy_form" class="form-horizontal" role="form">
-            	{% csrf_token %}
               <div class="form-group">
                 <label  class="col-sm-2 control-label"><i>S0</i></label>
                 <div class="col-sm-10">
-                    <input name="S0" class="form-control" placeholder="Price of Underlying Instrument ($)" autocomplete="off"/>
+                    <input name="S0" class="form-control field-input" placeholder="Price of Underlying Instrument ($)" autocomplete="off"/>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><i>&sigma;</i></label>
                 <div class="col-sm-10">
-                    <input name="sigma" class="form-control" placeholder="Volatility of Underlying Instrument" autocomplete="off"/>
+                    <input name="sigma" class="form-control field-input" placeholder="Volatility of Underlying Instrument" autocomplete="off"/>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><i>q</i></label>
                 <div class="col-sm-10">
-                    <input name="q" class="form-control" placeholder="Continuously Compounded Dividend Yield" autocomplete="off"/>
+                    <input name="q" class="form-control field-input" placeholder="Continuously Compounded Dividend Yield" autocomplete="off"/>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><i>r</i></label>
                 <div class="col-sm-10">
-                    <input name="r" class="form-control" placeholder="Risk-Free Rate of Return" autocomplete="off"/>
+                    <input name="r" class="form-control field-input" placeholder="Risk-Free Rate of Return" autocomplete="off"/>
                 </div>
               </div>
             </form>
             
             
             
-            </div>
+        </div>
             
             <div class="modal-footer">
                 <button type="submit" form="stgy_form" class="btn btn-primary">

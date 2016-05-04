@@ -6,27 +6,34 @@ from .black_scholes_pricing import BlackScholes
 from .binomial_pricing import BinomialTree
 
 """
-First priority
-- Fix Binomial theta (and gamma?)
+jadelizard.io
 
-- TOP PRIORITY: 
-	1. Implement Decimal Object for everything
-	2. Add calculator in Django form to divide input by 365 so user input can be in days
+ideas: 
+- clear button to unload graph data
+- Need to have strategy data present at top of legs modal
+- Need to change strategy modal to "Clear", "Save" (clear removes strategy and all legs, save updates the strategy and recalculates the legs)
+- Footer with links to: the source code on GitHub, my LinkedIn
 
-- Need yield, volatility, risk free rate as percentage inputs. 
-- Need to create one modal to manage all legs - can keep same form IDs and code, but include the forms inside 
-the same big modal that is rendered when the respective button is clicked 
-- If no strategy is present, instead of rendering legs modal, render small text modal with error msg
-- Use session to send value for S0 to JavaScript to plot vertical x= line 
+To-Do list
+1. Prevent adding more than 6 legs(apply valid_leg method from models)
+2. Error message if graphing attempted with no strategy present in the session
+2. Edit Strategy form so that it has buttons "save" (which updates) and "clear" 
+	Strategy button becomes "edit", dropdowns are "Strategy" and "Legs" 
+3. Edit Legs form so that it displays the strategy information on top and legs that have been added on the bottom -
+	with update fields and "delete" button for each leg and a "save" button at the bottom
+4. Button to set the current price model, and exercise type / # steps 
+5. Button to open a strategy info modal with greek values and strategy cost
+6. Templates
+7. Apply Decimal Object and remove tracking error
+8. Fix Binomial Tree theta (and gamma?)
+9. Yield, volatility, rfr as percentage inputs
+10. new ReadMe
+
 
 Luxury Goals / New Features
-- Create Default Strategy Templates 
-- Eliminate tracking error in BS models if possible
 - Implied Volatility Calculator
 - Exponentially Weighted Historical volatility (vs. Equally weighted h.v.)
 - Use Redis to store strategy information in short-term in-memory storage and eliminate session storage
-- Integrated add leg / update / delete form with (+) button to add new form fields for up to 6 forms. 
-	This is a big modal with multiple forms integrated into the modal.
 
 """
 
@@ -151,8 +158,7 @@ class Strategy:
 			return item["exp"]
 		new_leg = Option(position, kind, self.S0, K, T, self.q, self.r, self.sigma)
 		data = self.data(new_leg)
-		time_exp = T
-		self.legs.append({"option":new_leg, "data":data, "exp":time_exp, "id":str(uuid.uuid4())})
+		self.legs.append({"option":new_leg, "data":data, "exp":T, "id":str(uuid.uuid4())})
 		self.legs = sorted(self.legs, key=compare)
 		# Need to remove add functionality in web app if 6 legs present
 
@@ -264,6 +270,7 @@ class Strategy:
 		from 0 to 2x the underlying value.
 		The scale of the axis depends on the value of the underlying.
 		"""
+		start = int(self.S0*0.25)+1
 		end = int(self.S0*2)+1
 		def scale(): 
 			if self.S0<5: 
@@ -283,7 +290,7 @@ class Strategy:
 			elif self.S0<=1000: 
 				return 5
 		scale = scale()
-		price_range = np.arange(0,end,scale)
+		price_range = np.arange(start,end,scale)
 		index = np.arange(0,len(price_range), 1)
 		return index, price_range
 
@@ -297,13 +304,23 @@ class Strategy:
 		df['strategy_profit'] = df.price_range.map(lambda x: self.strategy_value(x)["profit"])
 		return df
 
-	def run_models(self): 
+	def graph_data(self): 
 		"""
-		Returns JSON copy of dataframe for graphing in C3
+		Returns copy of dataframe for graphing in C3
 		"""
 		cols = self.define_range()
 		df = self.dataframe_setup(cols[0], cols[1])
 		return df.to_json(orient='records')
+
+	def legs_data(self): 
+		"""
+		Returns legs-specific data for display 
+		"""
+		legs = []
+		for each in self.legs: 
+			option = each["option"]
+			legs.append({"position":option.position.upper(), "kind":option.kind.upper(), "K":option.K, "T":option.T, "id":each["id"]})
+		return legs
 
 	def convert(self, model): 
 		""" 
@@ -317,6 +334,20 @@ class Strategy:
 			option = each["option"]
 			each["data"] = self.data(option)
 
+	def valid_graph(self): 
+		"""
+		If no legs are present, graphing is disabled
+		"""
+		if len(self.legs)==0: 
+			return False
+
+	def valid_leg(self): 
+		"""
+		Maximum of 6 legs for graphing
+		"""
+		if len(self.legs)==6:
+			return False
+
 	def to_json(self): 
 		return {
 		"model":self.model.__name__,
@@ -326,7 +357,7 @@ class Strategy:
 		"sigma":self.sigma,
 		"exer_type":self.exer_type,
 		"steps":self.steps,
-		"legs": [{"data":leg["data"], "id": leg["id"], "option":leg["option"].to_json()} for leg in self.legs]
+		"legs": [{"data":leg["data"], "id": leg["id"], "exp": leg["exp"], "option" :leg["option"].to_json()} for leg in self.legs]
 		}
 
 	@classmethod
@@ -335,7 +366,7 @@ class Strategy:
 		strategy.exer_type = data["exer_type"]
 		strategy.steps = data["steps"]
 		legs = data["legs"]
-		strategy.legs = [{"data":leg["data"], "id":leg["id"], "option":Option.from_json(leg["option"])} for leg in legs]
+		strategy.legs = [{"data":leg["data"], "id":leg["id"], "exp":leg["exp"], "option":Option.from_json(leg["option"])} for leg in legs]
 		return strategy
 
 

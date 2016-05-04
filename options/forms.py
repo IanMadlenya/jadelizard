@@ -2,7 +2,7 @@ from django import forms
 
 POSITION_CHOICES=[
 ("long", "long"),
-("Short", "short")
+("short", "short")
 ]
 
 KIND_CHOICES=[
@@ -10,17 +10,21 @@ KIND_CHOICES=[
 ("put", "put")
 ]
 
-# class NewStrategyForm(forms.Form):
-# 	S0 = forms.DecimalField(min_value=1, max_value=1000, decimal_places=2)
-# 	sigma = forms.DecimalField(min_value=0, max_value=0.9999, decimal_places=4)
-# 	q = forms.DecimalField(min_value=0, max_value=0.9999, decimal_places=4)
-# 	r = forms.DecimalField(min_value=0, max_value=0.9999, decimal_places=4)
+MODEL_CHOICES=[
+("BlackScholes", "BlackScholes"),
+("BinomialTree", "BinomialTree")
+]
 
-# class LegsForm(forms.Form): 
-# 	position = forms.TypedChoiceField(choices=POSITION_CHOICES)
-# 	kind = forms.TypedChoiceField(choices=KIND_CHOICES)
-# 	K = forms.DecimalField(min_value=1, max_value=1000, decimal_places=2)
-# 	T = forms.DecimalField(min_value=.00272, max_value=100, decimal_places=4)
+EXER_CHOICES=[
+("european", "european"),
+("american", "american")
+]
+
+STEPS_CHOICES=[
+("10",10),
+("25",25),
+("50",50)
+]
 
 class NewStrategyForm(forms.Form):
 	S0 = forms.FloatField(min_value=1, max_value=1000)
@@ -29,8 +33,15 @@ class NewStrategyForm(forms.Form):
 	r = forms.FloatField(min_value=0, max_value=0.9999)
 
 class LegsForm(forms.Form): 
-	position = forms.TypedChoiceField(choices=POSITION_CHOICES)
-	kind = forms.TypedChoiceField(choices=KIND_CHOICES)
+	position = forms.ChoiceField(choices=POSITION_CHOICES)
+	kind = forms.ChoiceField(choices=KIND_CHOICES)
 	K = forms.FloatField(min_value=1, max_value=1000)
-	T = forms.FloatField(min_value=.00272, max_value=100)
+	T = forms.FloatField(min_value=1)
+
+class PriceModelForm(forms.Form): 
+	model = forms.ChoiceField(choices=MODEL_CHOICES)
+	exer_type = forms.ChoiceField(choices=EXER_CHOICES)
+	steps = forms.ChoiceField(choices=STEPS_CHOICES)
+
+
 
