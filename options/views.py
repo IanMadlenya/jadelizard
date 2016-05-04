@@ -9,6 +9,7 @@ from options.forms import NewStrategyForm, LegsForm
 class Index(View): 
 	template_name = "options/base.html"
 	def get(self, request): 
+		request.session["current_strategy"]=None
 		request.session["current_model"] = BlackScholes.__name__
 		return render(request, self.template_name)
 
@@ -25,14 +26,16 @@ class NewStrategy(View):
 		return JsonResponse({"status":"Invalid or Missing Input"})
 
 class AddLeg(View): 
-	def post(self, request): 
+	def post(self, request):
 		form = LegsForm(request.POST)
+		strategy = Strategy.from_json(request.session["current_strategy"])
+		if strategy.valid_legs()==False: 
+			return JsonResponse({"status":"Max Strategy Size Reached"}, status=422) 
 		if form.is_valid(): 
 			position = form.cleaned_data.get("position")
 			kind = form.cleaned_data.get("kind")
 			K = form.cleaned_data.get("K")
 			T = form.cleaned_data.get("T")
-			strategy = Strategy.from_json(request.session["current_strategy"])
 			strategy.add_leg(position, kind, K, T)
 			request.session["current_strategy"] = strategy.to_json()
 			return JsonResponse({"status":"success"})
@@ -42,25 +45,28 @@ class DisplayLegs(View):
 	def get(self, request): 
 		strategy = Strategy.from_json(request.session["current_strategy"])
 		data = strategy.legs_data()
-		return JsonResponse(data, safe=False)
+		return JsonResponse({'legs':data})
+
+class StrategyInfo(View): 
+	def get(self, request): 
+		strategy = Strategy.from_json(request.session["current_strategy"])
+		data = {"S0":strategy.S0, "sigma":strategy.sigma, "q":strategy.q, "r":strategy.r}
+		return JsonResponse(data)
 
 class DeleteLeg(View): 
 	def post(self, request): 
 		strategy = Strategy.from_json(request.session["current_strategy"])
 		id_ = request.POST.get('id')
-		print(id_)
 		for each in strategy.legs: 
 			if each["id"]==id_: 
 				strategy.legs.remove(each)
-				print("match")
 		request.session["current_strategy"] = strategy.to_json()
-		print("updated")
 		return JsonResponse({"message":"leg deleted"})
  
 
 class GraphData(View): 
 	def get(self, request): 
-		if "current_strategy" not in request.session: 
+		if request.session["current_strategy"]==None: 
 			return JsonResponse({"status":"No Strategy Present"}, status=412)
 		strategy = Strategy.from_json(request.session["current_strategy"])
 		if strategy.valid_graph()==False: 
@@ -68,6 +74,21 @@ class GraphData(View):
 		S0 = strategy.S0
 		json_data = strategy.graph_data()
 		return JsonResponse({"data":json_data, "S0":S0})
+
+class ClearData(View): 
+	def post(self, request): 
+		if request.session["current_strategy"]==None: 
+			print("No strategy")
+			return JsonResponse({"status":"No Strategy Present"})
+		else: 
+			print("Strategy found")
+			request.session["current_strategy"] = None
+			print("Strategy deleted")
+			print(request.session.keys())
+			return JsonResponse({"status":"Strategy Cleared"})
+
+	# Clear request.session["current_strategy"]
+	# unload graph data 
 
 # class GraphData(View): 
 # 	def get(self, request): 

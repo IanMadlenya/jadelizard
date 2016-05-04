@@ -13,6 +13,8 @@ ideas:
 - Need to have strategy data present at top of legs modal
 - Need to change strategy modal to "Clear", "Save" (clear removes strategy and all legs, save updates the strategy and recalculates the legs)
 - Footer with links to: the source code on GitHub, my LinkedIn
+- Graph button separate and different color 
+- Use materialize expand button with icons for graph / strategy info? 
 
 To-Do list
 1. Prevent adding more than 6 legs(apply valid_leg method from models)
@@ -28,6 +30,7 @@ To-Do list
 8. Fix Binomial Tree theta (and gamma?)
 9. Yield, volatility, rfr as percentage inputs
 10. new ReadMe
+11. Color scheme function - "Classic" (green) or "Blue Jade" (current color scheme)
 
 
 Luxury Goals / New Features
@@ -341,7 +344,7 @@ class Strategy:
 		if len(self.legs)==0: 
 			return False
 
-	def valid_leg(self): 
+	def valid_legs(self): 
 		"""
 		Maximum of 6 legs for graphing
 		"""

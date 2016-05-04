@@ -1,0 +1,26 @@
+.navbar {
+  background-color:#474444;
+  border: 0em;
+}
+
+.nav_button {
+ 	color: white!important;
+ 	background-color:#474444!important;
+}
+
+.nav_button:hover{
+	background-color:#477bc3!important;
+}
+
+.nav_button:focus{
+	background-color:#477bc3!important;
+}
+
+#graph_btn {
+	color: white!important;
+ 	background-color:#474444!important;
+}
+
+#graph_btn:hover{
+	background-color:#477bc3!important;
+}

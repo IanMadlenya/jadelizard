@@ -9,6 +9,8 @@ urlpatterns = [
 	url(r'^legsform$', views.AddLeg.as_view(), name='legsform'),
 	url(r'^displaylegs$', views.DisplayLegs.as_view(), name='displaylegs'),
 	url(r'^deleteleg$', views.DeleteLeg.as_view(), name='deleteleg'),
+	url(r'^strategyinfo$', views.StrategyInfo.as_view(), name='strategyinfo'),
+	url(r'^clear$', views.ClearData.as_view(), name='clear'),
 	url(r'^convert$', views.ChooseModel.as_view(), name='convert'),
 
 ]

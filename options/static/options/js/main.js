@@ -6,8 +6,8 @@ var render = function(templateSelector, dropZone){
 	};
 };
 
-// Sends JSON data to C3 to be graphed
-var strategyData = function(options){
+// Sends JSON data to C3 for graphing
+var graphData = function(options){
 		$.ajax({
 			url: "/options/graphdata",
 			method: "GET",
@@ -34,12 +34,60 @@ var strategyData = function(options){
 	});
 };
 
+var unloadData = function(){
+	d3_chart.unload({
+		ids: ['price_range','strategy_profit']
+	});
+	d3_chart.xgrids.remove()
+	d3_chart.ygrids.remove()
+};
+
+var getLegs = function(){
+	$.ajax({
+		url: "/options/displaylegs",
+		method: "GET",
+		dataType: "json",
+		success: function(data){
+			if(data.length===0){
+				render('#legs_empty_message', '#manage_legs_div')({});
+			}
+			else{
+				var template = $("#legs_manage_script").html()
+				var rendered = Mustache.render(template, data)
+				$('#manage_legs_div').html(rendered);
+			}
+		}
+	});
+};
+
+var getStrategy = function(){
+	$.ajax({
+		url: "/options/strategyinfo",
+		method: "GET",
+		dataType: "json",
+		success: function(data){
+			if(data.length===0){
+				render('#no_strategy_message', '#strategy_info_div')({});
+			}
+			else{
+				var template = $("#strategy_info_script").html()
+				var rendered = Mustache.render(template, data)
+				$('#strategy_info_div').html(rendered);
+			}
+		}
+	});
+}
+
 $(document).ready(function(){
 	render('#_nav', "#navbar_div")({});
 	render("#_strategy_data", "#data_div")({});
 
+	// Global strategy variable blocks access to Legs modal until a strategy is created
+	$('#legs_btn').prop('disabled', true).css("color", "grey");
+	strategy=false
+
 	$("#graph_btn").on('click', function(event){
-		strategyData()
+		graphData()
 	});
 
 	$('#stgy_btn').on('click','a', function(event){
@@ -54,7 +102,8 @@ $(document).ready(function(){
 			method: "POST",
 			'data':data,
 			success:function(data){
-				console.log(data)
+				$('#legs_btn').prop('disabled', false).css("color", "black");
+				strategy=true
 			}
 		});
 
@@ -66,22 +115,11 @@ $(document).ready(function(){
 	});
 
 	$('#legs_btn').on('click', function(event){
-		render('#legs_form_script', '#add_leg_div')({});
-		$.ajax({
-			url: "/options/displaylegs",
-			method: "GET",
-			dataType: "json",
-			success: function(data){
-				if(data.length===0){
-					render('#legs_empty_message', '#manage_legs_div')({});
-				}
-				else{
-					var template = $("#legs_manage_script").html()
-					var rendered = Mustache.render(template, {data:data})
-					$('#manage_legs_div').html(rendered);
-				}
-			}
-		})
+		if(strategy===true){
+			getStrategy();
+			render('#legs_form_script', '#add_leg_div')({});
+			getLegs();
+		}
 	});
 
 	$('#add_leg_div').on('submit', '#legs_form', function(event){
@@ -92,35 +130,45 @@ $(document).ready(function(){
 			method: "POST",
 			'data':data,
 			success: function(data){
-				console.log(data)
+				$(this).find(".field-input").val('').end();
+				render('#legs_form_script', '#add_leg_div')({});
+				getLegs();
+			},
+			statusCode: {
+				422: function() {
+					$('#max_legs_modal').modal('toggle')
+					$(this).find(".field-input").val('').end();
+					render('#legs_form_script', '#add_leg_div')({});
+				},
 			}
 		});
-
-		$('#legs_modal').on('hidden.bs.modal', function () {
-    		$(this).find(".field-input").val('').end();
-		});
-
-		// $('#legs_modal').modal('hide')
-
 	});
 
 	$('#manage_legs_div').on('submit', '.delete_leg_form', function(event){
 		event.preventDefault();
 		var id_ = $(this).data('id');
-		console.log($(this).serialize()),
 		$.ajax({
 			url: "/options/deleteleg",
 			method: "POST",
 			data: $(this).serialize(),
 			success: function(data){
-				var template = $("#legs_manage_script").html()
-				var rendered = Mustache.render(template, {data:data})
-				$('#manage_legs_div').html(rendered);
-				console.log(data)
+				getLegs();
 			}
 		});
 	});
 
+	$('#clear_btn').on('click', function(event){
+		$.ajax({
+			url: "/options/clear",
+			method: "POST",
+			success: function(data){
+				console.log("Session strategy deleted")
+				unloadData()
+				$('#legs_btn').prop('disabled', true).css("color", "grey");
+				strategy=false
+			}
+		});
+	});
 
 })
 
