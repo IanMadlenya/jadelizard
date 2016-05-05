@@ -40,6 +40,8 @@ class LegsForm(forms.Form):
 
 class PriceModelForm(forms.Form): 
 	model = forms.ChoiceField(choices=MODEL_CHOICES)
+
+class ModelSettingsForm(forms.Form):
 	exer_type = forms.ChoiceField(choices=EXER_CHOICES)
 	steps = forms.ChoiceField(choices=STEPS_CHOICES)
 

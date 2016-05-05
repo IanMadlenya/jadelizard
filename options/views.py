@@ -4,7 +4,7 @@ from django.views.generic import View
 from .models import (
 	Strategy, Option, BlackScholes, BinomialTree, InputCalc
 )
-from options.forms import NewStrategyForm, LegsForm
+from options.forms import NewStrategyForm, LegsForm, PriceModelForm
 
 class Index(View): 
 	template_name = "options/base.html"
@@ -102,28 +102,40 @@ class StrategyData(View):
 
 class ChooseModel(View): 
 	def post(self, request): 
-		request.session["current_strategy"] = request.session["current_strategy"].convert()
-		pass
+		print(request.session["current_model"])
+		form = PriceModelForm(request.POST)
+		print(request.POST)
+		if form.is_valid(): 
+			print("form")
+			model = request.POST.get('model')
+			request.session["current_model"] = model
+			if request.session["current_strategy"]==None: 
+				print(request.session["current_model"], "No options to convert")
+				return JsonResponse({"status":"Pricing Model Selected"})
+			strategy = Strategy.from_json(request.session["current_strategy"])
+			strategy.convert(model)
+			request.session["current_strategy"] = strategy.to_json()
+			print(request.session["current_model"], "Options converted")
+			return JsonResponse({"status":"Pricing Model Selected"})
+		print("invalid")
+		return JsonResponse({"status":"Invalid or Missing Input"})
 
 
 
 
-# class GraphData(View): 
-# 	def get(self, request): 
+
 # 		new_strategy = Strategy("BlackScholes", 100, .05, .005, .50)
 # 		# new_strategy.convert(BinomialTree)
 # 		new_strategy.model_settings('european', 25)
+# 		Long Calendar Spread
 # 		# new_strategy.add_leg("long", "call", 100, 2)
 # 		# new_strategy.add_leg("short", "call", 100, 1)
+#		Double Diagonal
 # 		new_strategy.add_leg("short", "put", 75, 1)
 # 		new_strategy.add_leg("short", "call", 110, 1)
 # 		new_strategy.add_leg("long", "put", 70, 1.5)
 # 		new_strategy.add_leg("long", "call", 130, 1.5)
-# 		json_data = new_strategy.run_models()
-# 		return JsonResponse(json_data,safe=False)
-
-
-
+#
 
 
 				

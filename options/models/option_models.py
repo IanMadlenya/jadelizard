@@ -9,22 +9,11 @@ from .binomial_pricing import BinomialTree
 jadelizard.io
 
 ideas: 
-- clear button to unload graph data
-- Need to have strategy data present at top of legs modal
-- Need to change strategy modal to "Clear", "Save" (clear removes strategy and all legs, save updates the strategy and recalculates the legs)
 - Footer with links to: the source code on GitHub, my LinkedIn
 - Graph button separate and different color 
-- Use materialize expand button with icons for graph / strategy info? 
 
 To-Do list
-1. Prevent adding more than 6 legs(apply valid_leg method from models)
-2. Error message if graphing attempted with no strategy present in the session
-2. Edit Strategy form so that it has buttons "save" (which updates) and "clear" 
-	Strategy button becomes "edit", dropdowns are "Strategy" and "Legs" 
-3. Edit Legs form so that it displays the strategy information on top and legs that have been added on the bottom -
-	with update fields and "delete" button for each leg and a "save" button at the bottom
 4. Button to set the current price model, and exercise type / # steps 
-5. Button to open a strategy info modal with greek values and strategy cost
 6. Templates
 7. Apply Decimal Object and remove tracking error
 8. Fix Binomial Tree theta (and gamma?)
@@ -325,12 +314,12 @@ class Strategy:
 			legs.append({"position":option.position.upper(), "kind":option.kind.upper(), "K":option.K, "T":option.T, "id":each["id"]})
 		return legs
 
-	def convert(self, model): 
+	def convert(self, model_name): 
 		""" 
 		Converts the strategy to the price model given by the argument. 
 		Exercise type and steps are reset to default values. 
 		"""
-		self.model = model
+		self.model = self.pricing_models.get(model_name)
 		self.exer_type=None
 		self.steps=None
 		for each in self.legs: 

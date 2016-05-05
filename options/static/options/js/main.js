@@ -191,6 +191,24 @@ $(document).ready(function(){
 		}
 	});
 
+	$('#model_btn').on('click', function(event){
+		$('#model_modal').modal('toggle')
+	});
+
+	$('#model_form').on('submit', function(event){
+		var data = $(this).serialize();
+		console.log(data)
+		event.preventDefault();
+		$.ajax({
+			url: "/options/choosemodel",
+			method: "POST",
+			'data':data,
+			success:function(data){
+				console.log("Model changed")
+				$('#model_modal').modal('hide')
+			}
+		});
+	});
 
 })
 
