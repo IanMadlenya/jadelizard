@@ -11,6 +11,7 @@ urlpatterns = [
 	url(r'^deleteleg$', views.DeleteLeg.as_view(), name='deleteleg'),
 	url(r'^strategyinfo$', views.StrategyInfo.as_view(), name='strategyinfo'),
 	url(r'^clear$', views.ClearData.as_view(), name='clear'),
+	url(r'^strategydata$', views.StrategyData.as_view(), name='strategydata'),
 	url(r'^convert$', views.ChooseModel.as_view(), name='convert'),
 
 ]

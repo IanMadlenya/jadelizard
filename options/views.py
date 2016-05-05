@@ -62,7 +62,6 @@ class DeleteLeg(View):
 				strategy.legs.remove(each)
 		request.session["current_strategy"] = strategy.to_json()
 		return JsonResponse({"message":"leg deleted"})
- 
 
 class GraphData(View): 
 	def get(self, request): 
@@ -78,17 +77,36 @@ class GraphData(View):
 class ClearData(View): 
 	def post(self, request): 
 		if request.session["current_strategy"]==None: 
-			print("No strategy")
 			return JsonResponse({"status":"No Strategy Present"})
 		else: 
-			print("Strategy found")
 			request.session["current_strategy"] = None
-			print("Strategy deleted")
-			print(request.session.keys())
 			return JsonResponse({"status":"Strategy Cleared"})
 
-	# Clear request.session["current_strategy"]
-	# unload graph data 
+class StrategyData(View):
+	def get(self, request): 
+		strategy = Strategy.from_json(request.session["current_strategy"])
+		if len(strategy.legs)==0:
+			return JsonResponse({"status":"No Options in Strategy"})
+		greeks = strategy.strategy_greeks()
+		cost = strategy.strategy_cost()
+		data = {
+		"delta":round(greeks["delta"], 5),
+		"gamma":round(greeks["gamma"], 5),
+		"rho":round(greeks["rho"], 5),
+		"theta":round(greeks["theta"], 5),
+		"vega":round(greeks["vega"], 5), 
+		"cost":round(cost["cost"], 2),
+		"type":cost["type"]
+		}
+		return JsonResponse(data)
+
+class ChooseModel(View): 
+	def post(self, request): 
+		request.session["current_strategy"] = request.session["current_strategy"].convert()
+		pass
+
+
+
 
 # class GraphData(View): 
 # 	def get(self, request): 
@@ -103,16 +121,6 @@ class ClearData(View):
 # 		new_strategy.add_leg("long", "call", 130, 1.5)
 # 		json_data = new_strategy.run_models()
 # 		return JsonResponse(json_data,safe=False)
-
-class ChooseModel(View): 
-	def post(self, request): 
-		model = request.session["current_model"]
-		request.session["current_strategy"].convert()
-		pass
-
-
-
-
 
 
 

@@ -1,35 +1,21 @@
-<script id="_strategy_data" type="mustache/template">
 
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-  <div class="modal-dialog modal-sm">
+<div id="data_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog">
     <div class="modal-content">
-    	<div class="row">
-    		<div class="col-sm-2">
-    			<span class="label label-primary">Delta</span>
-    		</div>
-    		<div class="col-sm-2">
-    			<span class="label label-primary">Gamma</span>
-    		</div>
+    	<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                   <span aria-hidden="true">&times;</span>
+                   <span class="sr-only">Close</span>
+            </button>
+    		<h5>Strategy Greeks and Setup Cost</h5>
     	</div>
-    	<div class="row">
-    		<div class="col-sm-2">
-    			<span class="label label-primary">Theta</span>
-    		</div>
-    		<div class="col-sm-2">
-    			<span class="label label-primary">Rho</span>
-    		</div>
-    	</div>
-    	<div class="row">
-    		<div class="col-sm-2">
-    			<span class="label label-primary">Vega</span>
-    		</div>
-    		<div class="col-sm-2">
-    			<span class="label label-primary">Strategy Cost</span>
-    		</div>
-    	</div>
-    </div>
+
+    	<div id="data_div" class="modal-body">
+		</div>
+
+	</div>
   </div>
 </div>
 
-</script>
+
 

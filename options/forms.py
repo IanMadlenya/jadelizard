@@ -36,7 +36,7 @@ class LegsForm(forms.Form):
 	position = forms.ChoiceField(choices=POSITION_CHOICES)
 	kind = forms.ChoiceField(choices=KIND_CHOICES)
 	K = forms.FloatField(min_value=1, max_value=1000)
-	T = forms.FloatField(min_value=1)
+	T = forms.FloatField(min_value=.01, max_value=20)
 
 class PriceModelForm(forms.Form): 
 	model = forms.ChoiceField(choices=MODEL_CHOICES)

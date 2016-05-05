@@ -48,7 +48,7 @@ var getLegs = function(){
 		method: "GET",
 		dataType: "json",
 		success: function(data){
-			if(data.length===0){
+			if(data['legs'].length===0){
 				render('#legs_empty_message', '#manage_legs_div')({});
 			}
 			else{
@@ -80,10 +80,10 @@ var getStrategy = function(){
 
 $(document).ready(function(){
 	render('#_nav', "#navbar_div")({});
-	render("#_strategy_data", "#data_div")({});
 
 	// Global strategy variable blocks access to Legs modal until a strategy is created
 	$('#legs_btn').prop('disabled', true).css("color", "grey");
+	$('#data_btn').prop('disabled', true).css("color", "grey");
 	strategy=false
 
 	$("#graph_btn").on('click', function(event){
@@ -103,6 +103,7 @@ $(document).ready(function(){
 			'data':data,
 			success:function(data){
 				$('#legs_btn').prop('disabled', false).css("color", "black");
+				$('#data_btn').prop('disabled', false).css("color", "black");
 				strategy=true
 			}
 		});
@@ -162,13 +163,34 @@ $(document).ready(function(){
 			url: "/options/clear",
 			method: "POST",
 			success: function(data){
-				console.log("Session strategy deleted")
 				unloadData()
 				$('#legs_btn').prop('disabled', true).css("color", "grey");
+				$('#data_btn').prop('disabled', true).css("color", "grey");
 				strategy=false
 			}
 		});
 	});
+
+	$('#data_btn').on('click', function(event){
+		if(strategy===true){
+			$.ajax({
+				url: "/options/strategydata",
+				method: "GET", 
+				dataType: "json",
+				success: function(data){
+					if("status" in data){
+						render('#legs_empty_message', '#data_div')({});
+					}
+					else{
+					var template = $("#strategy_data_script").html()
+					var rendered = Mustache.render(template, data)
+					$('#data_div').html(rendered);
+					}
+				}
+			});
+		}
+	});
+
 
 })
 

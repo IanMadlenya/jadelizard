@@ -231,9 +231,9 @@ class Strategy:
 			elif position == "short":
 				total_cost -= cost 
 		if total_cost>0: 
-			return total_cost, "net debit"
+			return {"cost":total_cost, "type": "net debit"}
 		elif total_cost<0: 
-			return abs(total_cost), "net credit"
+			return {"cost":abs(total_cost), "type": "net credit"}
 
 	def strategy_greeks(self):
 		"""
@@ -373,20 +373,10 @@ class Strategy:
 		return strategy
 
 
-
 # class LongCall(Strategy): 
 # 	def __init__(self): 
 # 		super().__init__(BlackScholes)
 # 		self.add_leg("long", "call", 100, 110, 1, 0, .005, .25)
-
-	# a = LongCall()
-	# price_range = a.define_range(100)
-	# df = a.dataframe_setup(price_range)
-	# print(df)
-	# a.plot_profit(df)
-
-
-
 
 
 
