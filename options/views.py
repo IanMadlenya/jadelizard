@@ -129,7 +129,7 @@ class TrailingVol(View):
 class GetR(View): 
 	def get(self, request): 
 		r = Utils.get_r()
-		return JsonResponse({r}) 
+		return JsonResponse(r) 
 
 
 

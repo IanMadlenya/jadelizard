@@ -245,6 +245,26 @@ $(document).ready(function(){
 		});
 	});
 
+	$('#r_btn').on('click', function(event){
+		$('#r_loading').show()
+		$.ajax({
+			url: "/options/getr",
+			method: "GET", 
+			'data':$(this).serialize(),
+			success: function(data){
+				$('#r_loading').hide()
+				var template = $("#r_result_script").html()
+				var rendered = Mustache.render(template, data)
+				$('#r_result').html(rendered);
+			}
+		});
+	});
+
+	$('#r_hide').on('click', function(event){
+		$('#r_result_div').remove()
+		$('#r_modal').modal('hide')
+	});
+
 
 
 })
