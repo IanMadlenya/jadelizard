@@ -107,6 +107,11 @@ $(document).ready(function(){
 				$('#data_btn').prop('disabled', false).css("color", "black");
 				$('#model_btn').prop('disabled', false).css("color", "black");
 				strategy=true
+			}, 
+			statusCode: {
+				412: function(){
+					console.log("Missing Input")
+				}
 			}
 		});
 
@@ -221,9 +226,48 @@ $(document).ready(function(){
 		render('#hidden_fields', '#fields_div')({});
 	});
 
+	$('#vol_form_hide').on('click', function(event){
+		$('#vol_result_div').remove()
+		$('#vol_modal').modal('hide')
+	});
+
+	$('#vol_form').on('submit', function(event){
+		event.preventDefault();
+		$.ajax({
+			url:"/options/volcalc",
+			method: "GET", 
+			'data':$(this).serialize(), 
+			success: function(data){
+				var template = $("#vol_result_script").html()
+				var rendered = Mustache.render(template, data)
+				$('#vol_result_container').html(rendered);
+			}
+		});
+	});
+
+	$('#r_btn').on('click', function(event){
+		$('#r_loading').show()
+		$.ajax({
+			url: "/options/getr",
+			method: "GET", 
+			'data':$(this).serialize(),
+			success: function(data){
+				$('#r_loading').hide()
+				var template = $("#r_result_script").html()
+				var rendered = Mustache.render(template, data)
+				$('#r_result').html(rendered);
+			}
+		});
+	});
+
+	$('#r_hide').on('click', function(event){
+		$('#r_result_div').remove()
+		$('#r_modal').modal('hide')
+	});
+
+
+
 })
-
-
 
 
 

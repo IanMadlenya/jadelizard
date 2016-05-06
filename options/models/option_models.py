@@ -5,29 +5,6 @@ import uuid
 from .black_scholes_pricing import BlackScholes
 from .binomial_pricing import BinomialTree
 
-"""
-jadelizard.io
-
-ideas: 
-- Footer with links to: the source code on GitHub, my LinkedIn
-- Graph button separate and different color 
-
-To-Do list
-6. Templates
-7. Apply Decimal Object and remove tracking error
-8. Fix Binomial Tree theta (and gamma?)
-9. Yield, volatility, rfr as percentage inputs
-10. new ReadMe
-11. Color scheme function - "Classic" (green) or "Blue Jade" (current color scheme)
-
-
-Luxury Goals / New Features
-- Implied Volatility Calculator
-- Exponentially Weighted Historical volatility (vs. Equally weighted h.v.)
-- Use Redis to store strategy information in short-term in-memory storage and eliminate session storage
-
-"""
-
 class Option: 
 	"""
 	Option objects are the building blocks ("legs") for Options Strategies. 

@@ -28,8 +28,8 @@ STEPS_CHOICES=[
 
 class NewStrategyForm(forms.Form):
 	S0 = forms.FloatField(min_value=1, max_value=1000)
-	sigma = forms.FloatField(min_value=0, max_value=0.9999)
-	q = forms.FloatField(min_value=0, max_value=0.9999)
+	sigma = forms.FloatField(min_value=0, max_value=0.9999, required=True)
+	q = forms.FloatField(min_value=0, max_value=0.9999, required=True)
 	r = forms.FloatField(min_value=0, max_value=0.9999)
 
 class LegsForm(forms.Form): 
@@ -52,6 +52,9 @@ class PriceModelForm(forms.Form):
 		elif model == "BinomialTree":
 			self.cleaned_data['steps'] = int(self.cleaned_data['steps'])
 
+class VolForm(forms.Form): 
+	ticker = forms.CharField(min_length=1)
+	days = forms.IntegerField(min_value=7)
 
 
 

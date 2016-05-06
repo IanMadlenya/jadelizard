@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.generic import View
 from .models import (
-	Strategy, Option, BlackScholes, BinomialTree, InputCalc
+	Strategy, Option, BlackScholes, BinomialTree, Utils
 )
-from options.forms import NewStrategyForm, LegsForm, PriceModelForm
+from options.forms import NewStrategyForm, LegsForm, PriceModelForm, VolForm
 
 class Index(View): 
 	template_name = "options/base.html"
@@ -23,7 +23,7 @@ class NewStrategy(View):
 			sigma = form.cleaned_data.get("sigma")
 			request.session["current_strategy"] = Strategy(request.session["current_model"], S0, q, r, sigma).to_json()
 			return JsonResponse({"status":"success"})
-		return JsonResponse({"status":"Invalid or Missing Input"})
+		return JsonResponse({"status":"Invalid or Missing Input"}, status=412)
 
 class AddLeg(View): 
 	def post(self, request):
@@ -113,6 +113,23 @@ class ChooseModel(View):
 			request.session["current_strategy"] = strategy.to_json()
 			return JsonResponse({"status":"Pricing Model Settings Updated"})
 		return JsonResponse({"status":"Invalid or Missing Input"})
+
+class TrailingVol(View): 
+	def get(self, request):
+		form = VolForm(request.GET)
+		if form.is_valid(): 
+			ticker = form.data.get('ticker')
+			days = int(form.data.get('days'))
+			vol = Utils.trailing_volatility(ticker, days)
+			if not vol: 
+				return JsonResponse({"status":"Invalid Ticker"})
+			return JsonResponse({"vol":vol})
+		return JsonResponse({"status":"Invalid or Missing Input"})
+
+class GetR(View): 
+	def get(self, request): 
+		r = Utils.get_r()
+		return JsonResponse(r) 
 
 
 
