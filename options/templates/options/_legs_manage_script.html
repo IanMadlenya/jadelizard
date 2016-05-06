@@ -1,0 +1,46 @@
+{% verbatim %}
+<script type="mustache/template" id="legs_manage_script">
+	<ul class="list-group">
+		<li class="list-group-item">
+		  <table class="table table-hover">
+			<thead>
+			  <tr>
+				<th>Position</th>
+				<th>Kind</th>
+				<th>Strike</th>
+				<th>Time to Expiration</th>
+				<th></th>
+			  </tr>
+			</thead>
+			<tbody>
+			  {{#legs}}
+				<tr class="active">
+					<td><strong>{{position}}</strong></td>
+					<td><strong>{{kind}}</strong></td>
+					<td>${{K}}</td>
+					<td>{{T}} years</td>
+					<td style="text-align: right">
+						<form class="delete_leg_form">
+							<input type="hidden" name="id" value="{{id}}" />
+							<button class="leg_delete btn-xs btn-danger" type="btn btn-primary">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+								<a href="#"></a>
+							</button>
+						</form>
+					</td>
+				</tr>
+			  {{/legs}}
+			</tbody>
+		  </table>
+		</li>
+	</ul>
+</script>
+{% endverbatim %}
+
+<script type="mustache/template" id="legs_empty_message">
+	<div class="panel panel-default">
+	  <div class="panel-body">
+		The strategy is empty.
+	  </div>
+	</div>
+</script>

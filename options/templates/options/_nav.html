@@ -1,7 +1,7 @@
 {% verbatim %}
 	<script id="_nav" type="mustache/template">
 
-		<nav class="navbar navbar-inverse">
+		<nav class="navbar">
 			<div class="container-fluid">
 				<div class="navbar-header">
 
@@ -16,45 +16,32 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li class="dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Strategy
+							<a class="dropdown-toggle nav_button" data-toggle="dropdown" href="#">Strategy
 							<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a id="stgy_btn" data-toggle="modal" data-target="#stgy_modal" href="#">New Strategy</a></li>
-								<li><a id="legs_btn" data-toggle="modal" data-target="#legs_modal" href="#">Legs</a></li>
+								<li><a id="legs_btn" data-toggle="modal" data-target="#legs_modal" href="#">Manage Legs</a></li>
+								<li><a id="data_btn" data-toggle="modal" data-target="#data_modal" href="#">Strategy Info</a></li>
+								<li><a id="clear_btn" href="#">Clear</a></li>
 							</ul>
 						</li>
 						<li class="dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Tools
+							<a class="dropdown-toggle nav_button" data-toggle="dropdown" href="#">Tools
 							<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="#">Volatility Calculator</a></li>
-								<li><a href="#">Date Calculator</a></li>
 								<li><a href="#">Get Risk-Free Rate</a></li>
 							</ul>
 						</li>
 						<li class="dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Templates
+							<a class="dropdown-toggle nav_button" data-toggle="dropdown" href="#">Settings
 							<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<li><a href="#">Call</a></li>
-								<li><a href="#">Put</a></li>
-								<li><a href="#">Straddle</a></li>
-								<li><a href="#">Strangle</a></li>
-								<li><a href="#">Iron Butterfly</a></li>
-								<li><a href="#">Long Combination</a></li>
-								<li><a href="#">Double Diagonal</a></li>
-							</ul>
-						</li>
-						<li class="dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings
-							<span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="#">Price Model</a></li>
-								<li><a href="#">Window</a></li>
+								<li><a id="model_btn" href="#">Price Model</a></li>
 							</ul>
 						</li>
 						<li>
-							<a href="#">Graph
+							<a id="graph_btn" href="#">Graph
 							<span class="glyphicon glyphicon-stats" aria-hidden="true"></span></a>
 						</li>
 					</ul>

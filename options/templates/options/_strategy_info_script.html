@@ -1,0 +1,37 @@
+
+{% verbatim %}
+<script type="mustache/template" id="strategy_info_script">
+
+	<ul class="list-group">
+	    <li class="list-group-item">
+	      <table class="table table-hover">
+	        <thead>
+      		  <tr>
+                <th><i>S0</i></th>
+                <th><i>&sigma;</i></th>
+                <th><i>q</i></th>
+                <th><i>r</i></th>
+              </tr>
+            </thead>
+	      	<tbody>
+		        <tr class="active">
+					<td>${{S0}}</td>
+					<td>{{sigma}}</td>
+					<td>{{q}}</td>
+					<td>{{r}}</td>
+				</tr>
+			</tbody>
+		  </table>
+	    </li>
+	</ul>
+
+</script>
+{% endverbatim %}
+
+<script type="mustache/template" id="no_strategy_message">
+	<div class="panel panel-default">
+	  <div class="panel-body">
+	    No strategy found.
+	  </div>
+	</div>
+</script>

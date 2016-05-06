@@ -1,70 +1,50 @@
-
 <div class="modal fade" id="legs_modal" tabindex="-1" role="dialog" 
- aria-labelledby="myModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-    <div class="modal-content">
-        
-        <div class="modal-header">
-            <button type="button" class="close" 
-               data-dismiss="modal">
-                   <span aria-hidden="true">&times;</span>
-                   <span class="sr-only">Close</span>
-            </button>
-            <h4 class="modal-title" id="myModalLabel">
-                Add Leg to Strategy 
-            </h4>
-            <h6>
-            	All fields are required. Enter all values in decimal format. 
-            </h6>
-        </div>
-        
-        <div class="modal-body">
-            
-            <form id="legs_form" class="form-horizontal" role="form">
-              {% csrf_token %}
-              <div class="form-group">
-                <div class="col-sm-2"></div>
-                <div class="col-sm-2">
-                    <label>Position</label>
-                    <select name="position">
-                      <option value="BUY">Long</option>
-                      <option value="SELL">Short</option>
-                    </select>
-                </div>
-                <div class="col-sm-2">
-                    <label>Kind</label>
-                    <select name="kind">
-                      <option value="c">Call</option>
-                      <option value="p">Put</option>
-                    </select>
-                </div>
-              </div>
+	 aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	    <div class="modal-content">
 
+	    	<div class="modal-header">
+	            <button type="button" class="close" 
+	               data-dismiss="modal">
+	                   <span aria-hidden="true">&times;</span>
+	                   <span class="sr-only">Close</span>
+	            </button>
+	            <h5 class="modal-title">
+	            	Current Strategy 
+	            </h5>
+	    	</div>
+	    	<div class="modal-body" id="strategy_info_div">
+	    	</div>
+	        
+	        <div class="modal-header">
+	            <h5 class="modal-title" id="myModalLabel">
+	                Add Leg to Strategy 
+	            </h5>
+	            <h6>
+	            	All fields are required. Enter all values in decimal format. 
+	            </h6>
+	        </div>
+	        
+	        <div id="add_leg_div" class="modal-body">
+	        </div>
+	            
+	            <div class="modal-footer">
+	                <button type="submit" form="legs_form" class="btn btn-primary">
+	                    Add
+	                </button>
+	            </div>
 
-
-              <div class="form-group">
-                <label class="col-sm-2 control-label"><i>K</i></label>
-                <div class="col-sm-10">
-                    <input name="q" class="form-control" placeholder="Strike Price" autocomplete="off"/>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label"><i>T</i></label>
-                <div class="col-sm-10">
-                    <input name="r" class="form-control" placeholder="Time to Expiration (years)" autocomplete="off"/>
-                </div>
-              </div>
-            </form>
-            
-            
-            
+        	<div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Manage Legs</h5>
             </div>
-            
-            <div class="modal-footer">
-                <button type="submit" form="legs_form" class="btn btn-primary">
-                    Save
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+
+	        <div id="manage_legs_div" class="modal-body">
+	        </div>
+
+	        <div class="modal-footer">
+	        	<button class="btn btn-primary" data-dismiss="modal"><a href="#"></a>Save</button>
+	        </div>
+
+	        </div>
+	    </div>
+	</div>

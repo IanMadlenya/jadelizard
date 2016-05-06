@@ -10,12 +10,12 @@ var d3_chart = c3.generate({
 
 		empty: {
 			label: {
-				text: "Create a Strategy or Load a Template to begin."
+				text: "Create a Strategy to begin."
 			}
 		},
 
 		colors: {
-			strategy_profit: '#f2c83d',
+			strategy_profit: '#0073e5'
 		},
 
 		selection: {
@@ -50,12 +50,6 @@ var d3_chart = c3.generate({
 	},
 
 	grid: {
-		x: {
-			lines: [
-				{value: 0},
-      			{value: 100, text: 'S0', position: 'start'},
-			]
-		},
 		y: {
 			lines: [
 				{value: 0}
@@ -73,7 +67,12 @@ var d3_chart = c3.generate({
 	tooltip: {
 		format: {
 			title: function(x) {return "Underlying Value $" + x},
-			value: function (value) {return "$" + value.toFixed(2)},
+			value: function (value, id) {return "$" + value.toFixed(2)},
+			name: function(id) {
+				if(id==='strategy_profit'){
+					return "Strategy Profit"
+				}
+			}
 		}
 	},
 
@@ -84,7 +83,7 @@ var d3_chart = c3.generate({
 	subchart: {
 		show: true,
 		size: {
-			height:35
+			height:50
 		}
 	},
 
@@ -92,8 +91,8 @@ var d3_chart = c3.generate({
 		zerobased: false
 	},
 
-		size: {
-		height:500
+	size: {
+		height:640
 	},
 
 	bindto: "#d3_chart", 

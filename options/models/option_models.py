@@ -6,22 +6,25 @@ from .black_scholes_pricing import BlackScholes
 from .binomial_pricing import BinomialTree
 
 """
-First priority
-- Fix Binomial theta (and gamma?)
+jadelizard.io
 
-- Need yield, volatility, risk free rate as percentage inputs. 
-- Need to create one modal to manage all legs - can keep same form IDs and code, but include the forms inside 
-the same big modal that is rendered when the respective button is clicked 
-- If no strategy is present, instead of rendering legs modal, render small text modal with error msg 
+ideas: 
+- Footer with links to: the source code on GitHub, my LinkedIn
+- Graph button separate and different color 
+
+To-Do list
+6. Templates
+7. Apply Decimal Object and remove tracking error
+8. Fix Binomial Tree theta (and gamma?)
+9. Yield, volatility, rfr as percentage inputs
+10. new ReadMe
+11. Color scheme function - "Classic" (green) or "Blue Jade" (current color scheme)
+
 
 Luxury Goals / New Features
-- Create Default Strategy Templates 
-- Eliminate tracking error in BS models if possible
 - Implied Volatility Calculator
 - Exponentially Weighted Historical volatility (vs. Equally weighted h.v.)
 - Use Redis to store strategy information in short-term in-memory storage and eliminate session storage
-- Integrated add leg / update / delete form with (+) button to add new form fields for up to 6 forms. 
-	This is a big modal with multiple forms integrated into the modal.
 
 """
 
@@ -115,13 +118,16 @@ class Strategy:
 		self.exer_type = None
 		self.steps = None
 
-	def model_settings(self, exer_type, steps):
+	def model_settings(self, model_name, exer_type, steps): 
+		""" 
+		Converts the strategy to the price model given by the argument. 
 		"""
-		Sets exercise type and number of steps for binomial tree
-		"""
-		if self.model==BinomialTree:
-			self.exer_type=exer_type
-			self.steps=steps
+		self.model=self.pricing_models.get(model_name)
+		self.exer_type=exer_type
+		self.steps=steps
+		for each in self.legs: 
+			option = each["option"]
+			each["data"] = self.data(option)
 
 	def data(self, option): 
 		"""
@@ -146,10 +152,8 @@ class Strategy:
 			return item["exp"]
 		new_leg = Option(position, kind, self.S0, K, T, self.q, self.r, self.sigma)
 		data = self.data(new_leg)
-		time_exp = T
-		self.legs.append({"option":new_leg, "data":data, "exp":time_exp, "id":str(uuid.uuid4())})
+		self.legs.append({"option":new_leg, "data":data, "exp":T, "id":str(uuid.uuid4())})
 		self.legs = sorted(self.legs, key=compare)
-		# Need to remove add functionality in web app if 6 legs present
 
 	def remove_leg(self, _id):
 		for each in self.legs: 
@@ -217,9 +221,9 @@ class Strategy:
 			elif position == "short":
 				total_cost -= cost 
 		if total_cost>0: 
-			return total_cost, "net debit"
+			return {"cost":total_cost, "type": "net debit"}
 		elif total_cost<0: 
-			return abs(total_cost), "net credit"
+			return {"cost":abs(total_cost), "type": "net credit"}
 
 	def strategy_greeks(self):
 		"""
@@ -259,6 +263,7 @@ class Strategy:
 		from 0 to 2x the underlying value.
 		The scale of the axis depends on the value of the underlying.
 		"""
+		start = int(self.S0*0.25)+1
 		end = int(self.S0*2)+1
 		def scale(): 
 			if self.S0<5: 
@@ -278,7 +283,7 @@ class Strategy:
 			elif self.S0<=1000: 
 				return 5
 		scale = scale()
-		price_range = np.arange(0,end,scale)
+		price_range = np.arange(start,end,scale)
 		index = np.arange(0,len(price_range), 1)
 		return index, price_range
 
@@ -292,25 +297,37 @@ class Strategy:
 		df['strategy_profit'] = df.price_range.map(lambda x: self.strategy_value(x)["profit"])
 		return df
 
-	def run_models(self): 
+	def graph_data(self): 
 		"""
-		Returns JSON copy of dataframe for graphing in C3
+		Returns copy of dataframe for graphing in C3
 		"""
 		cols = self.define_range()
 		df = self.dataframe_setup(cols[0], cols[1])
 		return df.to_json(orient='records')
 
-	def convert(self, model): 
-		""" 
-		Converts the strategy to the price model given by the argument. 
-		Exercise type and steps are reset to default values. 
+	def legs_data(self): 
 		"""
-		self.model = model
-		self.exer_type=None
-		self.steps=None
+		Returns legs-specific data for display 
+		"""
+		legs = []
 		for each in self.legs: 
 			option = each["option"]
-			each["data"] = self.data(option)
+			legs.append({"position":option.position.upper(), "kind":option.kind.upper(), "K":option.K, "T":option.T, "id":each["id"]})
+		return legs
+
+	def valid_graph(self): 
+		"""
+		If no legs are present, graphing is disabled
+		"""
+		if len(self.legs)==0: 
+			return False
+
+	def valid_legs(self): 
+		"""
+		Maximum of 6 legs for graphing
+		"""
+		if len(self.legs)==6:
+			return False
 
 	def to_json(self): 
 		return {
@@ -321,7 +338,7 @@ class Strategy:
 		"sigma":self.sigma,
 		"exer_type":self.exer_type,
 		"steps":self.steps,
-		"legs": [{"data":leg["data"], "id": leg["id"], "option":leg["option"].to_json()} for leg in self.legs]
+		"legs": [{"data":leg["data"], "id": leg["id"], "exp": leg["exp"], "option" :leg["option"].to_json()} for leg in self.legs]
 		}
 
 	@classmethod
@@ -330,24 +347,14 @@ class Strategy:
 		strategy.exer_type = data["exer_type"]
 		strategy.steps = data["steps"]
 		legs = data["legs"]
-		strategy.legs = [{"data":leg["data"], "id":leg["id"], "option":Option.from_json(leg["option"])} for leg in legs]
+		strategy.legs = [{"data":leg["data"], "id":leg["id"], "exp":leg["exp"], "option":Option.from_json(leg["option"])} for leg in legs]
 		return strategy
-
 
 
 # class LongCall(Strategy): 
 # 	def __init__(self): 
 # 		super().__init__(BlackScholes)
 # 		self.add_leg("long", "call", 100, 110, 1, 0, .005, .25)
-
-	# a = LongCall()
-	# price_range = a.define_range(100)
-	# df = a.dataframe_setup(price_range)
-	# print(df)
-	# a.plot_profit(df)
-
-
-
 
 
 

@@ -1,0 +1,33 @@
+<script type="mustache/template" id="legs_form_script">
+	<form id="legs_form" class="form-horizontal" role="form">
+	  <div class="form-group">
+	    <div class="col-sm-1"></div>
+	    <div class="col-sm-2">
+	        <label>Position</label>
+	        <select class="field-input" name="position">
+	          <option selected="selected" value="long">Long</option>
+	          <option value="short">Short</option>
+	        </select>
+	    </div>
+	    <div class="col-sm-2">
+	        <label>Kind</label>
+	        <select class="field-input" name="kind">
+	          <option selected="selected" value="call">Call</option>
+	          <option value="put">Put</option>
+	        </select>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-1 control-label"><i>K</i></label>
+	    <div class="col-sm-10">
+	        <input name="K" class="form-control field-input" placeholder="Strike Price" autocomplete="off"/>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-1 control-label"><i>T</i></label>
+	    <div class="col-sm-10">
+	        <input name="T" class="form-control field-input" placeholder="Time to Expiration In Years" autocomplete="off"/>
+	    </div>
+	  </div>
+	</form>
+</script>
