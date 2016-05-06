@@ -61,7 +61,7 @@ var d3_chart = c3.generate({
 		show: false,
 		select: {
 			r: 4
-		}
+		},
 	},
 
 	tooltip: {

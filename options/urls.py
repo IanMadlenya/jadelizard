@@ -13,4 +13,6 @@ urlpatterns = [
 	url(r'^clear$', views.ClearData.as_view(), name='clear'),
 	url(r'^strategydata$', views.StrategyData.as_view(), name='strategydata'),
 	url(r'^choosemodel$', views.ChooseModel.as_view(), name='choosemodel'),
+	url(r'^volcalc$', views.TrailingVol.as_view(), name='volcalc'),
+	url(r'^getr$', views.GetR.as_view(), name='getr'),
 ]

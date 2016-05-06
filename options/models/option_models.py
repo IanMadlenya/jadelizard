@@ -13,7 +13,6 @@ ideas:
 - Graph button separate and different color 
 
 To-Do list
-6. Templates
 7. Apply Decimal Object and remove tracking error
 8. Fix Binomial Tree theta (and gamma?)
 9. Yield, volatility, rfr as percentage inputs
