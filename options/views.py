@@ -102,40 +102,19 @@ class StrategyData(View):
 
 class ChooseModel(View): 
 	def post(self, request): 
-		print(request.session["current_model"])
 		form = PriceModelForm(request.POST)
-		print(request.POST)
 		if form.is_valid(): 
-			print("form")
-			model = request.POST.get('model')
+			model = form.cleaned_data.get('model')
+			exer_type = form.cleaned_data.get("exer_type")
+			steps = form.cleaned_data.get("steps")
 			request.session["current_model"] = model
-			if request.session["current_strategy"]==None: 
-				print(request.session["current_model"], "No options to convert")
-				return JsonResponse({"status":"Pricing Model Selected"})
 			strategy = Strategy.from_json(request.session["current_strategy"])
-			strategy.convert(model)
+			strategy.model_settings(model, exer_type, steps)
 			request.session["current_strategy"] = strategy.to_json()
-			print(request.session["current_model"], "Options converted")
-			return JsonResponse({"status":"Pricing Model Selected"})
-		print("invalid")
+			return JsonResponse({"status":"Pricing Model Settings Updated"})
 		return JsonResponse({"status":"Invalid or Missing Input"})
 
 
-
-
-
-# 		new_strategy = Strategy("BlackScholes", 100, .05, .005, .50)
-# 		# new_strategy.convert(BinomialTree)
-# 		new_strategy.model_settings('european', 25)
-# 		Long Calendar Spread
-# 		# new_strategy.add_leg("long", "call", 100, 2)
-# 		# new_strategy.add_leg("short", "call", 100, 1)
-#		Double Diagonal
-# 		new_strategy.add_leg("short", "put", 75, 1)
-# 		new_strategy.add_leg("short", "call", 110, 1)
-# 		new_strategy.add_leg("long", "put", 70, 1.5)
-# 		new_strategy.add_leg("long", "call", 130, 1.5)
-#
 
 
 				

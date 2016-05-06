@@ -13,7 +13,6 @@ ideas:
 - Graph button separate and different color 
 
 To-Do list
-4. Button to set the current price model, and exercise type / # steps 
 6. Templates
 7. Apply Decimal Object and remove tracking error
 8. Fix Binomial Tree theta (and gamma?)
@@ -119,13 +118,16 @@ class Strategy:
 		self.exer_type = None
 		self.steps = None
 
-	def model_settings(self, exer_type, steps):
+	def model_settings(self, model_name, exer_type, steps): 
+		""" 
+		Converts the strategy to the price model given by the argument. 
 		"""
-		Sets exercise type and number of steps for binomial tree
-		"""
-		if self.model==BinomialTree:
-			self.exer_type=exer_type
-			self.steps=steps
+		self.model=self.pricing_models.get(model_name)
+		self.exer_type=exer_type
+		self.steps=steps
+		for each in self.legs: 
+			option = each["option"]
+			each["data"] = self.data(option)
 
 	def data(self, option): 
 		"""
@@ -152,7 +154,6 @@ class Strategy:
 		data = self.data(new_leg)
 		self.legs.append({"option":new_leg, "data":data, "exp":T, "id":str(uuid.uuid4())})
 		self.legs = sorted(self.legs, key=compare)
-		# Need to remove add functionality in web app if 6 legs present
 
 	def remove_leg(self, _id):
 		for each in self.legs: 
@@ -313,18 +314,6 @@ class Strategy:
 			option = each["option"]
 			legs.append({"position":option.position.upper(), "kind":option.kind.upper(), "K":option.K, "T":option.T, "id":each["id"]})
 		return legs
-
-	def convert(self, model_name): 
-		""" 
-		Converts the strategy to the price model given by the argument. 
-		Exercise type and steps are reset to default values. 
-		"""
-		self.model = self.pricing_models.get(model_name)
-		self.exer_type=None
-		self.steps=None
-		for each in self.legs: 
-			option = each["option"]
-			each["data"] = self.data(option)
 
 	def valid_graph(self): 
 		"""

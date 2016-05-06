@@ -10,7 +10,7 @@ var d3_chart = c3.generate({
 
 		empty: {
 			label: {
-				text: "Create a Strategy or Load a Template to begin."
+				text: "Create a Strategy to begin."
 			}
 		},
 

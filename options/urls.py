@@ -13,5 +13,4 @@ urlpatterns = [
 	url(r'^clear$', views.ClearData.as_view(), name='clear'),
 	url(r'^strategydata$', views.StrategyData.as_view(), name='strategydata'),
 	url(r'^choosemodel$', views.ChooseModel.as_view(), name='choosemodel'),
-
 ]

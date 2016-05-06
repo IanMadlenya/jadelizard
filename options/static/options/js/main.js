@@ -81,9 +81,10 @@ var getStrategy = function(){
 $(document).ready(function(){
 	render('#_nav', "#navbar_div")({});
 
-	// Global strategy variable blocks access to Legs modal until a strategy is created
+	// Disable legs modal, strategy data modal, model settings modal until strategy is created
 	$('#legs_btn').prop('disabled', true).css("color", "grey");
 	$('#data_btn').prop('disabled', true).css("color", "grey");
+	$('#model_btn').prop('disabled', true).css("color", "grey");
 	strategy=false
 
 	$("#graph_btn").on('click', function(event){
@@ -104,6 +105,7 @@ $(document).ready(function(){
 			success:function(data){
 				$('#legs_btn').prop('disabled', false).css("color", "black");
 				$('#data_btn').prop('disabled', false).css("color", "black");
+				$('#model_btn').prop('disabled', false).css("color", "black");
 				strategy=true
 			}
 		});
@@ -166,6 +168,7 @@ $(document).ready(function(){
 				unloadData()
 				$('#legs_btn').prop('disabled', true).css("color", "grey");
 				$('#data_btn').prop('disabled', true).css("color", "grey");
+				$('#model_btn').prop('disabled', true).css("color", "grey");
 				strategy=false
 			}
 		});
@@ -192,22 +195,30 @@ $(document).ready(function(){
 	});
 
 	$('#model_btn').on('click', function(event){
-		$('#model_modal').modal('toggle')
+		if(strategy===true){
+			$('#model_modal').modal('toggle')			
+		}
 	});
 
 	$('#model_form').on('submit', function(event){
 		var data = $(this).serialize();
-		console.log(data)
 		event.preventDefault();
 		$.ajax({
 			url: "/options/choosemodel",
 			method: "POST",
 			'data':data,
 			success:function(data){
-				console.log("Model changed")
 				$('#model_modal').modal('hide')
 			}
 		});
+	});
+
+	$('#bs_input').on('click', function(event){
+		$('#fields_template').remove()
+	});
+
+	$('#bt_input').on('click', function(event){
+		render('#hidden_fields', '#fields_div')({});
 	});
 
 })

@@ -21,9 +21,9 @@ EXER_CHOICES=[
 ]
 
 STEPS_CHOICES=[
-("10",10),
-("25",25),
-("50",50)
+(10,"10"),
+(25,"25"),
+(50,"50")
 ]
 
 class NewStrategyForm(forms.Form):
@@ -40,10 +40,36 @@ class LegsForm(forms.Form):
 
 class PriceModelForm(forms.Form): 
 	model = forms.ChoiceField(choices=MODEL_CHOICES)
+	exer_type = forms.ChoiceField(choices=EXER_CHOICES, required=False)
+	steps = forms.ChoiceField(choices=STEPS_CHOICES, required=False)
 
-class ModelSettingsForm(forms.Form):
-	exer_type = forms.ChoiceField(choices=EXER_CHOICES)
-	steps = forms.ChoiceField(choices=STEPS_CHOICES)
+	def clean(self):
+		self.cleaned_data = super().clean()
+		model = self.cleaned_data.get("model")
+		if model == "BlackScholes":
+			self.cleaned_data['exer_type']=None
+			self.cleaned_data['steps']=None
+		elif model == "BinomialTree":
+			self.cleaned_data['steps'] = int(self.cleaned_data['steps'])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
