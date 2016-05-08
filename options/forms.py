@@ -28,14 +28,20 @@ STEPS_CHOICES=[
 
 class NewStrategyForm(forms.Form):
 	S0 = forms.FloatField(min_value=1, max_value=1000)
-	sigma = forms.FloatField(min_value=0, max_value=0.9999, required=True)
-	q = forms.FloatField(min_value=0, max_value=0.9999, required=True)
-	r = forms.FloatField(min_value=0, max_value=0.9999)
+	sigma = forms.FloatField(min_value=0.1, max_value=100, required=True)
+	q = forms.FloatField(min_value=0, max_value=100, required=True)
+	r = forms.FloatField(min_value=0, max_value=100)
+
+	def clean(self): 
+		self.cleaned_data = super().clean()
+		self.cleaned_data['sigma'] = self.cleaned_data['sigma']/100
+		self.cleaned_data['q'] = self.cleaned_data['q']/100
+		self.cleaned_data['r'] = self.cleaned_data['r']/100
 
 class LegsForm(forms.Form): 
 	position = forms.ChoiceField(choices=POSITION_CHOICES)
 	kind = forms.ChoiceField(choices=KIND_CHOICES)
-	K = forms.FloatField(min_value=1, max_value=1000)
+	K = forms.FloatField(min_value=1, max_value=1500)
 	T = forms.FloatField(min_value=.01, max_value=20)
 
 class PriceModelForm(forms.Form): 

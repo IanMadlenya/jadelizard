@@ -1,0 +1,11 @@
+#project_info_table th {
+	text-align: center;
+}
+
+#project_info_modal .modal-dialog {
+	width: 30%;
+}
+
+#jadelizard {
+	font-family: 'Josefin Sans';
+}

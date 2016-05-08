@@ -122,13 +122,15 @@ class TrailingVol(View):
 			days = int(form.data.get('days'))
 			vol = Utils.trailing_volatility(ticker, days)
 			if not vol: 
-				return JsonResponse({"status":"Invalid Ticker"})
+				return JsonResponse({"status":"Error Getting Volatility Data"}, status=503)
 			return JsonResponse({"vol":vol})
 		return JsonResponse({"status":"Invalid or Missing Input"})
 
 class GetR(View): 
 	def get(self, request): 
 		r = Utils.get_r()
+		if not r:
+			return JsonResponse({"status":"Error Retrieving Data"}, status=503)
 		return JsonResponse(r) 
 
 

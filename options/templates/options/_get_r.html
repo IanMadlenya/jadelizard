@@ -1,18 +1,12 @@
 
-<div class="modal fade" id="r_modal" tabindex="-1" role="dialog" 
- aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="r_modal" tabindex="-1" role="dialog">
 <div class="modal-dialog">
     <div class="modal-content">
         
         <div class="modal-header">
-            <button type="button" class="close" 
-               data-dismiss="modal">
-                   <span aria-hidden="true">&times;</span>
-                   <span class="sr-only">Close</span>
-            </button>
-            <h5 class="modal-title" id="myModalLabel">
-                Current Risk-Free Rate (90-Day Treasury)
-            </h5>
+          <h5 class="modal-title">
+              Current Risk-Free Rate (90-Day Treasury)
+          </h5>
         </div>
         
         <div class="modal-body">
@@ -20,6 +14,8 @@
             Loading...
           </p>
           <div id="r_result">
+          </div>
+          <div id="r_error">
           </div>
         </div>
             
@@ -32,14 +28,13 @@
     </div>
 </div>
 
-
 {% verbatim %}
 <script id="r_result_script" type="mustache/template">
         <div id="r_result_div" class="panel panel-default">
           <div class="panel-body">
             <p id="rate">
-              <strong>Daily: </strong>{{daily}}<br>
-              <strong>Monthly: </strong>{{monthly}}
+              <strong>Daily (FRED DGS3MO): </strong>{{daily}}<br>
+              <strong>Monthly (FRED GS3M): </strong>{{monthly}}
             </p>
           </div>
         </div>

@@ -8,6 +8,9 @@
 		<link rel="stylesheet" type="text/css" href="{% static 'c3/c3.min.css' %}">
 		<link rel="stylesheet" type="text/css" href="{% static 'options/css/base.css' %}">
 		<link rel="stylesheet" type="text/css" href="{% static 'options/css/nav.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'options/css/project_info.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'options/css/settings.css' %}">
+		<link href='http://fonts.googleapis.com/css?family=Josefin+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		<script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" 
 		crossorigin="anonymous"></script>
 		<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.1/mustache.min.js"></script>
@@ -45,6 +48,9 @@
 		{% include "options/_model_settings_form.html" %}
 		{% include "options/_vol_form.html" %}
 		{% include "options/_get_r.html" %}
+		{% include "options/_conn_error_script.html" %}
+		{% include "options/_input_error_script.html" %}
+		{% include "options/_project_info.html" %}
 
 	</body>
 </html>

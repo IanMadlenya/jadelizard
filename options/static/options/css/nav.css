@@ -24,3 +24,13 @@
 #graph_btn:hover{
 	background-color:#477bc3!important;
 }
+
+#logo_btn {
+	color: white;
+	font-family: 'Josefin Sans';
+	font-size: 2em;
+}
+
+#logo_btn:hover {
+	text-decoration: underline;
+}

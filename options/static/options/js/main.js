@@ -87,12 +87,21 @@ $(document).ready(function(){
 	$('#model_btn').prop('disabled', true).css("color", "grey");
 	strategy=false
 
+	$('#logo_btn').on('click', function(event){
+		$('#project_info_modal').modal('toggle');
+	});
+
 	$("#graph_btn").on('click', function(event){
 		graphData()
 	});
 
 	$('#stgy_btn').on('click','a', function(event){
 		$('#stgy_modal').modal('toggle')
+	});
+
+	$('#stgy_modal').on('hidden.bs.modal', function () {
+		$('#input_error_div').remove()
+    	$(this).find(".field-input").val('').end();
 	});
 
 	$('#stgy_form').on('submit', function(event){
@@ -107,19 +116,15 @@ $(document).ready(function(){
 				$('#data_btn').prop('disabled', false).css("color", "black");
 				$('#model_btn').prop('disabled', false).css("color", "black");
 				strategy=true
+				$('#stgy_modal').modal('hide')
 			}, 
 			statusCode: {
 				412: function(){
-					console.log("Missing Input")
+					render('#input_error_script', '#stgy_input_error_div')({});
 				}
 			}
 		});
 
-	$('#stgy_modal').on('hidden.bs.modal', function () {
-    $(this).find(".field-input").val('').end();
-	});
-
-	$('#stgy_modal').modal('hide')
 	});
 
 	$('#legs_btn').on('click', function(event){
@@ -228,6 +233,9 @@ $(document).ready(function(){
 
 	$('#vol_form_hide').on('click', function(event){
 		$('#vol_result_div').remove()
+		$('#conn_error_div').remove()
+		$('#input_error_div').remove()
+		$('#vol_form')[0].reset();
 		$('#vol_modal').modal('hide')
 	});
 
@@ -238,9 +246,19 @@ $(document).ready(function(){
 			method: "GET", 
 			'data':$(this).serialize(), 
 			success: function(data){
+				if(data['status']=="Invalid or Missing Input"){
+					render('#input_error_script', '#vol_result_container')({});
+				}
+				else{
 				var template = $("#vol_result_script").html()
 				var rendered = Mustache.render(template, data)
 				$('#vol_result_container').html(rendered);
+				}
+			},
+			statusCode: {
+				503: function() {
+					render('#conn_error_script', '#vol_result_container')({});
+				}
 			}
 		});
 	});
@@ -256,6 +274,12 @@ $(document).ready(function(){
 				var template = $("#r_result_script").html()
 				var rendered = Mustache.render(template, data)
 				$('#r_result').html(rendered);
+			},
+			statusCode: {
+				503: function(){
+					$('#r_loading').hide()
+					render('#conn_error_script', '#r_result')({});
+				}
 			}
 		});
 	});
