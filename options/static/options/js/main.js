@@ -88,9 +88,7 @@ $(document).ready(function(){
 	strategy=false
 
 	$('#logo_btn').on('click', function(event){
-		console.log("click")
 		$('#project_info_modal').modal('toggle');
-		console.log($('#project_info_modal'))
 	});
 
 	$("#graph_btn").on('click', function(event){
