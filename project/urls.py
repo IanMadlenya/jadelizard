@@ -20,3 +20,4 @@ urlpatterns = [
 	url(r'^options/', include('options.urls', namespace='options')),
     url(r'^', RedirectView.as_view(url="/options/"))
 ]
+
