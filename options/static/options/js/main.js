@@ -176,7 +176,7 @@ $(document).ready(function(){
 	});
 
 	$('#manage_legs_div').on('click', '.edit_btn', function(event){
-		event.preventDefault()
+		event.preventDefault();
 		var id_ = $(this).data('id');
 		id_selector = "#".concat(id_);
 		$.ajax({
@@ -202,16 +202,13 @@ $(document).ready(function(){
 				}
 			}
 		});
-
-		// create new form that is a table row
-		// make the 4 fields the same type as the input fields above in the legs modal
-		// Use mustache and value= / .val() to populate the 4 fields with their set values 
-		// make the submit button submit the form, re-render the whole div, update the values, restore the old buttons
 	});
 
 	$('#manage_legs_div').on('submit', '.update_leg_form', function(event){
+		event.preventDefault();
 		console.log("SUBMIT")
 	});
+		// make the submit button submit the form, re-render the whole div, update the values, restore the old buttons
 
 	$('#clear_btn').on('click', function(event){
 		$.ajax({

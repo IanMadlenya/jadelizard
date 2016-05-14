@@ -1,8 +1,6 @@
 {% verbatim %}
-	<script type="mustache/template" id="update_leg_script">
-
-	
-			<form class="update_leg_form">
+	<script type="mustache/template" id="save-{{id}}">
+		<form class="update_leg_form" id="testform">
 			<td class="col-sm-2" id="edit-select-pos">
 		        <select class="field-input" name="position" selected={{position}}>
 		          <option id="position_long" value="long">Long</option>
@@ -24,23 +22,20 @@
 				</div>
 			</td>
 			<td class="edit-input-save">
-				<button class="btn-xs btn" type="btn btn-primary">
+				<button class="btn-xs btn" type="btn btn-primary" form="save-{{id}}">
 					<span class="glyphicon glyphicon-save" aria-hidden="true"></span>
 					<a href="#"></a>
 				</button>
 			</td>
+		</form>
+		<td class="edit-input-del">
+			<form class="delete_leg_form">
+				<input type="hidden" name="id" value="{{id}}" />
+				<button class="btn-xs btn" type="btn btn-primary">
+					<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+					<a href="#"></a>
+				</button>
 			</form>
-			<td class="edit-input-del">
-				<form class="delete_leg_form">
-					<input type="hidden" name="id" value="{{id}}" />
-					<button class="btn-xs btn" type="btn btn-primary">
-						<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-						<a href="#"></a>
-					</button>
-				</form>
-			</td>
-
-
-
+		</td>
 	</script>
 {% endverbatim %}
