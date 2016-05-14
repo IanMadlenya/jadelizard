@@ -32,6 +32,7 @@ class NewStrategyForm(forms.Form):
 	q = forms.FloatField(min_value=0, max_value=100, required=True)
 	r = forms.FloatField(min_value=0, max_value=100)
 
+	# Clean percentages from user form to decimals for use in pricing models
 	def clean(self): 
 		self.cleaned_data = super().clean()
 		self.cleaned_data['sigma'] = self.cleaned_data['sigma']/100

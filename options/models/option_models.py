@@ -292,6 +292,19 @@ class Strategy:
 			legs.append({"position":option.position.upper(), "kind":option.kind.upper(), "K":option.K, "T":option.T, "id":each["id"]})
 		return legs
 
+	def leg_by_id(self, id_): 
+		"""
+		Returns leg data by UUID
+		"""
+		for each in self.legs: 
+			if each["id"]==id_:
+				return {
+					"position":each["option"].position,
+					"kind":each["option"].kind,
+					"K":each["option"].K,
+					"T":each["option"].T
+				} 
+
 	def valid_graph(self): 
 		"""
 		If no legs are present, graphing is disabled

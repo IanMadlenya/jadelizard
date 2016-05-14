@@ -22,6 +22,7 @@ var graphData = function(options){
 					},
 				});
 				d3_chart.xgrids([{value: S0, text: 'S0'},])
+				d3_chart.ygrids([{value: 0},])
 			},	
 			statusCode: {
 				412: function() {
@@ -42,6 +43,7 @@ var unloadData = function(){
 	d3_chart.ygrids.remove()
 };
 
+// All Legs
 var getLegs = function(){
 	$.ajax({
 		url: "/options/displaylegs",
@@ -74,6 +76,17 @@ var getStrategy = function(){
 				var rendered = Mustache.render(template, data)
 				$('#strategy_info_div').html(rendered);
 			}
+		}
+	});
+}
+
+var deleteLeg = function(form) {
+		$.ajax({
+		url: "/options/deleteleg",
+		method: "POST",
+		data: form.serialize(),
+		success: function(data){
+			getLegs();
 		}
 	});
 }
@@ -159,25 +172,42 @@ $(document).ready(function(){
 
 	$('#manage_legs_div').on('submit', '.delete_leg_form', function(event){
 		event.preventDefault();
-		var id_ = $(this).data('id');
-		$.ajax({
-			url: "/options/deleteleg",
-			method: "POST",
-			data: $(this).serialize(),
-			success: function(data){
-				getLegs();
-			}
-		});
+		deleteLeg($(this));
 	});
 
 	$('#manage_legs_div').on('click', '.edit_btn', function(event){
 		event.preventDefault()
-		console.log("EDIT")
 		var id_ = $(this).data('id');
-		var parent = $(this).parent();
-		// var id_ = $(this).data('id');
+		// var parent = $(this).parent();
 		console.log(id_)
-		render('.update_leg_script', parent)({});
+		// render('#update_leg_script_', parent)({});
+		id_selector = "#".concat(id_);
+
+		$.ajax({
+			url: "/options/getleg",
+			method: "GET", 
+			dataType: "json",
+			data: {id:id_},
+			success: function(data){
+				var template = $('#update_leg_script').html()
+				var rendered = Mustache.render(template, data)
+				$(id_selector).html(rendered);
+				console.log(data)
+				if(data['position']==='long'){
+					$('#position_long').prop("selected", true)
+				}
+				else if(data['position']==='short'){
+					$('#position_short').prop("selected", true)
+				}
+				if(data['kind']==='call'){
+					$('#kind_call').prop("selected", true)
+				}
+				else if(data['kind']==='put'){
+					$('#kind_put').prop("selected", true)
+				}
+			}
+		});
+
 		// create new form that is a table row
 		// make the 4 fields the same type as the input fields above in the legs modal
 		// Use mustache and value= / .val() to populate the 4 fields with their set values 

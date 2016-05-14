@@ -9,3 +9,21 @@
 .glyphicon-save {
 	color: white;
 }
+
+.edit-input-save {
+	text-align: right;
+	vertical-align: middle;
+}
+
+.edit-input-del {
+	text-align: left;
+	vertical-align: middle;
+}
+
+#edit-select-pos {
+	vertical-align: middle;
+}
+
+#edit-select-kind {
+	vertical-align: middle;
+}
