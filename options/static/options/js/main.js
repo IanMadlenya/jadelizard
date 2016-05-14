@@ -178,11 +178,7 @@ $(document).ready(function(){
 	$('#manage_legs_div').on('click', '.edit_btn', function(event){
 		event.preventDefault()
 		var id_ = $(this).data('id');
-		// var parent = $(this).parent();
-		console.log(id_)
-		// render('#update_leg_script_', parent)({});
 		id_selector = "#".concat(id_);
-
 		$.ajax({
 			url: "/options/getleg",
 			method: "GET", 
@@ -192,7 +188,6 @@ $(document).ready(function(){
 				var template = $('#update_leg_script').html()
 				var rendered = Mustache.render(template, data)
 				$(id_selector).html(rendered);
-				console.log(data)
 				if(data['position']==='long'){
 					$('#position_long').prop("selected", true)
 				}

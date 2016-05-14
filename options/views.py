@@ -86,7 +86,6 @@ class GetLeg(View):
 		strategy = Strategy.from_json(request.session["current_strategy"])
 		id_ = request.GET.get('id')
 		data = strategy.leg_by_id(id_)
-		print(data.keys())
 		return JsonResponse(data)
 
 class UpdateLeg(View): 

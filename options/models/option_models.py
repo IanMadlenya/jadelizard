@@ -302,7 +302,8 @@ class Strategy:
 					"position":each["option"].position,
 					"kind":each["option"].kind,
 					"K":each["option"].K,
-					"T":each["option"].T
+					"T":each["option"].T, 
+					"id":each["id"]
 				} 
 
 	def valid_graph(self): 
