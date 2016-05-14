@@ -206,9 +206,16 @@ $(document).ready(function(){
 
 	$('#manage_legs_div').on('submit', '.update_leg_form', function(event){
 		event.preventDefault();
-		console.log("SUBMIT")
+		var data = $(this).serialize();
+		$.ajax({
+			url: '/options/updateleg',
+			method: 'POST',
+			'data': data,
+			success: function(){
+				getLegs()
+			},
+		});
 	});
-		// make the submit button submit the form, re-render the whole div, update the values, restore the old buttons
 
 	$('#clear_btn').on('click', function(event){
 		$.ajax({
