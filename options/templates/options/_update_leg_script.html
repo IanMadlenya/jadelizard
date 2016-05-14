@@ -1,22 +1,22 @@
 {% verbatim %}
-	<script type="mustache/template" id="save-{{id}}">
-		<form class="update_leg_form" id="testform">
-			<td class="col-sm-2" id="edit-select-pos">
+	<script type="mustache/template" id="update_leg_script">
+		<form class="update_leg_form" id="save-{{id}}">
+			<td class="col-sm-2 row-val">
 		        <select class="field-input" name="position" selected={{position}}>
 		          <option id="position_long" value="long">Long</option>
 		          <option id="position_short" value="short">Short</option>
 		        </select>
 			</td>
-			<td class="col-sm-2 edit-select" id="edit-select-kind">
+			<td class="col-sm-2 row-val">
 		        <select class="field-input" name="kind" value={{kind}}>
 		          <option id="kind_call" value="call">Call</option>
 		          <option id="kind_put" value="put">Put</option>
 		        </select>
 			</td>
-			<td class="edit-input-td col-sm-2">
+			<td class="col-sm-2 row-val">
 				<input name="K" class="form-control field-input input-sm" value={{K}} autocomplete="off"/>
 			</td>
-			<td class="edit-input-td col-sm-4">
+			<td class="col-sm-4 row-val">
 				<div class="col-sm-8">
 					<input name="T" class="form-control field-input input-sm" value={{T}} autocomplete="off"/>
 				</div>
