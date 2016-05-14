@@ -95,27 +95,20 @@ class UpdateLeg(View):
 	def post(self, request): 
 		form = LegsForm(request.POST)
 		if form.is_valid(): 
-			print("VALID")
 			strategy = Strategy.from_json(request.session["current_strategy"])
 			id_ = request.POST.get('id')
-			position = request.POST.get('position')
-			kind = request.POST.get('kind')
-			K = request.POST.get('K')
-			T = request.POST.get('T')
+			position = form.cleaned_data.get('position')
+			kind = form.cleaned_data.get('kind')
+			K = form.cleaned_data.get('K')
+			T = form.cleaned_data.get('T')
 			print(position, kind, K, T)
 			for each in strategy.legs: 
 				if each["id"]==id_: 
-					print("ID MATCH")
 					strategy.remove_leg(id_)
-					print("REMOVED")
 					strategy.add_leg(position, kind, K, T)
-					print("ADDED")
 			request.session["current_strategy"] = strategy.to_json()
 			return JsonResponse({"status":"Leg Updated"})
-		else: 
-			print("INVALID")
-			print(form.data)
-			return JsonResponse({"status":"Invalid or Missing Input"})
+		return JsonResponse({"status":"Invalid or Missing Input"})
 
 class GraphData(View): 
 	"""
