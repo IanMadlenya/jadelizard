@@ -98,7 +98,8 @@ $(document).ready(function(){
 	$('#legs_btn').prop('disabled', true).css("color", "grey");
 	$('#data_btn').prop('disabled', true).css("color", "grey");
 	$('#model_btn').prop('disabled', true).css("color", "grey");
-	strategy=false
+	var strategy=false
+	var id_selector=null
 
 	$('#logo_btn').on('click', function(event){
 		$('#project_info_modal').modal('toggle');
@@ -211,8 +212,13 @@ $(document).ready(function(){
 			url: '/options/updateleg',
 			method: 'POST',
 			'data': data,
-			success: function(){
-				getLegs()
+			success: function(data){
+				if(data['status']=="Invalid or Missing Input"){
+					$('.edit-input').css('border','0.05em solid #a72101');
+				}
+				else {
+				getLegs();					
+				}
 			},
 		});
 	});

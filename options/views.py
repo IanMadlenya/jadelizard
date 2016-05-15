@@ -101,13 +101,13 @@ class UpdateLeg(View):
 			kind = form.cleaned_data.get('kind')
 			K = form.cleaned_data.get('K')
 			T = form.cleaned_data.get('T')
-			print(position, kind, K, T)
 			for each in strategy.legs: 
 				if each["id"]==id_: 
 					strategy.remove_leg(id_)
 					strategy.add_leg(position, kind, K, T)
 			request.session["current_strategy"] = strategy.to_json()
 			return JsonResponse({"status":"Leg Updated"})
+		print(form.errors)
 		return JsonResponse({"status":"Invalid or Missing Input"})
 
 class GraphData(View): 
