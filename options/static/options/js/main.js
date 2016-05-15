@@ -156,13 +156,31 @@ $(document).ready(function(){
 			method: "POST",
 			'data':data,
 			success: function(data){
-				$(this).find(".field-input").val('').end();
-				render('#legs_form_script', '#add_leg_div')({});
-				getLegs();
+				if('fields' in data){
+					fields=JSON.parse(data['fields'])	
+					if('K' in fields){
+						$('#add-input-k').css('border','0.05em solid #a72101');
+					}
+					else{
+						$('#add-input-k').removeAttr('style');
+					}
+					if('T' in fields){
+						$('#add-input-t').css('border','0.05em solid #a72101');
+					}
+					else{
+						$('#add-input-t').removeAttr('style');
+					}
+				}
+				else {
+					$(this).find(".field-input").val('').end();
+					render('#legs_form_script', '#add_leg_div')({});
+					getLegs();
+				}
 			},
+			// Strategy max # legs reached
 			statusCode: {
 				422: function() {
-					$('#max_legs_modal').modal('toggle')
+					render('#strategy-full', '#add_leg_desc')({});
 					$(this).find(".field-input").val('').end();
 					render('#legs_form_script', '#add_leg_div')({});
 				},
@@ -358,23 +376,4 @@ $(document).ready(function(){
 
 
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
