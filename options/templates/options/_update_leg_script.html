@@ -1,0 +1,45 @@
+{% verbatim %}
+	<script type="mustache/template" id="update_leg_script">
+		<form class="update_leg_form" id="save-{{id}}" role="form">
+			<td class="col-sm-2 row-align">
+		        <select class="field-input" name="position" form="save-{{id}}">
+		          <option id="position_long" value="long">Long</option>
+		          <option id="position_short" value="short">Short</option>
+		        </select>
+			</td>
+			<td class="col-sm-2 row-align">
+		        <select class="field-input" name="kind" value={{kind}} form="save-{{id}}">
+		          <option id="kind_call" value="call">Call</option>
+		          <option id="kind_put" value="put">Put</option>
+		        </select>
+			</td>
+			<td class="col-sm-2 row-align">
+				<input form="save-{{id}}" name="K" class="form-control field-input input-sm" id="edit-input-k" value={{K}} autocomplete="off"/>
+			</td>
+			<td class="col-sm-4 row-align">
+				<div class="col-sm-8">
+					<input form="save-{{id}}" name="T" class="form-control field-input input-sm" id="edit-input-t" value={{T}} autocomplete="off"/>
+				</div>
+			</td>
+			<td class="edit-input-save">
+				<input form="save-{{id}}" type="hidden" name="id" value="{{id}}" />
+				<button class="btn-xs btn" type="btn btn-primary" form="save-{{id}}">
+					<span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+					<a href="#"></a>
+				</button>
+			</td>
+		</form>
+		<td class="edit-input-del">
+			<form class="delete_leg_form">
+				<input type="hidden" name="id" value="{{id}}" />
+				<button class="btn-xs btn" type="btn btn-primary">
+					<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+					<a href="#"></a>
+				</button>
+			</form>
+		</td>
+	</script>
+{% endverbatim %}
+
+
+

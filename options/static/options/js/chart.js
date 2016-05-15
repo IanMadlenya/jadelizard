@@ -50,14 +50,6 @@ var d3_chart = c3.generate({
 		},
 	},
 
-	grid: {
-		y: {
-			lines: [
-				{value: 0}
-			]
-		}
-	},
-
 	point: {
 		show: false,
 		select: {

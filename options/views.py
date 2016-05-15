@@ -14,6 +14,9 @@ class Index(View):
 		return render(request, self.template_name)
 
 class NewStrategy(View): 
+	"""
+	Save constants for the underlying instrument 
+	"""
 	def post(self, request): 
 		form = NewStrategyForm(request.POST)
 		if form.is_valid():
@@ -26,6 +29,9 @@ class NewStrategy(View):
 		return JsonResponse({"status":"Invalid or Missing Input"}, status=412)
 
 class AddLeg(View): 
+	"""
+	Add leg to strategy (up to 6)
+	"""
 	def post(self, request):
 		form = LegsForm(request.POST)
 		strategy = Strategy.from_json(request.session["current_strategy"])
@@ -42,18 +48,27 @@ class AddLeg(View):
 		return JsonResponse({"status":"Invalid or Missing Input"})
 
 class DisplayLegs(View): 
+	"""
+	Fetch all legs for display
+	"""
 	def get(self, request): 
 		strategy = Strategy.from_json(request.session["current_strategy"])
 		data = strategy.legs_data()
 		return JsonResponse({'legs':data})
 
 class StrategyInfo(View): 
+	"""
+	Fetch user entered values for the strategy for display
+	"""
 	def get(self, request): 
 		strategy = Strategy.from_json(request.session["current_strategy"])
 		data = {"S0":strategy.S0, "sigma":strategy.sigma, "q":strategy.q, "r":strategy.r}
 		return JsonResponse(data)
 
 class DeleteLeg(View): 
+	"""
+	Delete individual leg selected by UUID
+	"""
 	def post(self, request): 
 		strategy = Strategy.from_json(request.session["current_strategy"])
 		id_ = request.POST.get('id')
@@ -61,9 +76,44 @@ class DeleteLeg(View):
 			if each["id"]==id_: 
 				strategy.legs.remove(each)
 		request.session["current_strategy"] = strategy.to_json()
-		return JsonResponse({"message":"leg deleted"})
+		return JsonResponse({"status":"Leg Deleted"})
+
+class GetLeg(View): 
+	"""
+	Get individual leg data by UUID
+	"""
+	def get(self, request): 
+		strategy = Strategy.from_json(request.session["current_strategy"])
+		id_ = request.GET.get('id')
+		data = strategy.leg_by_id(id_)
+		return JsonResponse(data)
+
+class UpdateLeg(View): 
+	"""
+	Update values for a preexisting Leg
+	"""
+	def post(self, request): 
+		form = LegsForm(request.POST)
+		if form.is_valid(): 
+			strategy = Strategy.from_json(request.session["current_strategy"])
+			id_ = request.POST.get('id')
+			position = form.cleaned_data.get('position')
+			kind = form.cleaned_data.get('kind')
+			K = form.cleaned_data.get('K')
+			T = form.cleaned_data.get('T')
+			for each in strategy.legs: 
+				if each["id"]==id_: 
+					strategy.remove_leg(id_)
+					strategy.add_leg(position, kind, K, T)
+			request.session["current_strategy"] = strategy.to_json()
+			return JsonResponse({"status":"Leg Updated"})
+		invalid_fields = {"fields":form.errors.as_json()}
+		return JsonResponse(invalid_fields)
 
 class GraphData(View): 
+	"""
+	Get JSON (orient=records) with pricing index (x) and strategy P/L (y) for graphing
+	"""
 	def get(self, request): 
 		if request.session["current_strategy"]==None: 
 			return JsonResponse({"status":"No Strategy Present"}, status=412)
@@ -75,6 +125,9 @@ class GraphData(View):
 		return JsonResponse({"data":json_data, "S0":S0})
 
 class ClearData(View): 
+	"""
+	Clear the current strategy in the session
+	"""
 	def post(self, request): 
 		if request.session["current_strategy"]==None: 
 			return JsonResponse({"status":"No Strategy Present"})
@@ -83,6 +136,9 @@ class ClearData(View):
 			return JsonResponse({"status":"Strategy Cleared"})
 
 class StrategyData(View):
+	"""
+	Get Strategy Setup Cost and Greek Values
+	"""
 	def get(self, request): 
 		strategy = Strategy.from_json(request.session["current_strategy"])
 		if len(strategy.legs)==0:
@@ -101,6 +157,9 @@ class StrategyData(View):
 		return JsonResponse(data)
 
 class ChooseModel(View): 
+	"""
+	Set Model, Steps, Exercise Type, Reprice Options in Strategy
+	"""
 	def post(self, request): 
 		form = PriceModelForm(request.POST)
 		if form.is_valid(): 
@@ -115,6 +174,9 @@ class ChooseModel(View):
 		return JsonResponse({"status":"Invalid or Missing Input"})
 
 class TrailingVol(View): 
+	"""
+	Get volatility by ticker for given # of trailing days
+	"""
 	def get(self, request):
 		form = VolForm(request.GET)
 		if form.is_valid(): 
@@ -127,6 +189,9 @@ class TrailingVol(View):
 		return JsonResponse({"status":"Invalid or Missing Input"})
 
 class GetR(View): 
+	"""
+	Fetch risk-free rate of return (90-Day Treasury)
+	"""
 	def get(self, request): 
 		r = Utils.get_r()
 		if not r:

@@ -22,6 +22,7 @@ var graphData = function(options){
 					},
 				});
 				d3_chart.xgrids([{value: S0, text: 'S0'},])
+				d3_chart.ygrids([{value: 0},])
 			},	
 			statusCode: {
 				412: function() {
@@ -42,6 +43,7 @@ var unloadData = function(){
 	d3_chart.ygrids.remove()
 };
 
+// All Legs
 var getLegs = function(){
 	$.ajax({
 		url: "/options/displaylegs",
@@ -78,6 +80,17 @@ var getStrategy = function(){
 	});
 }
 
+var deleteLeg = function(form) {
+		$.ajax({
+		url: "/options/deleteleg",
+		method: "POST",
+		data: form.serialize(),
+		success: function(data){
+			getLegs();
+		}
+	});
+}
+
 $(document).ready(function(){
 	render('#_nav', "#navbar_div")({});
 
@@ -85,7 +98,7 @@ $(document).ready(function(){
 	$('#legs_btn').prop('disabled', true).css("color", "grey");
 	$('#data_btn').prop('disabled', true).css("color", "grey");
 	$('#model_btn').prop('disabled', true).css("color", "grey");
-	strategy=false
+	var strategy=false
 
 	$('#logo_btn').on('click', function(event){
 		$('#project_info_modal').modal('toggle');
@@ -159,14 +172,67 @@ $(document).ready(function(){
 
 	$('#manage_legs_div').on('submit', '.delete_leg_form', function(event){
 		event.preventDefault();
+		deleteLeg($(this));
+	});
+
+	$('#manage_legs_div').on('click', '.edit_btn', function(event){
+		event.preventDefault();
 		var id_ = $(this).data('id');
+		var id_selector = "#".concat(id_);
 		$.ajax({
-			url: "/options/deleteleg",
-			method: "POST",
-			data: $(this).serialize(),
+			url: "/options/getleg",
+			method: "GET", 
+			dataType: "json",
+			data: {id:id_},
 			success: function(data){
-				getLegs();
+				var template = $('#update_leg_script').html()
+				var rendered = Mustache.render(template, data)
+				$(id_selector).html(rendered);
+				$('.edit_btn').prop('disabled', true);
+				if(data['position']==='long'){
+					$('#position_long').prop("selected", true)
+				}
+				else if(data['position']==='short'){
+					$('#position_short').prop("selected", true)
+				}
+				if(data['kind']==='call'){
+					$('#kind_call').prop("selected", true)
+				}
+				else if(data['kind']==='put'){
+					$('#kind_put').prop("selected", true)
+				}
 			}
+		});
+	});
+
+	$('#manage_legs_div').on('submit', '.update_leg_form', function(event){
+		event.preventDefault();
+		var data = $(this).serialize();
+		$.ajax({
+			url: '/options/updateleg',
+			method: 'POST',
+			'data': data,
+			success: function(data){
+				if('fields' in data){
+					fields=JSON.parse(data['fields'])	
+					if('K' in fields){
+						$('#edit-input-k').css('border','0.05em solid #a72101');
+					}
+					else{
+						$('#edit-input-k').removeAttr('style');
+					}
+					if('T' in fields){
+						$('#edit-input-t').css('border','0.05em solid #a72101');
+					}
+					else{
+						$('#edit-input-t').removeAttr('style');
+					}
+				}
+				else {
+				getLegs();	
+				$('.edit_btn').prop('disabled', false);
+				}
+			},
 		});
 	});
 

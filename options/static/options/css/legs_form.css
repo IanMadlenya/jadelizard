@@ -1,0 +1,37 @@
+.glyphicon-pencil {
+	color: white;
+}
+
+.glyphicon-trash {
+	color: white;
+}
+
+.glyphicon-save {
+	color: white;
+}
+
+.row-align {
+	vertical-align: middle!important;
+}
+
+.edit-input-edit {
+	text-align: right;
+	vertical-align: middle!important;
+}
+
+.edit-input-save {
+	text-align: right;
+	vertical-align: middle!important;
+}
+
+.edit-input-del {
+	text-align: left;
+	vertical-align: middle!important;
+	padding-left: 0.2em!important;
+}
+
+.leg_row {
+   line-height: 3.5em!important;
+   min-height: 3.5em!important;
+   height: 3.5em!important;
+}

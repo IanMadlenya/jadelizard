@@ -12,4 +12,3 @@ jadelizard is an interactive options strategy graphing calculator.
 * Fetch risk-free rate and trailing volatility by ticker 
 
 
-
