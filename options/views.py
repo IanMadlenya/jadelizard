@@ -62,7 +62,7 @@ class StrategyInfo(View):
 	"""
 	def get(self, request): 
 		strategy = Strategy.from_json(request.session["current_strategy"])
-		data = {"S0":strategy.S0, "sigma":strategy.sigma, "q":strategy.q, "r":strategy.r}
+		data = {"S0":round(strategy.S0, 2), "sigma":round(strategy.sigma, 7), "q":round(strategy.q, 7), "r":round(strategy.r, 7)}
 		return JsonResponse(data)
 
 class DeleteLeg(View): 
