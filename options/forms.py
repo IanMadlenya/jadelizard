@@ -1,4 +1,5 @@
 from django import forms 
+from django.core.validators import RegexValidator
 
 POSITION_CHOICES=[
 ("long", "long"),
@@ -26,6 +27,8 @@ STEPS_CHOICES=[
 (50,"50")
 ]
 
+alpha = RegexValidator(r'^[a-z A-Z]*$', 'Only letters are allowed.')
+
 class NewStrategyForm(forms.Form):
 	S0 = forms.FloatField(min_value=1, max_value=1000)
 	sigma = forms.FloatField(min_value=0.1, max_value=100, required=True)
@@ -33,7 +36,7 @@ class NewStrategyForm(forms.Form):
 	r = forms.FloatField(min_value=0, max_value=100)
 
 	# Clean percentages from user form to decimals for use in pricing models
-	def clean(self): 
+	def clean_data(self): 
 		self.cleaned_data = super().clean()
 		self.cleaned_data['sigma'] = self.cleaned_data['sigma']/100
 		self.cleaned_data['q'] = self.cleaned_data['q']/100
@@ -60,7 +63,7 @@ class PriceModelForm(forms.Form):
 			self.cleaned_data['steps'] = int(self.cleaned_data['steps'])
 
 class VolForm(forms.Form): 
-	ticker = forms.CharField(min_length=1)
+	ticker = forms.CharField(min_length=1, validators=[alpha])
 	days = forms.IntegerField(min_value=7)
 
 

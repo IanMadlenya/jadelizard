@@ -27,7 +27,7 @@
                 <div class="col-sm-8">
                     <div class="input-group">
                       <div class="input-group-addon">$</div>
-                      <input name="S0" class="form-control field-input" placeholder="Price of Underlying Instrument" autocomplete="off"/>
+                      <input name="S0" id="stgy-input-S0" class="form-control field-input stgy-input" placeholder="Price of Underlying Instrument" autocomplete="off"/>
                     </div>
                 </div>
               </div>
@@ -35,7 +35,7 @@
                 <label class="col-sm-2 control-label"><i>&sigma;</i></label>
                 <div class="col-sm-8">
                   <div class="input-group">
-                    <input name="sigma" class="form-control field-input" placeholder="Volatility of Underlying Instrument" autocomplete="off"/>
+                    <input name="sigma" id="stgy-input-sigma" class="form-control field-input stgy-input" placeholder="Volatility of Underlying Instrument" autocomplete="off"/>
                     <div class="input-group-addon">%</div>
                   </div>
                 </div>
@@ -44,7 +44,7 @@
                 <label class="col-sm-2 control-label"><i>q</i></label>
                 <div class="col-sm-8">
                   <div class="input-group">
-                    <input name="q" class="form-control field-input" placeholder="Continuously Compounded Dividend Yield" autocomplete="off"/>
+                    <input name="q" id="stgy-input-q" class="form-control field-input stgy-input" placeholder="Continuously Compounded Dividend Yield" autocomplete="off"/>
                     <div class="input-group-addon">%</div>
                   </div>
                 </div>
@@ -53,15 +53,13 @@
                 <label class="col-sm-2 control-label"><i>r</i></label>
                 <div class="col-sm-8">
                   <div class="input-group">
-                    <input name="r" class="form-control field-input" placeholder="Risk-Free Rate of Return" autocomplete="off"/>
+                    <input name="r" id="stgy-input-r" class="form-control field-input stgy-input" placeholder="Risk-Free Rate of Return" autocomplete="off"/>
                     <div class="input-group-addon">%</div>
                   </div>
                 </div>
               </div>
             </form>
 
-            <div id="stgy_input_error_div">
-            </div>
         </div>
             
             <div class="modal-footer">

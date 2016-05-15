@@ -20,13 +20,15 @@ class NewStrategy(View):
 	def post(self, request): 
 		form = NewStrategyForm(request.POST)
 		if form.is_valid():
+			form.clean_data()
 			S0 = form.cleaned_data.get("S0")
 			q = form.cleaned_data.get("q")
 			r = form.cleaned_data.get("r")
 			sigma = form.cleaned_data.get("sigma")
 			request.session["current_strategy"] = Strategy(request.session["current_model"], S0, q, r, sigma).to_json()
 			return JsonResponse({"status":"success"})
-		return JsonResponse({"status":"Invalid or Missing Input"}, status=412)
+		invalid_fields = {"fields":form.errors.as_json()}
+		return JsonResponse(invalid_fields)
 
 class AddLeg(View): 
 	"""
@@ -187,7 +189,8 @@ class TrailingVol(View):
 			if not vol: 
 				return JsonResponse({"status":"Error Getting Volatility Data"}, status=503)
 			return JsonResponse({"vol":vol})
-		return JsonResponse({"status":"Invalid or Missing Input"})
+		invalid_fields = {"fields":form.errors.as_json()}
+		return JsonResponse(invalid_fields)
 
 class GetR(View): 
 	"""

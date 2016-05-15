@@ -113,7 +113,7 @@ $(document).ready(function(){
 	});
 
 	$('#stgy_modal').on('hidden.bs.modal', function () {
-		$('#input_error_div').remove()
+		$('.stgy-input').removeAttr('style');
     	$(this).find(".field-input").val('').end();
 	});
 
@@ -125,19 +125,43 @@ $(document).ready(function(){
 			method: "POST",
 			'data':data,
 			success:function(data){
-				$('#legs_btn').prop('disabled', false).css("color", "black");
-				$('#data_btn').prop('disabled', false).css("color", "black");
-				$('#model_btn').prop('disabled', false).css("color", "black");
-				strategy=true
-				$('#stgy_modal').modal('hide')
-			}, 
-			statusCode: {
-				412: function(){
-					render('#input_error_script', '#stgy_input_error_div')({});
+				if('fields' in data){
+					fields=JSON.parse(data['fields'])	
+					if('S0' in fields){
+						$('#stgy-input-S0').css('border','0.05em solid #a72101');
+					}
+					else {
+						$('#stgy-input-S0').removeAttr('style');
+					}
+					if('sigma' in fields){
+						$('#stgy-input-sigma').css('border','0.05em solid #a72101');
+					}
+					else {
+						$('#stgy-input-sigma').removeAttr('style');
+					}
+					if('q' in fields){
+						$('#stgy-input-q').css('border','0.05em solid #a72101');
+					}
+					else {
+						$('#stgy-input-q').removeAttr('style');
+					}
+					if('r' in fields){
+						$('#stgy-input-r').css('border','0.05em solid #a72101');
+					}
+					else {
+						$('#stgy-input-r').removeAttr('style');
+					}
 				}
-			}
+				else{
+					$('.stgy-input').removeAttr('style');
+					$('#legs_btn').prop('disabled', false).css("color", "black");
+					$('#data_btn').prop('disabled', false).css("color", "black");
+					$('#model_btn').prop('disabled', false).css("color", "black");
+					strategy=true
+					$('#stgy_modal').modal('hide')
+				}
+			}, 
 		});
-
 	});
 
 	$('#legs_btn').on('click', function(event){
@@ -318,20 +342,33 @@ $(document).ready(function(){
 	$('#vol_form_hide').on('click', function(event){
 		$('#vol_result_div').remove()
 		$('#conn_error_div').remove()
-		$('#input_error_div').remove()
 		$('#vol_form')[0].reset();
+		$('.vol-input').removeAttr('style');
 		$('#vol_modal').modal('hide')
 	});
 
 	$('#vol_form').on('submit', function(event){
 		event.preventDefault();
+		$('.vol-input').removeAttr('style');
 		$.ajax({
 			url:"/options/volcalc",
 			method: "GET", 
 			'data':$(this).serialize(), 
 			success: function(data){
-				if(data['status']=="Invalid or Missing Input"){
-					render('#input_error_script', '#vol_result_container')({});
+				if('fields' in data){
+					fields=JSON.parse(data['fields'])	
+					if('ticker' in fields){
+						$('#vol-input-ticker').css('border','0.05em solid #a72101');
+					}
+					else{
+						$('#vol-input-ticker').removeAttr('style');
+					}
+					if('days' in fields){
+						$('#vol-input-days').css('border','0.05em solid #a72101');
+					}
+					else{
+						$('#vol-input-days').removeAttr('style');
+					}
 				}
 				else{
 				var template = $("#vol_result_script").html()
