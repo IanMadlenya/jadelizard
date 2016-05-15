@@ -99,7 +99,6 @@ $(document).ready(function(){
 	$('#data_btn').prop('disabled', true).css("color", "grey");
 	$('#model_btn').prop('disabled', true).css("color", "grey");
 	var strategy=false
-	var id_selector=null
 
 	$('#logo_btn').on('click', function(event){
 		$('#project_info_modal').modal('toggle');
@@ -179,7 +178,7 @@ $(document).ready(function(){
 	$('#manage_legs_div').on('click', '.edit_btn', function(event){
 		event.preventDefault();
 		var id_ = $(this).data('id');
-		id_selector = "#".concat(id_);
+		var id_selector = "#".concat(id_);
 		$.ajax({
 			url: "/options/getleg",
 			method: "GET", 

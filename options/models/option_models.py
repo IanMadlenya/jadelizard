@@ -284,12 +284,15 @@ class Strategy:
 
 	def legs_data(self): 
 		"""
-		Returns legs-specific data for display 
+		Returns legs-specific data for display, sorted by strike price
 		"""
+		def compare(item): 
+			return item["K"]
 		legs = []
 		for each in self.legs: 
 			option = each["option"]
 			legs.append({"position":option.position.upper(), "kind":option.kind.upper(), "K":option.K, "T":option.T, "id":each["id"]})
+		legs = sorted(legs, key=compare)
 		return legs
 
 	def leg_by_id(self, id_): 
