@@ -189,6 +189,7 @@ $(document).ready(function(){
 				var template = $('#update_leg_script').html()
 				var rendered = Mustache.render(template, data)
 				$(id_selector).html(rendered);
+				$('.edit_btn').prop('disabled', true);
 				if(data['position']==='long'){
 					$('#position_long').prop("selected", true)
 				}
@@ -229,7 +230,8 @@ $(document).ready(function(){
 					}
 				}
 				else {
-				getLegs();					
+				getLegs();	
+				$('.edit_btn').prop('disabled', false);
 				}
 			},
 		});
