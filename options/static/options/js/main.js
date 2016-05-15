@@ -213,8 +213,20 @@ $(document).ready(function(){
 			method: 'POST',
 			'data': data,
 			success: function(data){
-				if(data['status']=="Invalid or Missing Input"){
-					$('.edit-input').css('border','0.05em solid #a72101');
+				if('fields' in data){
+					fields=JSON.parse(data['fields'])	
+					if('K' in fields){
+						$('#edit-input-k').css('border','0.05em solid #a72101');
+					}
+					else{
+						$('#edit-input-k').removeAttr('style');
+					}
+					if('T' in fields){
+						$('#edit-input-t').css('border','0.05em solid #a72101');
+					}
+					else{
+						$('#edit-input-t').removeAttr('style');
+					}
 				}
 				else {
 				getLegs();					

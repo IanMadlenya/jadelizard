@@ -107,8 +107,8 @@ class UpdateLeg(View):
 					strategy.add_leg(position, kind, K, T)
 			request.session["current_strategy"] = strategy.to_json()
 			return JsonResponse({"status":"Leg Updated"})
-		print(form.errors)
-		return JsonResponse({"status":"Invalid or Missing Input"})
+		invalid_fields = {"fields":form.errors.as_json()}
+		return JsonResponse(invalid_fields)
 
 class GraphData(View): 
 	"""
