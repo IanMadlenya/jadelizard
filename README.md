@@ -1,4 +1,5 @@
 ## jadelizard 1.0
+##### Live at **[jadelizard.io](http://jadelizard.io)**
 
 #### What it is
 jadelizard is an interactive options strategy graphing calculator.
@@ -9,6 +10,5 @@ jadelizard is an interactive options strategy graphing calculator.
 * Valuation with Black-Scholes-Merton or Binomial Tree Models 
 * User Input for Exercise Type and # Tree Steps for Binomial Tree
 * Fetch risk-free rate and trailing volatility by ticker 
-
 
 

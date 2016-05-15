@@ -1,5 +1,5 @@
-"""project URL Configuration
 
+"""project URL Configuration
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.9/topics/http/urls/
 Examples:
@@ -16,8 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.views.generic.base import RedirectView
 
-
 urlpatterns = [
 	url(r'^options/', include('options.urls', namespace='options')),
-	url(r'^', RedirectView.as_view(url="/options/"))
+    url(r'^', RedirectView.as_view(url="/options/"))
 ]
