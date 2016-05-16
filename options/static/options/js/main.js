@@ -62,28 +62,26 @@ var getLegs = function(){
 	});
 };
 
-// set render to false to only retrieve data 
-var getStrategy = function(render){
+// UpdateStrategy context - show strategy data in stgy update form
+// LegsModal context - show strategy data in legs modal
+var getStrategy = function(context){
 	$.ajax({
 		url: "/options/strategyinfo",
 		method: "GET",
 		dataType: "json",
 		success: function(data){
-			if(render===true){
-				if(data.length===0){
-					render('#no_strategy_message', '#strategy_info_div')({});
+			if(context==="LegsModal"){
+				var template = $("#strategy_info_script").html()
+				var rendered = Mustache.render(template, data)
+				$('#strategy_info_div').html(rendered);
 				}
-				else{
-					var template = $("#strategy_info_script").html()
-					var rendered = Mustache.render(template, data)
-					$('#strategy_info_div').html(rendered);
-				}
-			}
-			else{
-				console.log("render false")
-				// printing data returns dictionary with 4 values
-				console.log(data)
-				return data
+			else if(context==="UpdateStrategy"){
+				data['sigma']=data['sigma']*100
+				data['q']=data['q']*100
+				data['r']=data['r']*100
+				var template = $('#stgy_update_form_script').html()
+				var rendered = Mustache.render(template, data)
+				$('#update_form_div').html(rendered);
 			}
 		}
 	});
@@ -122,14 +120,8 @@ $(document).ready(function(){
 			$('#stgy_modal').modal('toggle');
 		}
 		else if(strategy===true){
-			data = getStrategy(false)
-			console.log(data)
-			// this returns "undefined"
-			var template = $('#stgy_update_form_script').html()
-			var rendered = Mustache.render(template, data)
-			$('#update_form_div').html(rendered);
-
 			$('#stgy_update_modal').modal('toggle');
+			getStrategy("UpdateStrategy");
 		}
 	});
 
@@ -186,9 +178,13 @@ $(document).ready(function(){
 		});
 	});
 
+	$('#update_form_div'.on('submit', '#stgy_update_form', function(event){
+		console.log("SUBMIT")
+	});
+
 	$('#legs_btn').on('click', function(event){
 		if(strategy===true){
-			getStrategy(true);
+			getStrategy("LegsModal");
 			render('#legs_form_script', '#add_leg_div')({});
 			getLegs();
 		}
