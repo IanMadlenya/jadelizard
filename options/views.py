@@ -34,6 +34,7 @@ class UpdateStrategy(View):
 	def post(self, request): 
 		form = StrategyForm(request.POST)
 		if form.is_valid(): 
+			form.clean_data()
 			strategy = Strategy.from_json(request.session["current_strategy"])
 			S0 = form.cleaned_data.get("S0")
 			q = form.cleaned_data.get("q")
@@ -80,7 +81,7 @@ class StrategyInfo(View):
 	"""
 	def get(self, request): 
 		strategy = Strategy.from_json(request.session["current_strategy"])
-		data = {"S0":round(strategy.S0, 2), "sigma":round(strategy.sigma, 7), "q":round(strategy.q, 7), "r":round(strategy.r, 7)}
+		data = {"S0":round(strategy.S0, 2), "sigma":round(strategy.sigma, 6), "q":round(strategy.q, 6), "r":round(strategy.r, 6)}
 		return JsonResponse(data)
 
 class DeleteLeg(View): 

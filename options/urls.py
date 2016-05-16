@@ -6,6 +6,7 @@ urlpatterns = [
 	url(r'^$', views.Index.as_view(), name='index'),
 	url(r'^graphdata$', views.GraphData.as_view(), name='graphdata'),
 	url(r'^stgyform$', views.NewStrategy.as_view(), name='stgyform'),
+	url(r'^updatestgy$', views.UpdateStrategy.as_view(), name='updatestgy'),
 	url(r'^legsform$', views.AddLeg.as_view(), name='legsform'),
 	url(r'^displaylegs$', views.DisplayLegs.as_view(), name='displaylegs'),
 	url(r'^getleg$', views.GetLeg.as_view(), name='getleg'),

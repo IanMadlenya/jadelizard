@@ -178,8 +178,51 @@ $(document).ready(function(){
 		});
 	});
 
-	$('#update_form_div'.on('submit', '#stgy_update_form', function(event){
-		console.log("SUBMIT")
+	$('#update_form_div').on('submit', '#stgy_update_form', function(event){
+		event.preventDefault();
+		var data = $(this).serialize();
+		$.ajax({
+			url: "/options/updatestgy", 
+			method: "POST", 
+			'data': data,
+			success:function(data){
+				if('fields' in data){
+					fields=JSON.parse(data['fields'])	
+					if('S0' in fields){
+						$('#stgy-update-input-S0').css('border','0.05em solid #a72101');
+					}
+					else {
+						$('#stgy-update-input-S0').removeAttr('style');
+					}
+					if('sigma' in fields){
+						$('#stgy-update-input-sigma').css('border','0.05em solid #a72101');
+					}
+					else {
+						$('#stgy-update-input-sigma').removeAttr('style');
+					}
+					if('q' in fields){
+						$('#stgy-update-input-q').css('border','0.05em solid #a72101');
+					}
+					else {
+						$('#stgy-update-input-q').removeAttr('style');
+					}
+					if('r' in fields){
+						$('#stgy-update-input-r').css('border','0.05em solid #a72101');
+					}
+					else {
+						$('#stgy-update-input-r').removeAttr('style');
+					}
+				}
+				else{
+					// has-success attribute on Update button or green border, checkmark
+					console.log("All good")
+				}
+			}
+		})
+	});
+
+	$('#stgy_update_form_hide').on('click', function(event){
+		$('#stgy_update_modal').modal('toggle');
 	});
 
 	$('#legs_btn').on('click', function(event){
