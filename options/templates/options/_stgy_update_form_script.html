@@ -1,0 +1,40 @@
+<script type="mustache/template" id="stgy_update_form_script">
+  <form id= "stgy_update_form" class="form-horizontal" role="form">
+    <div class="form-group">
+      <label  class="col-sm-2 control-label"><i>S0</i></label>
+      <div class="col-sm-8">
+          <div class="input-group">
+            <div class="input-group-addon">$</div>
+            <input name="S0" id="stgy-update-input-S0" class="form-control field-input stgy-input" placeholder="Price of Underlying Instrument" autocomplete="off" value={{S0}}/>
+          </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label"><i>&sigma;</i></label>
+      <div class="col-sm-8">
+        <div class="input-group">
+          <input name="sigma" id="stgy-update-input-sigma" class="form-control field-input stgy-input" placeholder="Volatility of Underlying Instrument" autocomplete="off" value={{sigma}}/>
+          <div class="input-group-addon">%</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label"><i>q</i></label>
+      <div class="col-sm-8">
+        <div class="input-group">
+          <input name="q" id="stgy-update-input-q" class="form-control field-input stgy-input" placeholder="Continuously Compounded Dividend Yield" autocomplete="off" value={{q}}/>
+          <div class="input-group-addon">%</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label"><i>r</i></label>
+      <div class="col-sm-8">
+        <div class="input-group">
+          <input name="r" id="stgy-update-input-r" class="form-control field-input stgy-input" placeholder="Risk-Free Rate of Return" autocomplete="off" value={{r}}/>
+          <div class="input-group-addon">%</div>
+        </div>
+      </div>
+    </div>
+  </form>
+</script>

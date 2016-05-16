@@ -31,18 +31,19 @@ class NewStrategy(View):
 		return JsonResponse(invalid_fields)
 
 class UpdateStrategy(View): 
-	form = StrategyForm(request.POST)
-	if form.is_valid(): 
-		strategy = Strategy.from_json(request.session["current_strategy"])
-		S0 = form.cleaned_data.get("S0")
-		q = form.cleaned_data.get("q")
-		r = form.cleaned_data.get("r")
-		sigma = form.cleaned_data.get("sigma")
-		strategy.edit_strategy(S0, sigma, q, r)
-		request.session["current_strategy"] = strategy.to_json()
-		return JsonResponse({"status":"Strategy Values Updated"})
-	invalid_fields = {"fields":form.errors.as_json()}
-	return JsonResponse(invalid_fields)
+	def post(self, request): 
+		form = StrategyForm(request.POST)
+		if form.is_valid(): 
+			strategy = Strategy.from_json(request.session["current_strategy"])
+			S0 = form.cleaned_data.get("S0")
+			q = form.cleaned_data.get("q")
+			r = form.cleaned_data.get("r")
+			sigma = form.cleaned_data.get("sigma")
+			strategy.edit_strategy(S0, sigma, q, r)
+			request.session["current_strategy"] = strategy.to_json()
+			return JsonResponse({"status":"Strategy Values Updated"})
+		invalid_fields = {"fields":form.errors.as_json()}
+		return JsonResponse(invalid_fields)
 
 class AddLeg(View): 
 	"""

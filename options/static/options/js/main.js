@@ -62,19 +62,28 @@ var getLegs = function(){
 	});
 };
 
-var getStrategy = function(){
+// set render to false to only retrieve data 
+var getStrategy = function(render){
 	$.ajax({
 		url: "/options/strategyinfo",
 		method: "GET",
 		dataType: "json",
 		success: function(data){
-			if(data.length===0){
-				render('#no_strategy_message', '#strategy_info_div')({});
+			if(render===true){
+				if(data.length===0){
+					render('#no_strategy_message', '#strategy_info_div')({});
+				}
+				else{
+					var template = $("#strategy_info_script").html()
+					var rendered = Mustache.render(template, data)
+					$('#strategy_info_div').html(rendered);
+				}
 			}
 			else{
-				var template = $("#strategy_info_script").html()
-				var rendered = Mustache.render(template, data)
-				$('#strategy_info_div').html(rendered);
+				console.log("render false")
+				// printing data returns dictionary with 4 values
+				console.log(data)
+				return data
 			}
 		}
 	});
@@ -108,8 +117,20 @@ $(document).ready(function(){
 		graphData()
 	});
 
-	$('#stgy_btn').on('click','a', function(event){
-		$('#stgy_modal').modal('toggle')
+	$('#stgy_btn').on('click', function(event){
+		if(strategy===false){	
+			$('#stgy_modal').modal('toggle');
+		}
+		else if(strategy===true){
+			data = getStrategy(false)
+			console.log(data)
+			// this returns "undefined"
+			var template = $('#stgy_update_form_script').html()
+			var rendered = Mustache.render(template, data)
+			$('#update_form_div').html(rendered);
+
+			$('#stgy_update_modal').modal('toggle');
+		}
 	});
 
 	$('#stgy_modal').on('hidden.bs.modal', function () {
@@ -159,6 +180,7 @@ $(document).ready(function(){
 					$('#model_btn').prop('disabled', false).css("color", "black");
 					strategy=true
 					$('#stgy_modal').modal('hide')
+					$('#stgy_btn').text('Edit Strategy');
 				}
 			}, 
 		});
@@ -166,7 +188,7 @@ $(document).ready(function(){
 
 	$('#legs_btn').on('click', function(event){
 		if(strategy===true){
-			getStrategy();
+			getStrategy(true);
 			render('#legs_form_script', '#add_leg_div')({});
 			getLegs();
 		}
@@ -288,6 +310,7 @@ $(document).ready(function(){
 				$('#data_btn').prop('disabled', true).css("color", "grey");
 				$('#model_btn').prop('disabled', true).css("color", "grey");
 				strategy=false
+				$('#stgy_btn').text('New Strategy');
 			}
 		});
 	});
