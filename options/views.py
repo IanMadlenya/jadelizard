@@ -4,7 +4,7 @@ from django.views.generic import View
 from .models import (
 	Strategy, Option, BlackScholes, BinomialTree, Utils
 )
-from options.forms import NewStrategyForm, LegsForm, PriceModelForm, VolForm
+from options.forms import StrategyForm, LegsForm, PriceModelForm, VolForm
 
 class Index(View): 
 	template_name = "options/base.html"
@@ -18,7 +18,7 @@ class NewStrategy(View):
 	Save constants for the underlying instrument 
 	"""
 	def post(self, request): 
-		form = NewStrategyForm(request.POST)
+		form = StrategyForm(request.POST)
 		if form.is_valid():
 			form.clean_data()
 			S0 = form.cleaned_data.get("S0")
@@ -29,6 +29,20 @@ class NewStrategy(View):
 			return JsonResponse({"status":"success"})
 		invalid_fields = {"fields":form.errors.as_json()}
 		return JsonResponse(invalid_fields)
+
+class UpdateStrategy(View): 
+	form = StrategyForm(request.POST)
+	if form.is_valid(): 
+		strategy = Strategy.from_json(request.session["current_strategy"])
+		S0 = form.cleaned_data.get("S0")
+		q = form.cleaned_data.get("q")
+		r = form.cleaned_data.get("r")
+		sigma = form.cleaned_data.get("sigma")
+		strategy.edit_strategy(S0, sigma, q, r)
+		request.session["current_strategy"] = strategy.to_json()
+		return JsonResponse({"status":"Strategy Values Updated"})
+	invalid_fields = {"fields":form.errors.as_json()}
+	return JsonResponse(invalid_fields)
 
 class AddLeg(View): 
 	"""
