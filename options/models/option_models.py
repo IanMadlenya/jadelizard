@@ -106,6 +106,21 @@ class Strategy:
 			option = each["option"]
 			each["data"] = self.data(option)
 
+	def edit_strategy(self, S0, sigma, q, r): 
+		"""
+		Change underlying values for the strategy and re-price legs with the new values. 
+		"""
+		self.S0 = S0
+		self.sigma = sigma
+		self.q = q
+		self.r = r
+		for each in self.legs: 
+			option = each["option"]
+			edited_leg = Option(option.position, option.kind, self.S0, option.K, option.T, self.q, self.r, self.sigma)
+			data = self.data(edited_leg)
+			each["option"] = edited_leg
+			each["data"] = data
+
 	def data(self, option): 
 		"""
 		Gets price and Greek values for an option. 
