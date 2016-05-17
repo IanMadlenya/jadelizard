@@ -98,6 +98,22 @@ var deleteLeg = function(form) {
 	});
 }
 
+// Shows Form Errors for input fields
+// first argument - array of IDs for checked input fields
+// second argument - dictionary of errors returned by form
+var showInputErrors = function(arr, loc){
+	for(var i=0; i<arr.length; i++){
+		id = arr[i]
+		name = $(id).attr('name');
+		if(name in loc){
+			$(id).css('border','0.05em solid #a72101');
+		}
+		else{
+			$(id).removeAttr('style');
+		}
+	}
+}
+
 $(document).ready(function(){
 	render('#_nav', "#navbar_div")({});
 
@@ -140,30 +156,8 @@ $(document).ready(function(){
 			success:function(data){
 				if('fields' in data){
 					fields=JSON.parse(data['fields'])	
-					if('S0' in fields){
-						$('#stgy-input-S0').css('border','0.05em solid #a72101');
-					}
-					else {
-						$('#stgy-input-S0').removeAttr('style');
-					}
-					if('sigma' in fields){
-						$('#stgy-input-sigma').css('border','0.05em solid #a72101');
-					}
-					else {
-						$('#stgy-input-sigma').removeAttr('style');
-					}
-					if('q' in fields){
-						$('#stgy-input-q').css('border','0.05em solid #a72101');
-					}
-					else {
-						$('#stgy-input-q').removeAttr('style');
-					}
-					if('r' in fields){
-						$('#stgy-input-r').css('border','0.05em solid #a72101');
-					}
-					else {
-						$('#stgy-input-r').removeAttr('style');
-					}
+					ids = ['#stgy-input-S0', '#stgy-input-sigma', '#stgy-input-q', '#stgy-input-r']
+					showInputErrors(ids, fields)
 				}
 				else{
 					$('.stgy-input').removeAttr('style');
@@ -188,41 +182,14 @@ $(document).ready(function(){
 			success:function(data){
 				if('fields' in data){
 					fields=JSON.parse(data['fields'])	
-					if('S0' in fields){
-						$('#stgy-update-input-S0').css('border','0.05em solid #a72101');
-					}
-					else {
-						$('#stgy-update-input-S0').removeAttr('style');
-					}
-					if('sigma' in fields){
-						$('#stgy-update-input-sigma').css('border','0.05em solid #a72101');
-					}
-					else {
-						$('#stgy-update-input-sigma').removeAttr('style');
-					}
-					if('q' in fields){
-						$('#stgy-update-input-q').css('border','0.05em solid #a72101');
-					}
-					else {
-						$('#stgy-update-input-q').removeAttr('style');
-					}
-					if('r' in fields){
-						$('#stgy-update-input-r').css('border','0.05em solid #a72101');
-					}
-					else {
-						$('#stgy-update-input-r').removeAttr('style');
-					}
+					ids = ['#stgy-update-input-S0', '#stgy-update-input-sigma', '#stgy-update-input-q', '#stgy-update-input-r' ]
+					showInputErrors(ids, fields)
 				}
 				else{
-					// has-success attribute on Update button or green border, checkmark
-					console.log("All good")
+					$('#stgy_update_modal').modal('toggle');
 				}
 			}
 		})
-	});
-
-	$('#stgy_update_form_hide').on('click', function(event){
-		$('#stgy_update_modal').modal('toggle');
 	});
 
 	$('#legs_btn').on('click', function(event){
@@ -242,19 +209,9 @@ $(document).ready(function(){
 			'data':data,
 			success: function(data){
 				if('fields' in data){
-					fields=JSON.parse(data['fields'])	
-					if('K' in fields){
-						$('#add-input-k').css('border','0.05em solid #a72101');
-					}
-					else{
-						$('#add-input-k').removeAttr('style');
-					}
-					if('T' in fields){
-						$('#add-input-t').css('border','0.05em solid #a72101');
-					}
-					else{
-						$('#add-input-t').removeAttr('style');
-					}
+					fields=JSON.parse(data['fields'])
+					ids = ['#add-input-k', '#add-input-t']	
+					showInputErrors(ids, fields)
 				}
 				else {
 					$(this).find(".field-input").val('').end();
@@ -317,19 +274,9 @@ $(document).ready(function(){
 			'data': data,
 			success: function(data){
 				if('fields' in data){
-					fields=JSON.parse(data['fields'])	
-					if('K' in fields){
-						$('#edit-input-k').css('border','0.05em solid #a72101');
-					}
-					else{
-						$('#edit-input-k').removeAttr('style');
-					}
-					if('T' in fields){
-						$('#edit-input-t').css('border','0.05em solid #a72101');
-					}
-					else{
-						$('#edit-input-t').removeAttr('style');
-					}
+					fields=JSON.parse(data['fields'])
+					ids = ['#edit-input-k', '#edit-input-t']	
+					showInputErrors(ids, fields)
 				}
 				else {
 				getLegs();	
@@ -418,19 +365,9 @@ $(document).ready(function(){
 			'data':$(this).serialize(), 
 			success: function(data){
 				if('fields' in data){
-					fields=JSON.parse(data['fields'])	
-					if('ticker' in fields){
-						$('#vol-input-ticker').css('border','0.05em solid #a72101');
-					}
-					else{
-						$('#vol-input-ticker').removeAttr('style');
-					}
-					if('days' in fields){
-						$('#vol-input-days').css('border','0.05em solid #a72101');
-					}
-					else{
-						$('#vol-input-days').removeAttr('style');
-					}
+					fields=JSON.parse(data['fields'])
+					ids = ['#vol-input-ticker', '#vol-input-days']	
+					showInputErrors(ids, fields)
 				}
 				else{
 				var template = $("#vol_result_script").html()
