@@ -81,7 +81,9 @@ class StrategyInfo(View):
 	"""
 	def get(self, request): 
 		strategy = Strategy.from_json(request.session["current_strategy"])
-		data = {"S0":round(strategy.S0, 2), "sigma":round(strategy.sigma, 6), "q":round(strategy.q, 6), "r":round(strategy.r, 6)}
+		models = {"BlackScholes":"Black-Scholes", "BinomialTree": "Binomial Tree"}
+		model = models.get(request.session['current_model'])
+		data = {"S0":round(strategy.S0, 2), "sigma":round(strategy.sigma, 5), "q":round(strategy.q, 5), "r":round(strategy.r, 5), "model":model}
 		return JsonResponse(data)
 
 class DeleteLeg(View): 
