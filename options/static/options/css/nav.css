@@ -34,3 +34,7 @@
 #logo_btn:hover {
 	text-decoration: underline;
 }
+
+#template-menu {
+    width: 20em!important;
+}
