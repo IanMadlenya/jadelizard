@@ -4,7 +4,7 @@ from django.views.generic import View
 from .models import (
 	Strategy, Option, BlackScholes, BinomialTree, Utils
 )
-from options.forms import NewStrategyForm, LegsForm, PriceModelForm, VolForm
+from options.forms import StrategyForm, LegsForm, PriceModelForm, VolForm
 
 class Index(View): 
 	template_name = "options/base.html"
@@ -18,7 +18,7 @@ class NewStrategy(View):
 	Save constants for the underlying instrument 
 	"""
 	def post(self, request): 
-		form = NewStrategyForm(request.POST)
+		form = StrategyForm(request.POST)
 		if form.is_valid():
 			form.clean_data()
 			S0 = form.cleaned_data.get("S0")
@@ -27,6 +27,22 @@ class NewStrategy(View):
 			sigma = form.cleaned_data.get("sigma")
 			request.session["current_strategy"] = Strategy(request.session["current_model"], S0, q, r, sigma).to_json()
 			return JsonResponse({"status":"success"})
+		invalid_fields = {"fields":form.errors.as_json()}
+		return JsonResponse(invalid_fields)
+
+class UpdateStrategy(View): 
+	def post(self, request): 
+		form = StrategyForm(request.POST)
+		if form.is_valid(): 
+			form.clean_data()
+			strategy = Strategy.from_json(request.session["current_strategy"])
+			S0 = form.cleaned_data.get("S0")
+			q = form.cleaned_data.get("q")
+			r = form.cleaned_data.get("r")
+			sigma = form.cleaned_data.get("sigma")
+			strategy.edit_strategy(S0, sigma, q, r)
+			request.session["current_strategy"] = strategy.to_json()
+			return JsonResponse({"status":"Strategy Values Updated"})
 		invalid_fields = {"fields":form.errors.as_json()}
 		return JsonResponse(invalid_fields)
 
@@ -65,7 +81,9 @@ class StrategyInfo(View):
 	"""
 	def get(self, request): 
 		strategy = Strategy.from_json(request.session["current_strategy"])
-		data = {"S0":round(strategy.S0, 2), "sigma":round(strategy.sigma, 7), "q":round(strategy.q, 7), "r":round(strategy.r, 7)}
+		models = {"BlackScholes":"Black-Scholes", "BinomialTree": "Binomial Tree"}
+		model = models.get(request.session['current_model'])
+		data = {"S0":round(strategy.S0, 2), "sigma":round(strategy.sigma, 5), "q":round(strategy.q, 5), "r":round(strategy.r, 5), "model":model}
 		return JsonResponse(data)
 
 class DeleteLeg(View): 

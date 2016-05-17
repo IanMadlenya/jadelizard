@@ -62,19 +62,26 @@ var getLegs = function(){
 	});
 };
 
-var getStrategy = function(){
+// UpdateStrategy context - show strategy data in stgy update form
+// LegsModal context - show strategy data in legs modal
+var getStrategy = function(context){
 	$.ajax({
 		url: "/options/strategyinfo",
 		method: "GET",
 		dataType: "json",
 		success: function(data){
-			if(data.length===0){
-				render('#no_strategy_message', '#strategy_info_div')({});
-			}
-			else{
+			if(context==="LegsModal"){
 				var template = $("#strategy_info_script").html()
 				var rendered = Mustache.render(template, data)
 				$('#strategy_info_div').html(rendered);
+				}
+			else if(context==="UpdateStrategy"){
+				data['sigma']=data['sigma']*100
+				data['q']=data['q']*100
+				data['r']=data['r']*100
+				var template = $('#stgy_update_form_script').html()
+				var rendered = Mustache.render(template, data)
+				$('#update_form_div').html(rendered);
 			}
 		}
 	});
@@ -89,6 +96,22 @@ var deleteLeg = function(form) {
 			getLegs();
 		}
 	});
+}
+
+// Shows Form Errors for input fields
+// first argument - array of IDs for checked input fields
+// second argument - dictionary of errors returned by form
+var showInputErrors = function(arr, loc){
+	for(var i=0; i<arr.length; i++){
+		id = arr[i]
+		name = $(id).attr('name');
+		if(name in loc){
+			$(id).css('border','0.05em solid #a72101');
+		}
+		else{
+			$(id).removeAttr('style');
+		}
+	}
 }
 
 $(document).ready(function(){
@@ -108,8 +131,14 @@ $(document).ready(function(){
 		graphData()
 	});
 
-	$('#stgy_btn').on('click','a', function(event){
-		$('#stgy_modal').modal('toggle')
+	$('#stgy_btn').on('click', function(event){
+		if(strategy===false){	
+			$('#stgy_modal').modal('toggle');
+		}
+		else if(strategy===true){
+			$('#stgy_update_modal').modal('toggle');
+			getStrategy("UpdateStrategy");
+		}
 	});
 
 	$('#stgy_modal').on('hidden.bs.modal', function () {
@@ -127,30 +156,8 @@ $(document).ready(function(){
 			success:function(data){
 				if('fields' in data){
 					fields=JSON.parse(data['fields'])	
-					if('S0' in fields){
-						$('#stgy-input-S0').css('border','0.05em solid #a72101');
-					}
-					else {
-						$('#stgy-input-S0').removeAttr('style');
-					}
-					if('sigma' in fields){
-						$('#stgy-input-sigma').css('border','0.05em solid #a72101');
-					}
-					else {
-						$('#stgy-input-sigma').removeAttr('style');
-					}
-					if('q' in fields){
-						$('#stgy-input-q').css('border','0.05em solid #a72101');
-					}
-					else {
-						$('#stgy-input-q').removeAttr('style');
-					}
-					if('r' in fields){
-						$('#stgy-input-r').css('border','0.05em solid #a72101');
-					}
-					else {
-						$('#stgy-input-r').removeAttr('style');
-					}
+					ids = ['#stgy-input-S0', '#stgy-input-sigma', '#stgy-input-q', '#stgy-input-r']
+					showInputErrors(ids, fields)
 				}
 				else{
 					$('.stgy-input').removeAttr('style');
@@ -159,14 +166,35 @@ $(document).ready(function(){
 					$('#model_btn').prop('disabled', false).css("color", "black");
 					strategy=true
 					$('#stgy_modal').modal('hide')
+					$('#stgy_btn').text('Edit Strategy');
 				}
 			}, 
 		});
 	});
 
+	$('#update_form_div').on('submit', '#stgy_update_form', function(event){
+		event.preventDefault();
+		var data = $(this).serialize();
+		$.ajax({
+			url: "/options/updatestgy", 
+			method: "POST", 
+			'data': data,
+			success:function(data){
+				if('fields' in data){
+					fields=JSON.parse(data['fields'])	
+					ids = ['#stgy-update-input-S0', '#stgy-update-input-sigma', '#stgy-update-input-q', '#stgy-update-input-r' ]
+					showInputErrors(ids, fields)
+				}
+				else{
+					$('#stgy_update_modal').modal('toggle');
+				}
+			}
+		})
+	});
+
 	$('#legs_btn').on('click', function(event){
 		if(strategy===true){
-			getStrategy();
+			getStrategy("LegsModal");
 			render('#legs_form_script', '#add_leg_div')({});
 			getLegs();
 		}
@@ -181,19 +209,9 @@ $(document).ready(function(){
 			'data':data,
 			success: function(data){
 				if('fields' in data){
-					fields=JSON.parse(data['fields'])	
-					if('K' in fields){
-						$('#add-input-k').css('border','0.05em solid #a72101');
-					}
-					else{
-						$('#add-input-k').removeAttr('style');
-					}
-					if('T' in fields){
-						$('#add-input-t').css('border','0.05em solid #a72101');
-					}
-					else{
-						$('#add-input-t').removeAttr('style');
-					}
+					fields=JSON.parse(data['fields'])
+					ids = ['#add-input-k', '#add-input-t']	
+					showInputErrors(ids, fields)
 				}
 				else {
 					$(this).find(".field-input").val('').end();
@@ -256,19 +274,9 @@ $(document).ready(function(){
 			'data': data,
 			success: function(data){
 				if('fields' in data){
-					fields=JSON.parse(data['fields'])	
-					if('K' in fields){
-						$('#edit-input-k').css('border','0.05em solid #a72101');
-					}
-					else{
-						$('#edit-input-k').removeAttr('style');
-					}
-					if('T' in fields){
-						$('#edit-input-t').css('border','0.05em solid #a72101');
-					}
-					else{
-						$('#edit-input-t').removeAttr('style');
-					}
+					fields=JSON.parse(data['fields'])
+					ids = ['#edit-input-k', '#edit-input-t']	
+					showInputErrors(ids, fields)
 				}
 				else {
 				getLegs();	
@@ -288,6 +296,7 @@ $(document).ready(function(){
 				$('#data_btn').prop('disabled', true).css("color", "grey");
 				$('#model_btn').prop('disabled', true).css("color", "grey");
 				strategy=false
+				$('#stgy_btn').text('New Strategy');
 			}
 		});
 	});
@@ -356,19 +365,9 @@ $(document).ready(function(){
 			'data':$(this).serialize(), 
 			success: function(data){
 				if('fields' in data){
-					fields=JSON.parse(data['fields'])	
-					if('ticker' in fields){
-						$('#vol-input-ticker').css('border','0.05em solid #a72101');
-					}
-					else{
-						$('#vol-input-ticker').removeAttr('style');
-					}
-					if('days' in fields){
-						$('#vol-input-days').css('border','0.05em solid #a72101');
-					}
-					else{
-						$('#vol-input-days').removeAttr('style');
-					}
+					fields=JSON.parse(data['fields'])
+					ids = ['#vol-input-ticker', '#vol-input-days']	
+					showInputErrors(ids, fields)
 				}
 				else{
 				var template = $("#vol_result_script").html()

@@ -29,7 +29,7 @@ STEPS_CHOICES=[
 
 alpha = RegexValidator(r'^[a-z A-Z]*$', 'Only letters are allowed.')
 
-class NewStrategyForm(forms.Form):
+class StrategyForm(forms.Form):
 	S0 = forms.FloatField(min_value=1, max_value=1000)
 	sigma = forms.FloatField(min_value=0.1, max_value=100, required=True)
 	q = forms.FloatField(min_value=0, max_value=100, required=True)
