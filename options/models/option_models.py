@@ -359,15 +359,3 @@ class Strategy:
 		strategy.legs = [{"data":leg["data"], "id":leg["id"], "exp":leg["exp"], "option":Option.from_json(leg["option"])} for leg in legs]
 		return strategy
 
-
-# class LongCall(Strategy): 
-# 	def __init__(self): 
-# 		super().__init__(BlackScholes)
-# 		self.add_leg("long", "call", 100, 110, 1, 0, .005, .25)
-
-
-
-
-
-
-

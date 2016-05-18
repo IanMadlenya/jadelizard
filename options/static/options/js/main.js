@@ -409,7 +409,28 @@ $(document).ready(function(){
 		$('#r_modal').modal('hide')
 	});
 
+	$('.template_btn').on('click', function(event){
+		id_ = $(this).attr('id')
+		$.ajax({
+			url: "/options/loadtemplate",
+			method: "POST",
+			data: {id:id_},
+			success: function(data){
+				strategy=true
+				$('#legs_btn').prop('disabled', false).css("color", "black");
+				$('#data_btn').prop('disabled', false).css("color", "black");
+				$('#model_btn').prop('disabled', false).css("color", "black");
+				$('#stgy_btn').text('Edit Strategy');
+			}
+		});
+	});
+
 
 
 })
+
+
+
+
+
 

@@ -34,3 +34,13 @@
 #logo_btn:hover {
 	text-decoration: underline;
 }
+
+#template-menu {
+    width: 20em!important;
+    height: 25em!important;
+}
+
+.dropdown-menu {
+    overflow: hidden;
+    overflow-y: auto;
+}

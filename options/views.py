@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.generic import View
 from .models import (
-	Strategy, Option, BlackScholes, BinomialTree, Utils
+	Strategy, Option, BlackScholes, BinomialTree, Utils, Templates
 )
 from options.forms import StrategyForm, LegsForm, PriceModelForm, VolForm
 
@@ -219,6 +219,26 @@ class GetR(View):
 		if not r:
 			return JsonResponse({"status":"Error Retrieving Data"}, status=503)
 		return JsonResponse(r) 
+
+class StrategyTemplate(View): 
+	"""
+	Load a preset Strategy Template
+	"""
+	def post(self, request): 
+		template = Templates.get(request.POST.get('id'))
+		model = request.session["current_model"]
+		request.session["current_strategy"]=template(model).to_json()
+		return JsonResponse({"status":"Template Loaded"})
+
+
+
+
+
+
+
+
+
+
 
 
 

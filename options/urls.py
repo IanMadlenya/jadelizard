@@ -18,4 +18,5 @@ urlpatterns = [
 	url(r'^choosemodel$', views.ChooseModel.as_view(), name='choosemodel'),
 	url(r'^volcalc$', views.TrailingVol.as_view(), name='volcalc'),
 	url(r'^getr$', views.GetR.as_view(), name='getr'),
+	url(r'^loadtemplate$', views.StrategyTemplate.as_view(), name='loadtemplate'),
 ]
