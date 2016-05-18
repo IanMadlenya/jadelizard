@@ -416,7 +416,11 @@ $(document).ready(function(){
 			method: "POST",
 			data: {id:id_},
 			success: function(data){
-				console.log("SUCCESS")
+				strategy=true
+				$('#legs_btn').prop('disabled', false).css("color", "black");
+				$('#data_btn').prop('disabled', false).css("color", "black");
+				$('#model_btn').prop('disabled', false).css("color", "black");
+				$('#stgy_btn').text('Edit Strategy');
 			}
 		});
 	});

@@ -225,8 +225,7 @@ class StrategyTemplate(View):
 	Load a preset Strategy Template
 	"""
 	def post(self, request): 
-		id_ = request.POST.get('id')
-		template = Templates.get(id_)
+		template = Templates.get(request.POST.get('id'))
 		model = request.session["current_model"]
 		request.session["current_strategy"]=template(model).to_json()
 		return JsonResponse({"status":"Template Loaded"})
