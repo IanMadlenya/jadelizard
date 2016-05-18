@@ -360,11 +360,25 @@ class Strategy:
 		return strategy
 
 
-# class LongCall(Strategy): 
-# 	def __init__(self): 
-# 		super().__init__(BlackScholes)
-# 		self.add_leg("long", "call", 100, 110, 1, 0, .005, .25)
+class IronButterfly(Strategy): 
+	def __init__(self, model_name): 
+		super().__init__(model_name, 100, .05, .01, .25)
+		self.add_leg("long", "call", 110, 1)
+		self.add_leg("short", "call", 100, 1)
+		self.add_leg("short", "put", 100, 1)
+		self.add_leg("long", "put", 90, 1)
 
+class JadeLizard(Strategy): 
+	def __init__(self, model_name): 
+		super().__init__(model_name, 100, .05, .01, .25)
+		self.add_leg("short", "call", 95, 1)
+		self.add_leg("short", "put", 105, 1)
+		self.add_leg("long", "call", 115, 1)
+
+Templates = {
+	"IronButterfly": IronButterfly,
+	"JadeLizard": JadeLizard
+}
 
 
 

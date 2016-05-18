@@ -37,4 +37,10 @@
 
 #template-menu {
     width: 20em!important;
+    height: 30em!important;
+}
+
+.dropdown-menu {
+    overflow: hidden;
+    overflow-y: auto;
 }
