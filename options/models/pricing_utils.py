@@ -31,8 +31,8 @@ class Utils:
 		except Exception:
 			return False
 		return {
-		"monthly":monthly,
-		"daily":daily, 
+		"monthly":round(monthly,4),
+		"daily":round(daily,4), 
 		}
 
 
