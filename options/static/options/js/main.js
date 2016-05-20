@@ -127,6 +127,7 @@ $(document).ready(function(){
 	$('#legs_btn').prop('disabled', true).css("color", "grey");
 	$('#data_btn').prop('disabled', true).css("color", "grey");
 	$('#model_btn').prop('disabled', true).css("color", "grey");
+	$('#range_btn').prop('disabled', true).css("color", "grey");
 	var strategy=false
 	var range="auto"
 
@@ -178,6 +179,7 @@ $(document).ready(function(){
 					$('#legs_btn').prop('disabled', false).css("color", "black");
 					$('#data_btn').prop('disabled', false).css("color", "black");
 					$('#model_btn').prop('disabled', false).css("color", "black");
+					$('#range_btn').prop('disabled', false).css("color", "black");
 					strategy=true
 					$('#stgy_modal').modal('hide')
 					$('#stgy_btn').text('Edit Strategy');
@@ -317,6 +319,7 @@ $(document).ready(function(){
 				$('#legs_btn').prop('disabled', true).css("color", "grey");
 				$('#data_btn').prop('disabled', true).css("color", "grey");
 				$('#model_btn').prop('disabled', true).css("color", "grey");
+				$('#range_btn').prop('disabled', true).css("color", "grey");
 				strategy=false
 				$('#stgy_btn').text('New Strategy');
 				$('#range_form')[0].reset();
@@ -380,7 +383,9 @@ $(document).ready(function(){
 
 	// Window Settings
 	$('#range_btn').on('click', function(event){
-		$('#range_modal').modal('toggle')
+		if(strategy===true){
+			$('#range_modal').modal('toggle')			
+		}
 	});
 
 	$('#enter_input').on('click', function(event){
@@ -508,6 +513,7 @@ $(document).ready(function(){
 				$('#legs_btn').prop('disabled', false).css("color", "black");
 				$('#data_btn').prop('disabled', false).css("color", "black");
 				$('#model_btn').prop('disabled', false).css("color", "black");
+				$('#range_btn').prop('disabled', false).css("color", "black");
 				$('#stgy_btn').text('Edit Strategy');
 			}
 		});
