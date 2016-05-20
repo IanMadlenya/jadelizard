@@ -249,6 +249,7 @@ class GraphRange(View):
 			start = form.cleaned_data.get('range_start')
 			request.session["graph_range"]["start"]=form.cleaned_data.get('range_start')
 			request.session["graph_range"]["end"]=form.cleaned_data.get('range_end')
+			request.session.modified = True
 			return JsonResponse({"status":"Range Updated"})
 		invalid_fields = {"fields":form.errors.as_json()}
 		return JsonResponse(invalid_fields)

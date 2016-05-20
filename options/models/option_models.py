@@ -255,7 +255,7 @@ class Strategy:
 		Default is to calculate P/L from 25 percent to 200 percent underlying value. 
 		The user can also enter a desired range for graphing.
 		"""
-		if range_start and range_end: 
+		if range_end: 
 			start,end = range_start,range_end
 			graph_range = (range_end-range_start)/1.75
 		else: 
