@@ -35,6 +35,8 @@ var graphData = function(options){
 	});
 };
 
+
+// Clears graph and removes grid lines
 var unloadData = function(){
 	d3_chart.unload({
 		ids: ['price_range','strategy_profit']
@@ -115,15 +117,19 @@ var showInputErrors = function(arr, loc){
 }
 
 $(document).ready(function(){
-	
+
 	// Render navbar
 	render('#_nav', "#navbar_div")({});
 
 	// Disable legs modal, strategy data modal, model settings modal until strategy is created
+	// no strategy present
+	// default range setting
 	$('#legs_btn').prop('disabled', true).css("color", "grey");
 	$('#data_btn').prop('disabled', true).css("color", "grey");
 	$('#model_btn').prop('disabled', true).css("color", "grey");
 	var strategy=false
+	var range="auto"
+
 
 
 	// Logo Modal
@@ -313,6 +319,7 @@ $(document).ready(function(){
 				$('#model_btn').prop('disabled', true).css("color", "grey");
 				strategy=false
 				$('#stgy_btn').text('New Strategy');
+				$('#range_form')[0].reset();
 			}
 		});
 	});
@@ -377,12 +384,48 @@ $(document).ready(function(){
 	});
 
 	$('#enter_input').on('click', function(event){
+		range="manual"
 		render('#range_hidden_fields', '#range_fields_div')({});
+		$('#range_fields_div').css('border-left', '1px solid black');
 	});
 
 	$('#auto_input').on('click', function(event){
+		range="auto"
 		$('#range_fields_template').remove();
+		$('#range_fields_div').css('border-left', '0px');
 	})
+
+	$('#range_submit_btn').on('click', function(event){
+		if(range==="auto"){
+			$.ajax({
+				url: "/options/resetrange",
+				method: "POST",
+				success:function(){
+					$('#range_modal').modal('toggle');
+					$('#range_form')[0].reset();
+				}
+			})
+		}
+		else if(range==="manual"){
+			data = $('#range_form').serialize()
+			$.ajax({
+				url: "/options/graphrange",
+				method: "POST",
+				'data':data,
+				success:function(data){
+					if('fields' in data){
+						fields=JSON.parse(data['fields'])
+						ids = ['#range-input-start', '#range-input-end']	
+						showInputErrors(ids, fields)
+					}
+					else{
+						$('#range_modal').modal('toggle');
+						$('.range-input').removeAttr('style')
+					}
+				}
+			})
+		}
+	});
 
 
 

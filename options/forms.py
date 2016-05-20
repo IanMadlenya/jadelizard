@@ -1,5 +1,6 @@
 from django import forms 
 from django.core.validators import RegexValidator
+import math
 
 POSITION_CHOICES=[
 ("long", "long"),
@@ -70,15 +71,15 @@ class RangeForm(forms.Form):
 	range_start = forms.FloatField(min_value=0, max_value=999)
 	range_end = forms.FloatField(min_value=1, max_value=1000)
 
-	def clean(self): 
+	def clean_data(self): 
 		self.cleaned_data = super().clean()
-		range_start = cleaned_data.get('range_start')
-		range_end = cleaned_data.get('range_end')
+		range_start = self.cleaned_data.get('range_start')
+		range_end = self.cleaned_data.get('range_end')
 		if range_start >= range_end: 
 			message = "Invalid Range"
 			self._errors['range_end'] = self.error_class([message])
-		self.cleaned_data['range_start'] = int(range_start)
-		self.cleaned_data['range_end'] = int(range_end)+1
+		self.cleaned_data['range_start'] = math.floor(range_start)
+		self.cleaned_data['range_end'] = math.ceil(range_end)
 
 
 

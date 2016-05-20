@@ -242,21 +242,24 @@ class GraphRange(View):
 	def post(self, request): 
 		form = RangeForm(request.POST)
 		if form.is_valid(): 
-			print("valid")
+			form.clean_data()
+			if form.errors:
+				invalid_fields = {"fields":form.errors.as_json()}
+				return JsonResponse(invalid_fields)
+			start = form.cleaned_data.get('range_start')
 			request.session["graph_range"]["start"]=form.cleaned_data.get('range_start')
 			request.session["graph_range"]["end"]=form.cleaned_data.get('range_end')
 			return JsonResponse({"status":"Range Updated"})
-		print("invalid")
 		invalid_fields = {"fields":form.errors.as_json()}
 		return JsonResponse(invalid_fields)
 
-
-
-
-
-
-
-
+class ResetRange(View): 
+	"""
+	Revert to auto window setting
+	"""
+	def post(self, request): 
+		request.session["graph_range"] = {"start":None,"end":None}
+		return JsonResponse({"status":"Window Reset"})
 
 
 
