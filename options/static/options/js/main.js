@@ -348,6 +348,10 @@ $(document).ready(function(){
 		render('#hidden_fields', '#fields_div')({});
 	});
 
+	$('#range_btn').on('click', function(event){
+		$('#range_modal').modal('toggle')
+	});
+
 	$('#vol_form_hide').on('click', function(event){
 		$('#vol_result_div').remove()
 		$('#conn_error_div').remove()
