@@ -68,7 +68,7 @@ class VolForm(forms.Form):
 
 class RangeForm(forms.Form): 
 	range_start = forms.FloatField(min_value=0, max_value=999)
-	range_end=forms.FloatField(min_value=1, max_value=1000)
+	range_end = forms.FloatField(min_value=1, max_value=1000)
 
 	def clean(self): 
 		self.cleaned_data = super().clean()

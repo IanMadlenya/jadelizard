@@ -115,6 +115,8 @@ var showInputErrors = function(arr, loc){
 }
 
 $(document).ready(function(){
+	
+	// Render navbar
 	render('#_nav', "#navbar_div")({});
 
 	// Disable legs modal, strategy data modal, model settings modal until strategy is created
@@ -123,14 +125,20 @@ $(document).ready(function(){
 	$('#model_btn').prop('disabled', true).css("color", "grey");
 	var strategy=false
 
+
+	// Logo Modal
 	$('#logo_btn').on('click', function(event){
 		$('#project_info_modal').modal('toggle');
 	});
 
+
+	// Graph 
 	$("#graph_btn").on('click', function(event){
 		graphData()
 	});
 
+
+	// Creating and updating custom Options Strategies
 	$('#stgy_btn').on('click', function(event){
 		if(strategy===false){	
 			$('#stgy_modal').modal('toggle');
@@ -192,6 +200,10 @@ $(document).ready(function(){
 		})
 	});
 
+
+
+
+	// Adding, Viewing, Editing, Deleting Legs Modal
 	$('#legs_btn').on('click', function(event){
 		if(strategy===true){
 			getStrategy("LegsModal");
@@ -286,6 +298,10 @@ $(document).ready(function(){
 		});
 	});
 
+
+
+
+	// Clear current strategy and window
 	$('#clear_btn').on('click', function(event){
 		$.ajax({
 			url: "/options/clear",
@@ -301,6 +317,9 @@ $(document).ready(function(){
 		});
 	});
 
+
+
+	// Strategy Greek Values and Setup Cost
 	$('#data_btn').on('click', function(event){
 		if(strategy===true){
 			$.ajax({
@@ -321,6 +340,8 @@ $(document).ready(function(){
 		}
 	});
 
+
+	// Pricing Model Settings
 	$('#model_btn').on('click', function(event){
 		if(strategy===true){
 			$('#model_modal').modal('toggle')			
@@ -341,17 +362,31 @@ $(document).ready(function(){
 	});
 
 	$('#bs_input').on('click', function(event){
-		$('#fields_template').remove()
+		$('#fields_template').remove();
 	});
 
 	$('#bt_input').on('click', function(event){
 		render('#hidden_fields', '#fields_div')({});
 	});
 
+
+
+	// Window Settings
 	$('#range_btn').on('click', function(event){
 		$('#range_modal').modal('toggle')
 	});
 
+	$('#enter_input').on('click', function(event){
+		render('#range_hidden_fields', '#range_fields_div')({});
+	});
+
+	$('#auto_input').on('click', function(event){
+		$('#range_fields_template').remove();
+	})
+
+
+
+	// Volatility by Ticker Tool
 	$('#vol_form_hide').on('click', function(event){
 		$('#vol_result_div').remove()
 		$('#conn_error_div').remove()
@@ -387,6 +422,9 @@ $(document).ready(function(){
 		});
 	});
 
+
+
+	// Fetch risk-free rate tool
 	$('#r_btn').on('click', function(event){
 		$('#r_loading').show()
 		$.ajax({
@@ -413,6 +451,9 @@ $(document).ready(function(){
 		$('#r_modal').modal('hide')
 	});
 
+
+
+	// Load pre-configured strategy template 
 	$('.template_btn').on('click', function(event){
 		id_ = $(this).attr('id')
 		$.ajax({
