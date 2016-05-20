@@ -144,7 +144,8 @@ class GraphData(View):
 		if strategy.valid_graph()==False: 
 			return JsonResponse({"status":"No Options in Strategy"}, status=422)
 		S0 = strategy.S0
-		json_data = strategy.graph_data()
+		start, end = request.session["graph_range"]["start"], request.session["graph_range"]["end"]
+		json_data = strategy.graph_data(range_start=start, range_end=end)
 		return JsonResponse({"data":json_data, "S0":S0})
 
 class ClearData(View): 
@@ -156,6 +157,7 @@ class ClearData(View):
 			return JsonResponse({"status":"No Strategy Present"})
 		else: 
 			request.session["current_strategy"] = None
+			request.session["current_range"] = {"start":None,"end":None}
 			return JsonResponse({"status":"Strategy Cleared"})
 
 class StrategyData(View):
@@ -230,6 +232,7 @@ class StrategyTemplate(View):
 		template = Templates.get(request.POST.get('id'))
 		model = request.session["current_model"]
 		request.session["current_strategy"]=template(model).to_json()
+		request.session["graph_range"] = {"start":None,"end":None}
 		return JsonResponse({"status":"Template Loaded"})
 
 class GraphRange(View):

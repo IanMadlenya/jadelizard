@@ -257,7 +257,7 @@ class Strategy:
 		"""
 		if range_start and range_end: 
 			start,end = range_start,range_end
-			graph_range = (range_end-range_start)*2
+			graph_range = (range_end-range_start)/1.75
 		else: 
 			start, end = (int(self.S0*0.25)+1), (int(self.S0*2)+1)
 			graph_range = self.S0
