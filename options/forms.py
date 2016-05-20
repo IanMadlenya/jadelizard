@@ -45,7 +45,7 @@ class StrategyForm(forms.Form):
 class LegsForm(forms.Form): 
 	position = forms.ChoiceField(choices=POSITION_CHOICES)
 	kind = forms.ChoiceField(choices=KIND_CHOICES)
-	K = forms.FloatField(min_value=1, max_value=1500)
+	K = forms.FloatField(min_value=1, max_value=1000)
 	T = forms.FloatField(min_value=.01, max_value=20)
 
 class PriceModelForm(forms.Form): 
@@ -65,6 +65,22 @@ class PriceModelForm(forms.Form):
 class VolForm(forms.Form): 
 	ticker = forms.CharField(min_length=1, validators=[alpha])
 	days = forms.IntegerField(min_value=7)
+
+class RangeForm(forms.Form): 
+	range_start = forms.FloatField(min_value=0, max_value=999)
+	range_end=forms.FloatField(min_value=1, max_value=1000)
+
+	def clean(self): 
+		self.cleaned_data = super().clean()
+		range_start = cleaned_data.get('range_start')
+		range_end = cleaned_data.get('range_end')
+		if range_start >= range_end: 
+			message = "Invalid Range"
+			self._errors['range_end'] = self.error_class([message])
+		self.cleaned_data['range_start'] = int(range_start)
+		self.cleaned_data['range_end'] = int(range_end)+1
+
+
 
 
 

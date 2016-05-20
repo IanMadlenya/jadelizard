@@ -4,13 +4,14 @@ from django.views.generic import View
 from .models import (
 	Strategy, Option, BlackScholes, BinomialTree, Utils, Templates
 )
-from options.forms import StrategyForm, LegsForm, PriceModelForm, VolForm
+from options.forms import StrategyForm, LegsForm, PriceModelForm, VolForm, RangeForm
 
 class Index(View): 
 	template_name = "options/base.html"
 	def get(self, request): 
 		request.session["current_strategy"]=None
 		request.session["current_model"] = BlackScholes.__name__
+		request.session["graph_range"] = {"start":None,"end":None}
 		return render(request, self.template_name)
 
 class NewStrategy(View): 
@@ -26,6 +27,7 @@ class NewStrategy(View):
 			r = form.cleaned_data.get("r")
 			sigma = form.cleaned_data.get("sigma")
 			request.session["current_strategy"] = Strategy(request.session["current_model"], S0, q, r, sigma).to_json()
+			request.session["current_range"] = {"start":None,"end":None}
 			return JsonResponse({"status":"success"})
 		invalid_fields = {"fields":form.errors.as_json()}
 		return JsonResponse(invalid_fields)
@@ -229,6 +231,21 @@ class StrategyTemplate(View):
 		model = request.session["current_model"]
 		request.session["current_strategy"]=template(model).to_json()
 		return JsonResponse({"status":"Template Loaded"})
+
+class GraphRange(View):
+	"""
+	Set a manual range for graphing
+	"""
+	def post(self, request): 
+		form = RangeForm(request.POST)
+		if form.is_valid(): 
+			print("valid")
+			request.session["graph_range"]["start"]=form.cleaned_data.get('range_start')
+			request.session["graph_range"]["end"]=form.cleaned_data.get('range_end')
+			return JsonResponse({"status":"Range Updated"})
+		print("invalid")
+		invalid_fields = {"fields":form.errors.as_json()}
+		return JsonResponse(invalid_fields)
 
 
 
