@@ -4,13 +4,14 @@ from django.views.generic import View
 from .models import (
 	Strategy, Option, BlackScholes, BinomialTree, Utils, Templates
 )
-from options.forms import StrategyForm, LegsForm, PriceModelForm, VolForm
+from options.forms import StrategyForm, LegsForm, PriceModelForm, VolForm, RangeForm
 
 class Index(View): 
 	template_name = "options/base.html"
 	def get(self, request): 
 		request.session["current_strategy"]=None
 		request.session["current_model"] = BlackScholes.__name__
+		request.session["graph_range"] = {"start":None,"end":None}
 		return render(request, self.template_name)
 
 class NewStrategy(View): 
@@ -26,6 +27,7 @@ class NewStrategy(View):
 			r = form.cleaned_data.get("r")
 			sigma = form.cleaned_data.get("sigma")
 			request.session["current_strategy"] = Strategy(request.session["current_model"], S0, q, r, sigma).to_json()
+			request.session["current_range"] = {"start":None,"end":None}
 			return JsonResponse({"status":"success"})
 		invalid_fields = {"fields":form.errors.as_json()}
 		return JsonResponse(invalid_fields)
@@ -142,7 +144,8 @@ class GraphData(View):
 		if strategy.valid_graph()==False: 
 			return JsonResponse({"status":"No Options in Strategy"}, status=422)
 		S0 = strategy.S0
-		json_data = strategy.graph_data()
+		start, end = request.session["graph_range"]["start"], request.session["graph_range"]["end"]
+		json_data = strategy.graph_data(range_start=start, range_end=end)
 		return JsonResponse({"data":json_data, "S0":S0})
 
 class ClearData(View): 
@@ -154,6 +157,7 @@ class ClearData(View):
 			return JsonResponse({"status":"No Strategy Present"})
 		else: 
 			request.session["current_strategy"] = None
+			request.session["current_range"] = {"start":None,"end":None}
 			return JsonResponse({"status":"Strategy Cleared"})
 
 class StrategyData(View):
@@ -228,15 +232,35 @@ class StrategyTemplate(View):
 		template = Templates.get(request.POST.get('id'))
 		model = request.session["current_model"]
 		request.session["current_strategy"]=template(model).to_json()
+		request.session["graph_range"] = {"start":None,"end":None}
 		return JsonResponse({"status":"Template Loaded"})
 
+class GraphRange(View):
+	"""
+	Set a manual range for graphing
+	"""
+	def post(self, request): 
+		form = RangeForm(request.POST)
+		if form.is_valid(): 
+			form.clean_data()
+			if form.errors:
+				invalid_fields = {"fields":form.errors.as_json()}
+				return JsonResponse(invalid_fields)
+			start = form.cleaned_data.get('range_start')
+			request.session["graph_range"]["start"]=form.cleaned_data.get('range_start')
+			request.session["graph_range"]["end"]=form.cleaned_data.get('range_end')
+			request.session.modified = True
+			return JsonResponse({"status":"Range Updated"})
+		invalid_fields = {"fields":form.errors.as_json()}
+		return JsonResponse(invalid_fields)
 
-
-
-
-
-
-
+class ResetRange(View): 
+	"""
+	Revert to auto window setting
+	"""
+	def post(self, request): 
+		request.session["graph_range"] = {"start":None,"end":None}
+		return JsonResponse({"status":"Window Reset"})
 
 
 

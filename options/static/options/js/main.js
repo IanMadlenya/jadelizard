@@ -35,6 +35,8 @@ var graphData = function(options){
 	});
 };
 
+
+// Clears graph and removes grid lines
 var unloadData = function(){
 	d3_chart.unload({
 		ids: ['price_range','strategy_profit']
@@ -115,22 +117,35 @@ var showInputErrors = function(arr, loc){
 }
 
 $(document).ready(function(){
+
+	// Render navbar
 	render('#_nav', "#navbar_div")({});
 
 	// Disable legs modal, strategy data modal, model settings modal until strategy is created
+	// no strategy present
+	// default range setting
 	$('#legs_btn').prop('disabled', true).css("color", "grey");
 	$('#data_btn').prop('disabled', true).css("color", "grey");
 	$('#model_btn').prop('disabled', true).css("color", "grey");
+	$('#range_btn').prop('disabled', true).css("color", "grey");
 	var strategy=false
+	var range="auto"
 
+
+
+	// Logo Modal
 	$('#logo_btn').on('click', function(event){
 		$('#project_info_modal').modal('toggle');
 	});
 
+
+	// Graph 
 	$("#graph_btn").on('click', function(event){
 		graphData()
 	});
 
+
+	// Creating and updating custom Options Strategies
 	$('#stgy_btn').on('click', function(event){
 		if(strategy===false){	
 			$('#stgy_modal').modal('toggle');
@@ -164,6 +179,7 @@ $(document).ready(function(){
 					$('#legs_btn').prop('disabled', false).css("color", "black");
 					$('#data_btn').prop('disabled', false).css("color", "black");
 					$('#model_btn').prop('disabled', false).css("color", "black");
+					$('#range_btn').prop('disabled', false).css("color", "black");
 					strategy=true
 					$('#stgy_modal').modal('hide')
 					$('#stgy_btn').text('Edit Strategy');
@@ -192,6 +208,10 @@ $(document).ready(function(){
 		})
 	});
 
+
+
+
+	// Adding, Viewing, Editing, Deleting Legs Modal
 	$('#legs_btn').on('click', function(event){
 		if(strategy===true){
 			getStrategy("LegsModal");
@@ -286,6 +306,10 @@ $(document).ready(function(){
 		});
 	});
 
+
+
+
+	// Clear current strategy and window
 	$('#clear_btn').on('click', function(event){
 		$.ajax({
 			url: "/options/clear",
@@ -295,12 +319,17 @@ $(document).ready(function(){
 				$('#legs_btn').prop('disabled', true).css("color", "grey");
 				$('#data_btn').prop('disabled', true).css("color", "grey");
 				$('#model_btn').prop('disabled', true).css("color", "grey");
+				$('#range_btn').prop('disabled', true).css("color", "grey");
 				strategy=false
 				$('#stgy_btn').text('New Strategy');
+				$('#range_form')[0].reset();
 			}
 		});
 	});
 
+
+
+	// Strategy Greek Values and Setup Cost
 	$('#data_btn').on('click', function(event){
 		if(strategy===true){
 			$.ajax({
@@ -321,6 +350,8 @@ $(document).ready(function(){
 		}
 	});
 
+
+	// Pricing Model Settings
 	$('#model_btn').on('click', function(event){
 		if(strategy===true){
 			$('#model_modal').modal('toggle')			
@@ -341,13 +372,69 @@ $(document).ready(function(){
 	});
 
 	$('#bs_input').on('click', function(event){
-		$('#fields_template').remove()
+		$('#fields_template').remove();
 	});
 
 	$('#bt_input').on('click', function(event){
 		render('#hidden_fields', '#fields_div')({});
 	});
 
+
+
+	// Window Settings
+	$('#range_btn').on('click', function(event){
+		if(strategy===true){
+			$('#range_modal').modal('toggle')			
+		}
+	});
+
+	$('#enter_input').on('click', function(event){
+		range="manual"
+		render('#range_hidden_fields', '#range_fields_div')({});
+		$('#range_fields_div').css('border-left', '1px solid black');
+	});
+
+	$('#auto_input').on('click', function(event){
+		range="auto"
+		$('#range_fields_template').remove();
+		$('#range_fields_div').css('border-left', '0px');
+	})
+
+	$('#range_submit_btn').on('click', function(event){
+		if(range==="auto"){
+			$.ajax({
+				url: "/options/resetrange",
+				method: "POST",
+				success:function(){
+					$('#range_modal').modal('toggle');
+					$('#range_form')[0].reset();
+				}
+			})
+		}
+		else if(range==="manual"){
+			data = $('#range_form').serialize()
+			$.ajax({
+				url: "/options/graphrange",
+				method: "POST",
+				'data':data,
+				success:function(data){
+					if('fields' in data){
+						fields=JSON.parse(data['fields'])
+						ids = ['#range-input-start', '#range-input-end']	
+						showInputErrors(ids, fields)
+					}
+					else{
+						$('#range_modal').modal('toggle');
+						$('.range-input').removeAttr('style')
+					}
+				}
+			})
+		}
+	});
+
+
+
+	// Volatility by Ticker Tool
 	$('#vol_form_hide').on('click', function(event){
 		$('#vol_result_div').remove()
 		$('#conn_error_div').remove()
@@ -383,6 +470,9 @@ $(document).ready(function(){
 		});
 	});
 
+
+
+	// Fetch risk-free rate tool
 	$('#r_btn').on('click', function(event){
 		$('#r_loading').show()
 		$.ajax({
@@ -409,6 +499,9 @@ $(document).ready(function(){
 		$('#r_modal').modal('hide')
 	});
 
+
+
+	// Load pre-configured strategy template 
 	$('.template_btn').on('click', function(event){
 		id_ = $(this).attr('id')
 		$.ajax({
@@ -420,6 +513,7 @@ $(document).ready(function(){
 				$('#legs_btn').prop('disabled', false).css("color", "black");
 				$('#data_btn').prop('disabled', false).css("color", "black");
 				$('#model_btn').prop('disabled', false).css("color", "black");
+				$('#range_btn').prop('disabled', false).css("color", "black");
 				$('#stgy_btn').text('Edit Strategy');
 			}
 		});

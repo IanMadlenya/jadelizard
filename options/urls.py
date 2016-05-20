@@ -19,4 +19,6 @@ urlpatterns = [
 	url(r'^volcalc$', views.TrailingVol.as_view(), name='volcalc'),
 	url(r'^getr$', views.GetR.as_view(), name='getr'),
 	url(r'^loadtemplate$', views.StrategyTemplate.as_view(), name='loadtemplate'),
+	url(r'^graphrange$', views.GraphRange.as_view(), name='graphrange'), 
+	url(r'^resetrange$', views.ResetRange.as_view(), name='resetrange'),
 ]

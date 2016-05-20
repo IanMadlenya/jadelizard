@@ -249,30 +249,36 @@ class Strategy:
 		"vega":vega
 		}
 
-	def define_range(self): 
+	def define_range(self, range_start=None, range_end=None): 
 		"""
-		Creates the index (x-axis) values for the strategy - 
-		from 0 to 2x the underlying value.
-		The scale of the axis depends on the value of the underlying.
+		Creates the index and price range (x-axis) for the strategy. 
+		Default is to calculate P/L from 25 percent to 200 percent underlying value. 
+		The user can also enter a desired range for graphing.
 		"""
-		start = int(self.S0*0.25)+1
-		end = int(self.S0*2)+1
+		if range_end: 
+			start,end = range_start,range_end
+			graph_range = (range_end-range_start)/1.75
+		else: 
+			start, end = (int(self.S0*0.25)+1), (int(self.S0*2)+1)
+			graph_range = self.S0
 		def scale(): 
-			if self.S0<5: 
+			if graph_range<2:
+				return .02
+			elif graph_range<5: 
 				return .05
-			elif self.S0<10: 
+			elif graph_range<10: 
 				return .10
-			elif self.S0<20: 
+			elif graph_range<20: 
 				return .20
-			elif self.S0<50: 
+			elif graph_range<50: 
 				return .25
-			elif self.S0<100: 
+			elif graph_range<100: 
 				return .50
-			elif self.S0<200: 
+			elif graph_range<200: 
 				return 1
-			elif self.S0<500: 
+			elif graph_range<500: 
 				return 2.50
-			elif self.S0<=1000: 
+			elif graph_range<=1000: 
 				return 5
 		scale = scale()
 		price_range = np.arange(start,end,scale)
@@ -289,11 +295,11 @@ class Strategy:
 		df['strategy_profit'] = df.price_range.map(lambda x: self.strategy_value(x)["profit"])
 		return df
 
-	def graph_data(self): 
+	def graph_data(self, range_start=None, range_end=None): 
 		"""
 		Returns copy of dataframe for graphing in C3
 		"""
-		cols = self.define_range()
+		cols = self.define_range(range_start, range_end)
 		df = self.dataframe_setup(cols[0], cols[1])
 		return df.to_json(orient='records')
 
