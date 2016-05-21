@@ -1,11 +1,30 @@
-#project_info_table th {
-	text-align: center;
-}
-
 #project_info_modal .modal-dialog {
 	width: 30%;
 }
 
 #jadelizard {
 	font-family: 'Josefin Sans';
+	color: #477bc3;
+	text-decoration: underline;
+}
+
+#jadelizard:hover{
+	text-decoration: none;
+}
+
+#repo_link{
+	color: black!important;
+	text-decoration: underline;
+}
+
+#repo_link:hover{
+	color: #477bc3!important;
+}
+
+#brendanburns:hover{
+	color: #477bc3;
+}
+
+.project-info * {
+	text-align: center;
 }
