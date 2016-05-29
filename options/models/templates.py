@@ -1,181 +1,181 @@
 from .option_models import Strategy
 
-"""
-Pre-configured Strategy Templates for the user to load. 
-All are set with the following values: 
-underlying price $100, volatility 30%, dividend yield 3%, risk-free rate 2%. 
 
-Templates will be priced with the pricing model set in the session. 
-"""
+DEFAULT_q = .03
+DEFAULT_r = .02
+DEFAULT_sigma = .30
 
-# class Template(Strategy):
-# 	pass
+class Template(Strategy):
+	def __init__(self, model_name, S0): 
+		super().__init__(model_name, S0, DEFAULT_q, DEFAULT_r, DEFAULT_sigma)
 
-class LongCallSpread(Strategy): 
+
+
+class LongCallSpread(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "call", 95, 1)
 		self.add_leg("short", "call", 105, 1)
 
-class LongPutSpread(Strategy): 
+class LongPutSpread(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("short", "put", 95, 1)
 		self.add_leg("long", "put", 105, 1)
 
-class ShortCallSpread(Strategy): 
+class ShortCallSpread(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("short", "call", 105, 1)
 		self.add_leg("long", "call", 110, 1)
 
-class ShortPutSpread(Strategy): 
+class ShortPutSpread(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "put", 90, 1)
 		self.add_leg("short", "put", 95, 1)
 
-class LongCombination(Strategy): 
+class LongCombination(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "call", 100, 1)
 		self.add_leg("short", "put", 100, 1)
 
-class ShortCombination(Strategy): 
+class ShortCombination(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("short", "call", 100, 1)
 		self.add_leg("long", "put", 100, 1)
 
-class BackSpreadCalls(Strategy): 
+class BackSpreadCalls(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("short", "call", 100, 1)
 		self.add_leg("long", "call", 105, 1)
 		self.add_leg("long", "call", 105, 1)
 
-class BackSpreadPuts(Strategy): 
+class BackSpreadPuts(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("short", "put", 100, 1)
 		self.add_leg("long", "put", 95, 1)
 		self.add_leg("long", "put", 95, 1)
 
-class FrontSpreadCalls(Strategy): 
+class FrontSpreadCalls(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "call", 100, 1)
 		self.add_leg("short", "call", 105, 1)
 		self.add_leg("short", "call", 105, 1)
 
-class FrontSpreadPuts(Strategy): 
+class FrontSpreadPuts(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "put", 100, 1)
 		self.add_leg("short", "put", 95, 1)
 		self.add_leg("short", "put", 95, 1)
 
-class LongStraddle(Strategy): 
+class LongStraddle(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "call", 100, 1)
 		self.add_leg("long", "put", 100, 1)
 
-class ShortStraddle(Strategy): 
+class ShortStraddle(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("short", "call", 100, 1)
 		self.add_leg("short", "put", 100, 1)
 
-class LongStrangle(Strategy): 
+class LongStrangle(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "call", 105, 1)
 		self.add_leg("long", "put", 95, 1)
 
-class ShortStrangle(Strategy): 
+class ShortStrangle(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("short", "call", 105, 1)
 		self.add_leg("short", "put", 95, 1)
 
-class LongCalendarSpreadCalls(Strategy): 
+class LongCalendarSpreadCalls(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("short", "call", 100, .5)
 		self.add_leg("long", "call", 100, 1)
 
-class LongCalendarSpreadPuts(Strategy): 
+class LongCalendarSpreadPuts(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("short", "put", 100, .5)
 		self.add_leg("long", "put", 100, 1)
 
-class LongCondorCalls(Strategy): 
+class LongCondorCalls(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "call", 90, 1)
 		self.add_leg("short", "call", 95, 1)
 		self.add_leg("short", "call", 105, 1)
 		self.add_leg("long", "call", 110)
 
-class LongCondorPuts(Strategy): 
+class LongCondorPuts(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "put", 90, 1)
 		self.add_leg("short", "put", 95, 1)
 		self.add_leg("short", "put", 105, 1)
 		self.add_leg("long", "put", 110, 1)
 
-class IronCondor(Strategy): 
+class IronCondor(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "call", 110, 1)
 		self.add_leg("short", "call", 105, 1)
 		self.add_leg("short", "put", 95, 1)
 		self.add_leg("long", "put", 90, 1)
 
-class LongButterflyCalls(Strategy): 
+class LongButterflyCalls(Template): 
 	def __init__(self, model_name):
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "call", 90, 1)
 		self.add_leg("short", "call", 100, 1)
 		self.add_leg("short", "call", 100, 1)
 		self.add_leg("long", "call", 110, 1)
 
-class LongButterflyPuts(Strategy): 
+class LongButterflyPuts(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "put", 90, 1)
 		self.add_leg("short", "put", 100, 1)
 		self.add_leg("short", "put", 100, 1)
 		self.add_leg("long", "put", 110, 1)
 
-class IronButterfly(Strategy): 
+class IronButterfly(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "call", 110, 1)
 		self.add_leg("short", "call", 100, 1)
 		self.add_leg("short", "put", 100, 1)
 		self.add_leg("long", "put", 90, 1)
 
-class JadeLizard(Strategy): 
+class JadeLizard(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("short", "call", 95, 1)
 		self.add_leg("short", "put", 105, 1)
 		self.add_leg("long", "call", 115, 1)
 
-class BigLizard(Strategy): 
+class BigLizard(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("short", "call", 100, 1)
 		self.add_leg("short", "put", 100, 1)
 		self.add_leg("long", "call", 115, 1)
 
-class DoubleDiagonal(Strategy): 
+class DoubleDiagonal(Template): 
 	def __init__(self, model_name): 
-		super().__init__(model_name, 100, .03, .02, .30)
+		super().__init__(model_name, 100)
 		self.add_leg("long", "put", 90, .5)
 		self.add_leg("short", "put", 96.5, .25)
 		self.add_leg("short", "call", 104.5, .25)
