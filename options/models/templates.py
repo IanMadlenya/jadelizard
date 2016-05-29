@@ -8,6 +8,9 @@ underlying price $100, volatility 30%, dividend yield 3%, risk-free rate 2%.
 Templates will be priced with the pricing model set in the session. 
 """
 
+# class Template(Strategy):
+# 	pass
+
 class LongCallSpread(Strategy): 
 	def __init__(self, model_name): 
 		super().__init__(model_name, 100, .03, .02, .30)
@@ -108,6 +111,22 @@ class LongCalendarSpreadPuts(Strategy):
 		self.add_leg("short", "put", 100, .5)
 		self.add_leg("long", "put", 100, 1)
 
+class LongCondorCalls(Strategy): 
+	def __init__(self, model_name): 
+		super().__init__(model_name, 100, .03, .02, .30)
+		self.add_leg("long", "call", 90, 1)
+		self.add_leg("short", "call", 95, 1)
+		self.add_leg("short", "call", 105, 1)
+		self.add_leg("long", "call", 110)
+
+class LongCondorPuts(Strategy): 
+	def __init__(self, model_name): 
+		super().__init__(model_name, 100, .03, .02, .30)
+		self.add_leg("long", "put", 90, 1)
+		self.add_leg("short", "put", 95, 1)
+		self.add_leg("short", "put", 105, 1)
+		self.add_leg("long", "put", 110, 1)
+
 class IronCondor(Strategy): 
 	def __init__(self, model_name): 
 		super().__init__(model_name, 100, .03, .02, .30)
@@ -115,6 +134,22 @@ class IronCondor(Strategy):
 		self.add_leg("short", "call", 105, 1)
 		self.add_leg("short", "put", 95, 1)
 		self.add_leg("long", "put", 90, 1)
+
+class LongButterflyCalls(Strategy): 
+	def __init__(self, model_name):
+		super().__init__(model_name, 100, .03, .02, .30)
+		self.add_leg("long", "call", 90, 1)
+		self.add_leg("short", "call", 100, 1)
+		self.add_leg("short", "call", 100, 1)
+		self.add_leg("long", "call", 110, 1)
+
+class LongButterflyPuts(Strategy): 
+	def __init__(self, model_name): 
+		super().__init__(model_name, 100, .03, .02, .30)
+		self.add_leg("long", "put", 90, 1)
+		self.add_leg("short", "put", 100, 1)
+		self.add_leg("short", "put", 100, 1)
+		self.add_leg("long", "put", 110, 1)
 
 class IronButterfly(Strategy): 
 	def __init__(self, model_name): 
@@ -164,7 +199,11 @@ Templates = {
 	"ShortStrangle": ShortStrangle,
 	"LongCalendarSpreadCalls": LongCalendarSpreadCalls, 
 	"LongCalendarSpreadPuts": LongCalendarSpreadPuts, 
+	"LongCondorCalls": LongCondorCalls, 
+	"LongCondorPuts": LongCondorPuts,
 	"IronCondor": IronCondor,
+	"LongButterflyCalls": LongButterflyCalls, 
+	"LongButterflyPuts": LongButterflyPuts,
 	"IronButterfly": IronButterfly,
 	"JadeLizard": JadeLizard, 
 	"BigLizard": BigLizard,
