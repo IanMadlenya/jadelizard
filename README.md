@@ -1,4 +1,5 @@
 ## jadelizard 1.0
+![screenshot](Screen Shot 2016-05-30 at 11.56.25 PM.png)
 ##### Live at **[jadelizard.io](http://jadelizard.io)**
 
 #### What it is
