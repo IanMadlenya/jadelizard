@@ -9,7 +9,7 @@ var render = function(templateSelector, dropZone){
 // Sends JSON data to C3 for graphing
 var graphData = function(options){
 		$.ajax({
-			url: "/options/graphdata",
+			url: "/home/graphdata",
 			method: "GET",
 			dataType: "json",
 			success: function(data){
@@ -48,7 +48,7 @@ var unloadData = function(){
 // All Legs
 var getLegs = function(){
 	$.ajax({
-		url: "/options/displaylegs",
+		url: "/home/displaylegs",
 		method: "GET",
 		dataType: "json",
 		success: function(data){
@@ -68,7 +68,7 @@ var getLegs = function(){
 // LegsModal context - show strategy data in legs modal
 var getStrategy = function(context){
 	$.ajax({
-		url: "/options/strategyinfo",
+		url: "/home/strategyinfo",
 		method: "GET",
 		dataType: "json",
 		success: function(data){
@@ -91,7 +91,7 @@ var getStrategy = function(context){
 
 var deleteLeg = function(form) {
 		$.ajax({
-		url: "/options/deleteleg",
+		url: "/home/deleteleg",
 		method: "POST",
 		data: form.serialize(),
 		success: function(data){
@@ -165,7 +165,7 @@ $(document).ready(function(){
 		event.preventDefault();
 		var data = $(this).serialize();
 		$.ajax({
-			url: "/options/stgyform",
+			url: "/home/stgyform",
 			method: "POST",
 			'data':data,
 			success:function(data){
@@ -192,7 +192,7 @@ $(document).ready(function(){
 		event.preventDefault();
 		var data = $(this).serialize();
 		$.ajax({
-			url: "/options/updatestgy", 
+			url: "/home/updatestgy", 
 			method: "POST", 
 			'data': data,
 			success:function(data){
@@ -224,7 +224,7 @@ $(document).ready(function(){
 		event.preventDefault();
 		var data = $(this).serialize();
 		$.ajax({
-			url: "/options/legsform",
+			url: "/home/legsform",
 			method: "POST",
 			'data':data,
 			success: function(data){
@@ -260,7 +260,7 @@ $(document).ready(function(){
 		var id_ = $(this).data('id');
 		var id_selector = "#".concat(id_);
 		$.ajax({
-			url: "/options/getleg",
+			url: "/home/getleg",
 			method: "GET", 
 			dataType: "json",
 			data: {id:id_},
@@ -289,7 +289,7 @@ $(document).ready(function(){
 		event.preventDefault();
 		var data = $(this).serialize();
 		$.ajax({
-			url: '/options/updateleg',
+			url: '/home/updateleg',
 			method: 'POST',
 			'data': data,
 			success: function(data){
@@ -312,7 +312,7 @@ $(document).ready(function(){
 	// Clear current strategy and window
 	$('#clear_btn').on('click', function(event){
 		$.ajax({
-			url: "/options/clear",
+			url: "/home/clear",
 			method: "POST",
 			success: function(data){
 				unloadData()
@@ -333,7 +333,7 @@ $(document).ready(function(){
 	$('#data_btn').on('click', function(event){
 		if(strategy===true){
 			$.ajax({
-				url: "/options/strategydata",
+				url: "/home/strategydata",
 				method: "GET", 
 				dataType: "json",
 				success: function(data){
@@ -362,7 +362,7 @@ $(document).ready(function(){
 		var data = $(this).serialize();
 		event.preventDefault();
 		$.ajax({
-			url: "/options/choosemodel",
+			url: "/home/choosemodel",
 			method: "POST",
 			'data':data,
 			success:function(data){
@@ -403,7 +403,7 @@ $(document).ready(function(){
 	$('#range_submit_btn').on('click', function(event){
 		if(range==="auto"){
 			$.ajax({
-				url: "/options/resetrange",
+				url: "/home/resetrange",
 				method: "POST",
 				success:function(){
 					$('#range_modal').modal('toggle');
@@ -414,7 +414,7 @@ $(document).ready(function(){
 		else if(range==="manual"){
 			data = $('#range_form').serialize()
 			$.ajax({
-				url: "/options/graphrange",
+				url: "/home/graphrange",
 				method: "POST",
 				'data':data,
 				success:function(data){
@@ -447,7 +447,7 @@ $(document).ready(function(){
 		event.preventDefault();
 		$('.vol-input').removeAttr('style');
 		$.ajax({
-			url:"/options/volcalc",
+			url:"/home/volcalc",
 			method: "GET", 
 			'data':$(this).serialize(), 
 			success: function(data){
@@ -476,7 +476,7 @@ $(document).ready(function(){
 	$('#r_btn').on('click', function(event){
 		$('#r_loading').show()
 		$.ajax({
-			url: "/options/getr",
+			url: "/home/getr",
 			method: "GET", 
 			'data':$(this).serialize(),
 			success: function(data){
@@ -505,7 +505,7 @@ $(document).ready(function(){
 	$('.template_btn').on('click', function(event){
 		id_ = $(this).attr('id')
 		$.ajax({
-			url: "/options/loadtemplate",
+			url: "/home/loadtemplate",
 			method: "POST",
 			data: {id:id_},
 			success: function(data){

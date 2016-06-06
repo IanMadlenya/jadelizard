@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
-	url(r'^options/', include('options.urls', namespace='options')),
-    url(r'^$', RedirectView.as_view(url="/options/"))
+	url(r'^home/', include('options.urls', namespace='home')),
+    url(r'^$', RedirectView.as_view(url="/home/"))
 ]
 
