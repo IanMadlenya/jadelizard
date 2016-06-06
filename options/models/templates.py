@@ -117,7 +117,7 @@ class LongCondorCalls(Template):
 		self.add_leg("long", "call", 90, 1)
 		self.add_leg("short", "call", 95, 1)
 		self.add_leg("short", "call", 105, 1)
-		self.add_leg("long", "call", 110)
+		self.add_leg("long", "call", 110, 1)
 
 class LongCondorPuts(Template): 
 	def __init__(self, model_name): 
