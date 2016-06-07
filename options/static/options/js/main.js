@@ -49,8 +49,9 @@ var unloadData = function(){
 	$('.c3-axis-y-label').css('visibility', 'hidden')
 };
 
-// All Legs
+// All Legs and Stock
 var getLegs = function(){
+	console.log("LEGS")
 	$.ajax({
 		url: "/home/displaylegs",
 		method: "GET",
@@ -60,13 +61,25 @@ var getLegs = function(){
 				render('#legs_empty_message', '#manage_legs_div')({});
 			}
 			else{
+				data['longqty'] = stock['longqty']
+				data['shortqty'] = stock['shortqty']
 				var template = $("#legs_manage_script").html()
 				var rendered = Mustache.render(template, data)
 				$('#manage_legs_div').html(rendered);
 			}
 		}
 	});
+
 };
+
+var getStock = function(){
+	var template = $('#shares_script').html()
+	console.log(template)
+	var rendered = Mustache.render(template, stock)
+	console.log(rendered)
+	console.log(stock)
+	$('#stock_div').html(rendered);
+}
 
 // UpdateStrategy context - show strategy data in stgy update form
 // LegsModal context - show strategy data in legs modal
@@ -140,6 +153,7 @@ $(document).ready(function(){
 	manageButtons(true)
 	var strategy=false
 	var range="auto"
+	stock = {"longqty":0, "shortqty":0}
 
 
 
@@ -166,6 +180,7 @@ $(document).ready(function(){
 		}
 	});
 
+	// clear inputs on form hide
 	$('#stgy_modal').on('hidden.bs.modal', function () {
 		$('.stgy-input').removeAttr('style');
     	$(this).find(".field-input").val('').end();
@@ -224,6 +239,7 @@ $(document).ready(function(){
 			getStrategy("LegsModal");
 			render('#legs_form_script', '#add_leg_div')({});
 			getLegs();
+			// getStock();
 		}
 	});
 
