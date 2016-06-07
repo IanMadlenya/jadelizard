@@ -329,6 +329,22 @@ $(document).ready(function(){
 		});
 	});
 
+	$('#manage_legs_div').on('click', '.stock_save_btn', function(event){
+		var data = $('#stock_form').serialize()
+		$.ajax({
+			url: '/home/setstock', 
+			method: 'POST', 
+			'data': data,
+			success: function(data){
+				stock['longqty'] = data['longqty']
+				stock['shortqty'] = data['shortqty']
+
+			}
+
+		});
+
+	});
+
 
 
 

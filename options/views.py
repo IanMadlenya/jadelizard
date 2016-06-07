@@ -143,7 +143,7 @@ class SetStock(View):
 			strategy = Strategy.from_json(request.session["current_strategy"])
 			longqty, shortqty = request.POST.get('longqty'), request.POST.get('shortqty')
 			strategy.set_stock(longqty, shortqty)
-			return JsonResponse({"status":"Shares Updated"})
+			return JsonResponse({"status":"Shares Updated", "longqty":longqty, "shortqty":shortqty})
 		invalid_fields = {"fields":form.errors.as_json()}
 		return JsonResponse(invalid_fields)
 
