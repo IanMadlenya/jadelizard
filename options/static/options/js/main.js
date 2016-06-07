@@ -49,9 +49,11 @@ var unloadData = function(){
 	$('.c3-axis-y-label').css('visibility', 'hidden')
 };
 
+// Global variable for strategy stock shares 
+var stock = {"longqty":0, "shortqty":0}
+
 // All Legs and Stock
 var getLegs = function(){
-	console.log("LEGS")
 	$.ajax({
 		url: "/home/displaylegs",
 		method: "GET",
@@ -63,6 +65,7 @@ var getLegs = function(){
 			else{
 				data['longqty'] = stock['longqty']
 				data['shortqty'] = stock['shortqty']
+				console.log(data['longqty'], data['shortqty'])
 				var template = $("#legs_manage_script").html()
 				var rendered = Mustache.render(template, data)
 				$('#manage_legs_div').html(rendered);
@@ -153,7 +156,6 @@ $(document).ready(function(){
 	manageButtons(true)
 	var strategy=false
 	var range="auto"
-	stock = {"longqty":0, "shortqty":0}
 
 
 
@@ -336,6 +338,8 @@ $(document).ready(function(){
 			method: 'POST', 
 			'data': data,
 			success: function(data){
+				console.log(data)
+				console.log(data['longqty'], data['shortqty'])
 				stock['longqty'] = data['longqty']
 				stock['shortqty'] = data['shortqty']
 

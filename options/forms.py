@@ -50,8 +50,8 @@ class LegsForm(forms.Form):
 	T = forms.FloatField(min_value=.01, max_value=20)
 
 class StockForm(forms.Form): 
-	longqty = forms.IntegerField(min_value=1, max_value=100)
-	shortqty = forms.IntegerField(min_value=1, max_value=100)
+	longqty = forms.IntegerField(min_value=0, max_value=100)
+	shortqty = forms.IntegerField(min_value=0, max_value=100)
 
 class PriceModelForm(forms.Form): 
 	model = forms.ChoiceField(choices=MODEL_CHOICES)

@@ -348,7 +348,8 @@ class Strategy:
 		"sigma":self.sigma,
 		"exer_type":self.exer_type,
 		"steps":self.steps,
-		"legs": [{"data":leg["data"], "id": leg["id"], "exp": leg["exp"], "option" :leg["option"].to_json()} for leg in self.legs]
+		"legs": [{"data":leg["data"], "id": leg["id"], "exp": leg["exp"], "option" :leg["option"].to_json()} for leg in self.legs], 
+		"shares": self.shares
 		}
 
 	@classmethod
@@ -358,5 +359,6 @@ class Strategy:
 		strategy.steps = data["steps"]
 		legs = data["legs"]
 		strategy.legs = [{"data":leg["data"], "id":leg["id"], "exp":leg["exp"], "option":Option.from_json(leg["option"])} for leg in legs]
+		strategy.shares = data["shares"]
 		return strategy
 
