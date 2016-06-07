@@ -25,6 +25,10 @@ var d3_chart = c3.generate({
 		},
 	},
 
+	transition: {
+		duration: 550,
+	},
+
 	axis: {
 		x: {
 			label: {
