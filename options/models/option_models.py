@@ -87,6 +87,7 @@ class Strategy:
 
 	def __init__(self, model_name, S0, q, r, sigma):
 		self.legs = []
+		self.shares = {"long": 0, "short": 0}
 		self.model = self.pricing_models.get(model_name)
 		self.S0 = S0
 		self.q = q
@@ -153,52 +154,46 @@ class Strategy:
 				self.legs.remove(each)
 				return "Leg removed"
 
+	def set_stock(self, longqty, shortqty):
+		"""
+		Add or remove shares of stock from the strategy 
+		"""
+		self.shares['long'], self.shares['short'] = longqty, shortqty 
+
 	def strategy_value(self, new_underlying_price): 
 		"""
-		This function returns three values: 
+		The return value - profit - is the value used for graphing. It includes profit or loss from options
+		at the first expiration, plus the unrealized gain/loss of the adjusted value of outstanding long options
+		minus their initial cost, plus credit received from outstanding short options, plus unrealized gain/loss
+		from shares of stock (long and short). 
 
-		1. Value - total value of the options strategy – profit or loss from options at first expiration, 
-		plus the adjusted price of any long outstanding options at first expiration, plus the net credit
-		received from short options outstanding at first expiration.
+		It is not possible to assess the value of a strategy at multiple points in time, meaning that, in a 
+		strategy with multiple expiration dates, valuation for the longer-term options can be problematic. 
+		These calculations do not take into account the profit/loss from those longer-term legs at expiration. 
 
-		2. Profit - This is the value used for graphing. Profit or loss from options at first expiration, 
-		plus the unrealized gain/loss of the adjusted value of outstanding long options minus their initial 
-		cost, plus net credit received from outstanding short options. 
-
-		3. Remaining options - The adjusted value of outstanding long options. 
-
-		If multiple expiration dates are present, the value method will calculate the value of the strategy 
-		at the first expiration present - profit from options at the first expiration plus adjusted (at new T, S0)
-		value of outstanding long options and credit received from outstanding short options. 
-
-		In addition: the assumption is made that interest rates and 
-		volatility of the underlying at expiration of the earliest options are the same as when the
-		strategy is initiated. This will not necessarily be the case.
+		In addition: the assumption must be made that interest rates and volatility of the underlying at expiration 
+		of the earliest options are the same as when the strategy is initiated. This will not necessarily be the case.
 		"""
-		total_value = total_profit = remaining_options = 0
+		total_profit = 0
 		first_exp = self.legs[0]["exp"]
 		for each in self.legs: 
 			original_price = each["data"]["price"]
 			if each["exp"] == first_exp: 
-				profit = each["option"].option_profit(new_underlying_price, original_price)
-				total_value += profit
-				total_profit += profit
+				total_profit += each["option"].option_profit(new_underlying_price, original_price)
 			else: 
 				position = each["option"].position 
 				if position == "long":
 					new_T = each["exp"]-first_exp
 					new_price = self.price(each["option"], new_underlying_price, new_T)
-					total_value += new_price
-					remaining_options += new_price
 					total_profit += new_price - original_price
 				elif position == "short": 
-					total_value += original_price
 					total_profit += original_price
-		return {
-			"value":total_value, 
-			"profit":total_profit, 
-			"rem_long_options":remaining_options
-		}
+		# Add P/L for Stock Shares
+		long_pl = self.shares["long"]*(new_underlying_price - self.S0)
+		short_pl = self.shares["short"]*(self.S0 - new_underlying_price)
+		total_profit += (long_pl + short_pl)
+
+		return total_profit
 
 	def strategy_cost(self): 
 		"""
@@ -292,7 +287,7 @@ class Strategy:
 		"""
 		df = pd.DataFrame(index=index) 
 		df['price_range']=price_range
-		df['strategy_profit'] = df.price_range.map(lambda x: self.strategy_value(x)["profit"])
+		df['strategy_profit'] = df.price_range.map(lambda x: self.strategy_value(x))
 		return df
 
 	def graph_data(self, range_start=None, range_end=None): 

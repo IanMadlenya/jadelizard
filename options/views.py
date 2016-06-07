@@ -4,7 +4,7 @@ from django.views.generic import View
 from .models import (
 	Strategy, Option, BlackScholes, BinomialTree, Utils, Templates
 )
-from options.forms import StrategyForm, LegsForm, PriceModelForm, VolForm, RangeForm
+from options.forms import StrategyForm, LegsForm, StockForm, PriceModelForm, VolForm, RangeForm
 
 class Index(View): 
 	template_name = "options/base.html"
@@ -130,6 +130,20 @@ class UpdateLeg(View):
 					strategy.add_leg(position, kind, K, T)
 			request.session["current_strategy"] = strategy.to_json()
 			return JsonResponse({"status":"Leg Updated"})
+		invalid_fields = {"fields":form.errors.as_json()}
+		return JsonResponse(invalid_fields)
+
+class SetStock(View): 
+	"""
+	Set qty shares long/short
+	"""
+	def post(self, request): 
+		form = StockForm(request.POST)
+		if form.is_valid(): 
+			strategy = Strategy.from_json(request.session["current_strategy"])
+			longqty, shortqty = request.POST.get('longqty'), request.POST.get('shortqty')
+			strategy.set_stock(longqty, shortqty)
+			return JsonResponse({"status":"Shares Updated"})
 		invalid_fields = {"fields":form.errors.as_json()}
 		return JsonResponse(invalid_fields)
 
