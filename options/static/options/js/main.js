@@ -23,6 +23,8 @@ var graphData = function(options){
 				});
 				d3_chart.xgrids([{value: S0, text: 'S0'},])
 				d3_chart.ygrids([{value: 0},])
+				$('.c3-axis-x-label').css('visibility', 'visible')
+				$('.c3-axis-y-label').css('visibility', 'visible')
 			},	
 			statusCode: {
 				412: function() {
@@ -43,6 +45,8 @@ var unloadData = function(){
 	});
 	d3_chart.xgrids.remove()
 	d3_chart.ygrids.remove()
+	$('.c3-axis-x-label').css('visibility', 'hidden')
+	$('.c3-axis-y-label').css('visibility', 'hidden')
 };
 
 // All Legs
@@ -116,6 +120,15 @@ var showInputErrors = function(arr, loc){
 	}
 }
 
+// Enable (bool=false) and Disable (bool=true) buttons
+var manageButtons = function(bool){
+	color = ((bool==true) ? "grey" : "black")
+	$('#legs_btn').prop('disabled', bool).css("color", color);
+	$('#data_btn').prop('disabled', bool).css("color", color);
+	$('#model_btn').prop('disabled', bool).css("color", color);
+	$('#range_btn').prop('disabled', bool).css("color", color);
+}
+
 $(document).ready(function(){
 
 	// Render navbar
@@ -124,16 +137,13 @@ $(document).ready(function(){
 	// Disable legs modal, strategy data modal, model settings modal until strategy is created
 	// no strategy present
 	// default range setting
-	$('#legs_btn').prop('disabled', true).css("color", "grey");
-	$('#data_btn').prop('disabled', true).css("color", "grey");
-	$('#model_btn').prop('disabled', true).css("color", "grey");
-	$('#range_btn').prop('disabled', true).css("color", "grey");
+	manageButtons(true)
 	var strategy=false
 	var range="auto"
 
 
 
-	// Logo Modal
+	// Project Info Modal
 	$('#logo_btn').on('click', function(event){
 		$('#project_info_modal').modal('toggle');
 	});
@@ -176,10 +186,7 @@ $(document).ready(function(){
 				}
 				else{
 					$('.stgy-input').removeAttr('style');
-					$('#legs_btn').prop('disabled', false).css("color", "black");
-					$('#data_btn').prop('disabled', false).css("color", "black");
-					$('#model_btn').prop('disabled', false).css("color", "black");
-					$('#range_btn').prop('disabled', false).css("color", "black");
+					manageButtons(false)
 					strategy=true
 					$('#stgy_modal').modal('hide')
 					$('#stgy_btn').text('Edit Strategy');
@@ -316,10 +323,7 @@ $(document).ready(function(){
 			method: "POST",
 			success: function(data){
 				unloadData()
-				$('#legs_btn').prop('disabled', true).css("color", "grey");
-				$('#data_btn').prop('disabled', true).css("color", "grey");
-				$('#model_btn').prop('disabled', true).css("color", "grey");
-				$('#range_btn').prop('disabled', true).css("color", "grey");
+				manageButtons(true)
 				strategy=false
 				$('#stgy_btn').text('New Strategy');
 				$('#range_form')[0].reset();
@@ -510,10 +514,7 @@ $(document).ready(function(){
 			data: {id:id_},
 			success: function(data){
 				strategy=true
-				$('#legs_btn').prop('disabled', false).css("color", "black");
-				$('#data_btn').prop('disabled', false).css("color", "black");
-				$('#model_btn').prop('disabled', false).css("color", "black");
-				$('#range_btn').prop('disabled', false).css("color", "black");
+				manageButtons(false)
 				$('#stgy_btn').text('Edit Strategy');
 			}
 		});

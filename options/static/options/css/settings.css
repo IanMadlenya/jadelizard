@@ -10,3 +10,11 @@
 .stgy-info {
 	text-align: center;
 }
+
+.c3-axis-x-label {
+	visibility: hidden;
+}
+
+.c3-axis-y-label {
+	visibility: hidden;
+}
