@@ -4,8 +4,10 @@
 }
 
 .btn:hover {
-	background-color: #474444!important;
+	background-color: #00a86b!important;
 }
+
+/*#474444*/
 
 .stgy-info {
 	text-align: center;
