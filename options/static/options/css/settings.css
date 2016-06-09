@@ -35,13 +35,21 @@ body {
 .btn {
 	background-color: #477bc3!important;
 	border: none!important;
+	outline: none!important;
 }
 
 .btn:hover {
 	background-color: #00a86b!important;
 }
-
 /*#474444*/
+
+*:focus {
+    outline: 0 !important;
+}
+
+input[type="button"]::-moz-focus-inner {
+   border: 0;
+}
 
 .stgy-info {
 	text-align: center;
