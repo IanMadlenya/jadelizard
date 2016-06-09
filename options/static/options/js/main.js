@@ -49,7 +49,10 @@ var unloadData = function(){
 	$('.c3-axis-y-label').css('visibility', 'hidden')
 };
 
-// All Legs
+// Global variable for strategy stock shares 
+var stock = {"longqty":0, "shortqty":0}
+
+// All Legs and Stock
 var getLegs = function(){
 	$.ajax({
 		url: "/home/displaylegs",
@@ -60,13 +63,30 @@ var getLegs = function(){
 				render('#legs_empty_message', '#manage_legs_div')({});
 			}
 			else{
+				data['longqty'] = stock['longqty']
+				data['shortqty'] = stock['shortqty']
+				console.log(data['longqty'], data['shortqty'])
 				var template = $("#legs_manage_script").html()
 				var rendered = Mustache.render(template, data)
 				$('#manage_legs_div').html(rendered);
 			}
 		}
 	});
+
 };
+
+var getStock = function(){
+	var template = $('#shares_script').html()
+	console.log(template)
+	var rendered = Mustache.render(template, stock)
+	//
+	//
+	console.log(rendered)
+	console.log(stock)
+	//
+	//
+	$('#stock_div').html(rendered);
+}
 
 // UpdateStrategy context - show strategy data in stgy update form
 // LegsModal context - show strategy data in legs modal
@@ -107,6 +127,7 @@ var deleteLeg = function(form) {
 // Shows Form Errors for input fields
 // first argument - array of IDs for checked input fields
 // second argument - dictionary of errors returned by form
+// html input names must match django form names
 var showInputErrors = function(arr, loc){
 	for(var i=0; i<arr.length; i++){
 		id = arr[i]
@@ -120,9 +141,15 @@ var showInputErrors = function(arr, loc){
 	}
 }
 
+// on successful completion for non-closing forms
+var showInputSuccess = function(selector){
+	$(selector).css('border', '0.05em solid #32cd32')
+	setTimeout(function(){($(selector).removeAttr('style'))}, 800);
+}
+
 // Enable (bool=false) and Disable (bool=true) buttons
-var manageButtons = function(bool){
-	color = ((bool==true) ? "grey" : "black")
+var disableButtons = function(bool){
+	color = ((bool===true) ? "grey" : "black")
 	$('#legs_btn').prop('disabled', bool).css("color", color);
 	$('#data_btn').prop('disabled', bool).css("color", color);
 	$('#model_btn').prop('disabled', bool).css("color", color);
@@ -137,7 +164,7 @@ $(document).ready(function(){
 	// Disable legs modal, strategy data modal, model settings modal until strategy is created
 	// no strategy present
 	// default range setting
-	manageButtons(true)
+	disableButtons(true)
 	var strategy=false
 	var range="auto"
 
@@ -166,6 +193,7 @@ $(document).ready(function(){
 		}
 	});
 
+	// clear inputs on form hide
 	$('#stgy_modal').on('hidden.bs.modal', function () {
 		$('.stgy-input').removeAttr('style');
     	$(this).find(".field-input").val('').end();
@@ -186,7 +214,7 @@ $(document).ready(function(){
 				}
 				else{
 					$('.stgy-input').removeAttr('style');
-					manageButtons(false)
+					disableButtons(false)
 					strategy=true
 					$('#stgy_modal').modal('hide')
 					$('#stgy_btn').text('Edit Strategy');
@@ -224,6 +252,7 @@ $(document).ready(function(){
 			getStrategy("LegsModal");
 			render('#legs_form_script', '#add_leg_div')({});
 			getLegs();
+			// getStock();
 		}
 	});
 
@@ -276,18 +305,9 @@ $(document).ready(function(){
 				var rendered = Mustache.render(template, data)
 				$(id_selector).html(rendered);
 				$('.edit_btn').prop('disabled', true);
-				if(data['position']==='long'){
-					$('#position_long').prop("selected", true)
-				}
-				else if(data['position']==='short'){
-					$('#position_short').prop("selected", true)
-				}
-				if(data['kind']==='call'){
-					$('#kind_call').prop("selected", true)
-				}
-				else if(data['kind']==='put'){
-					$('#kind_put').prop("selected", true)
-				}
+
+				(data['position']==='long') ? $('#position_long').prop("selected", true) : $('#position_short').prop("selected", true);
+				(data['kind']==='call') ? $('#kind_call').prop("selected", true) : $('#kind_put').prop("selected", true);
 			}
 		});
 	});
@@ -313,6 +333,31 @@ $(document).ready(function(){
 		});
 	});
 
+	$('#manage_legs_div').on('click', '.stock_save_btn', function(event){
+		var data = $('#stock_form').serialize()
+		$.ajax({
+			url: '/home/setstock', 
+			method: 'POST', 
+			'data': data,
+			success: function(data){
+				if('fields' in data){
+					ids = ['#stock-input-long', '#stock-input-short']
+					fields = JSON.parse(data['fields'])
+					showInputErrors(ids, fields)
+				}
+				else {
+					showInputSuccess('.stock-input')
+					console.log(data['longqty'], data['shortqty'])
+					stock['longqty'] = data['longqty']
+					stock['shortqty'] = data['shortqty']	
+				}
+
+			}
+
+		});
+
+	});
+
 
 
 
@@ -323,10 +368,11 @@ $(document).ready(function(){
 			method: "POST",
 			success: function(data){
 				unloadData()
-				manageButtons(true)
+				disableButtons(true)
 				strategy=false
 				$('#stgy_btn').text('New Strategy');
 				$('#range_form')[0].reset();
+				stock = {'longqty':0, 'shortqty':0}
 			}
 		});
 	});
@@ -513,8 +559,9 @@ $(document).ready(function(){
 			method: "POST",
 			data: {id:id_},
 			success: function(data){
+				stock = data["stock"]
 				strategy=true
-				manageButtons(false)
+				disableButtons(false)
 				$('#stgy_btn').text('Edit Strategy');
 			}
 		});

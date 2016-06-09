@@ -6,7 +6,7 @@
 			<thead>
 			  <tr>
 				<th class="col-sm-2" >Position</th>
-				<th class="col-sm-2">Kind</th>
+				<th class="col-sm-2">Type</th>
 				<th class="col-sm-2">Strike</th>
 				<th class="col-sm-4">Time to Expiration</th>
 				<th></th>
@@ -37,8 +37,47 @@
 					</td>
 				</tr>
 			  {{/legs}}
+			  	<tr id="divider_row"></tr>
+
 			</tbody>
 		  </table>
+		  <table class="table table-hover">
+			  <thead>
+			  	<tr>
+			  		<th class="col-sm-2" style="align: left">Add Stock</th>
+			  		<th></th><th></th><th></th>
+			  	</tr>
+			  </thead>
+			  <tbody>
+					<tr class="active leg_row" id="stock_row">
+					  	<form id="stock_form">
+					  	<td id="num_shares" class="row-align col-sm-2">
+					  		<strong># Shares</strong>
+					  	</td>
+						<td class="row-align col-sm-4">
+							<div class="input-group">
+	    						<div class="input-group-addon">Long</div>
+	        					<input name="longqty" id="stock-input-long" class="form-control field-input input-sm stock-input" value = {{longqty}}    form="stock_form" autocomplete="off"/>
+	        				</div>
+						</td>
+						<td class="row-align col-sm-4">
+							<div class="input-group">
+	    						<div class="input-group-addon">Short</div>
+	        					<input name="shortqty" id="stock-input-short" class="form-control field-input input-sm stock-input" value = {{shortqty}}  form="stock_form" autocomplete="off"/>
+	        				</div>
+						</td>
+						</form>	
+						<td class="row-align stock_save">
+							<button class="btn-xs btn stock_save_btn" type="btn btn-primary" name="longqty">
+								<span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+								<a href="#"></a>
+							</button>
+						</td>
+					</tr>
+			  </tbody>
+		  </table>
+		  <div>
+		  </div>
 		</li>
 	</ul>
 </script>

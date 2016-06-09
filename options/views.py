@@ -4,7 +4,7 @@ from django.views.generic import View
 from .models import (
 	Strategy, Option, BlackScholes, BinomialTree, Utils, Templates
 )
-from options.forms import StrategyForm, LegsForm, PriceModelForm, VolForm, RangeForm
+from options.forms import StrategyForm, LegsForm, StockForm, PriceModelForm, VolForm, RangeForm
 
 class Index(View): 
 	template_name = "options/base.html"
@@ -133,6 +133,21 @@ class UpdateLeg(View):
 		invalid_fields = {"fields":form.errors.as_json()}
 		return JsonResponse(invalid_fields)
 
+class SetStock(View): 
+	"""
+	Set qty shares long/short
+	"""
+	def post(self, request): 
+		form = StockForm(request.POST)
+		if form.is_valid(): 
+			strategy = Strategy.from_json(request.session["current_strategy"])
+			longqty, shortqty = form.cleaned_data.get('longqty'), form.cleaned_data.get('shortqty')
+			strategy.set_stock(longqty, shortqty)
+			request.session["current_strategy"] = strategy.to_json()
+			return JsonResponse({"status":"Shares Updated", "longqty":longqty, "shortqty":shortqty})
+		invalid_fields = {"fields":form.errors.as_json()}
+		return JsonResponse(invalid_fields)
+
 class GraphData(View): 
 	"""
 	Get JSON (orient=records) with pricing index (x) and strategy P/L (y) for graphing
@@ -232,8 +247,9 @@ class StrategyTemplate(View):
 		template = Templates.get(request.POST.get('id'))
 		model = request.session["current_model"]
 		request.session["current_strategy"]=template(model).to_json()
+		stock = request.session["current_strategy"]["shares"]
 		request.session["graph_range"] = {"start":None,"end":None}
-		return JsonResponse({"status":"Template Loaded"})
+		return JsonResponse({"status":"Template Loaded", "stock":stock})
 
 class GraphRange(View):
 	"""

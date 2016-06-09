@@ -12,6 +12,7 @@ urlpatterns = [
 	url(r'^getleg$', views.GetLeg.as_view(), name='getleg'),
 	url(r'^deleteleg$', views.DeleteLeg.as_view(), name='deleteleg'),
 	url(r'^updateleg$', views.UpdateLeg.as_view(), name='updateleg'),
+	url(r'^setstock$', views.SetStock.as_view(), name='setstock'),
 	url(r'^strategyinfo$', views.StrategyInfo.as_view(), name='strategyinfo'),
 	url(r'^clear$', views.ClearData.as_view(), name='clear'),
 	url(r'^strategydata$', views.StrategyData.as_view(), name='strategydata'),
