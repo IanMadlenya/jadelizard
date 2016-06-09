@@ -1,5 +1,5 @@
 ## jadelizard 1.0
-[![screenshot](https://github.com/bburns223/jadelizard/blob/master/screenshots/Screen%20Shot%202016-05-30%20at%2011.56.25%20PM.png)](http://jadelizard.io)
+[![screenshot](/screenshots/jadelizard_screenshot1.png?raw=true "jadelizard screenshot")](http://jadelizard.io)
 ##### Live at **[jadelizard.io](http://jadelizard.io)**
 
 #### What it is
