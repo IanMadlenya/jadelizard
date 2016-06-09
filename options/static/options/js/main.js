@@ -143,7 +143,7 @@ var showInputErrors = function(arr, loc){
 
 // on successful completion for non-closing forms
 var showInputSuccess = function(selector){
-	$(selector).css('border', '0.05em solid #32cd32')
+	$(selector).css('border', '0.05em solid #00a86b')
 	setTimeout(function(){($(selector).removeAttr('style'))}, 800);
 }
 

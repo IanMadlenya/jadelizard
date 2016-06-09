@@ -1,3 +1,36 @@
+body {
+	background-color: #efefef;
+}
+
+.container {
+	background-color: #f4f7f9;
+	position: absolute;
+	width: 95%;
+	height: 98%;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+}
+
+#navbar_div {
+	position: absolute;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+}
+
+.navbar-height {
+	height: 4em!important;
+}
+
+.graph-container {
+	position: relative;
+	top: 6em;
+}
+
 .btn {
 	background-color: #477bc3!important;
 	border: none!important;
@@ -19,4 +52,8 @@
 
 .c3-axis-y-label {
 	visibility: hidden;
+}
+
+.c3-area {
+	opacity:0.33!important;
 }
