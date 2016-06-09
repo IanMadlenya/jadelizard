@@ -247,8 +247,9 @@ class StrategyTemplate(View):
 		template = Templates.get(request.POST.get('id'))
 		model = request.session["current_model"]
 		request.session["current_strategy"]=template(model).to_json()
+		stock = request.session["current_strategy"]["shares"]
 		request.session["graph_range"] = {"start":None,"end":None}
-		return JsonResponse({"status":"Template Loaded"})
+		return JsonResponse({"status":"Template Loaded", "stock":stock})
 
 class GraphRange(View):
 	"""

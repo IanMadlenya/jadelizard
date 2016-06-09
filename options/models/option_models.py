@@ -87,7 +87,7 @@ class Strategy:
 
 	def __init__(self, model_name, S0, q, r, sigma):
 		self.legs = []
-		self.shares = {"long": 0, "short": 0}
+		self.shares = {"longqty": 0, "shortqty": 0}
 		self.model = self.pricing_models.get(model_name)
 		self.S0 = S0
 		self.q = q
@@ -158,7 +158,7 @@ class Strategy:
 		"""
 		Add or remove shares of stock from the strategy 
 		"""
-		self.shares['long'], self.shares['short'] = longqty, shortqty 
+		self.shares['longqty'], self.shares['shortqty'] = longqty, shortqty 
 
 	def strategy_value(self, new_underlying_price): 
 		"""
@@ -189,8 +189,8 @@ class Strategy:
 				elif position == "short": 
 					total_profit += original_price
 		# Add P/L for Stock Shares
-		long_pl = self.shares["long"]*(new_underlying_price - self.S0)
-		short_pl = self.shares["short"]*(self.S0 - new_underlying_price)
+		long_pl = self.shares["longqty"]*(new_underlying_price - self.S0)
+		short_pl = self.shares["shortqty"]*(self.S0 - new_underlying_price)
 		total_profit += (long_pl + short_pl)
 
 		return total_profit
@@ -206,7 +206,9 @@ class Strategy:
 			if position == "long":
 				total_cost += cost
 			elif position == "short":
-				total_cost -= cost 
+				total_cost -= cost
+		total_cost += self.shares['longqty']*self.S0
+		total_cost -= self.shares['shortqty']*self.S0
 		if total_cost>0: 
 			return {"cost":total_cost, "type": "net debit"}
 		elif total_cost<0: 
@@ -249,6 +251,10 @@ class Strategy:
 		Creates the index and price range (x-axis) for the strategy. 
 		Default is to calculate P/L from 25 percent to 200 percent underlying value. 
 		The user can also enter a desired range for graphing.
+
+		The graph_range variable determines the scale for the graph. The goal is to generate
+		no fewer than 100 and no more than 400 data points for graphing, with 200 being ideal. 
+		D3/C3 generally don't work as well once datasets exceed that size. 
 		"""
 		if range_end: 
 			start,end = range_start,range_end

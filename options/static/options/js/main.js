@@ -144,11 +144,11 @@ var showInputErrors = function(arr, loc){
 // on successful completion for non-closing forms
 var showInputSuccess = function(selector){
 	$(selector).css('border', '0.05em solid #32cd32')
-	setTimeout(function(){($(selector).removeAttr('style'))}, 1250);
+	setTimeout(function(){($(selector).removeAttr('style'))}, 800);
 }
 
 // Enable (bool=false) and Disable (bool=true) buttons
-var manageButtons = function(bool){
+var disableButtons = function(bool){
 	color = ((bool===true) ? "grey" : "black")
 	$('#legs_btn').prop('disabled', bool).css("color", color);
 	$('#data_btn').prop('disabled', bool).css("color", color);
@@ -164,7 +164,7 @@ $(document).ready(function(){
 	// Disable legs modal, strategy data modal, model settings modal until strategy is created
 	// no strategy present
 	// default range setting
-	manageButtons(true)
+	disableButtons(true)
 	var strategy=false
 	var range="auto"
 
@@ -214,7 +214,7 @@ $(document).ready(function(){
 				}
 				else{
 					$('.stgy-input').removeAttr('style');
-					manageButtons(false)
+					disableButtons(false)
 					strategy=true
 					$('#stgy_modal').modal('hide')
 					$('#stgy_btn').text('Edit Strategy');
@@ -347,7 +347,6 @@ $(document).ready(function(){
 				}
 				else {
 					showInputSuccess('.stock-input')
-					console.log(data)
 					console.log(data['longqty'], data['shortqty'])
 					stock['longqty'] = data['longqty']
 					stock['shortqty'] = data['shortqty']	
@@ -369,10 +368,11 @@ $(document).ready(function(){
 			method: "POST",
 			success: function(data){
 				unloadData()
-				manageButtons(true)
+				disableButtons(true)
 				strategy=false
 				$('#stgy_btn').text('New Strategy');
 				$('#range_form')[0].reset();
+				stock = {'longqty':0, 'shortqty':0}
 			}
 		});
 	});
@@ -559,8 +559,9 @@ $(document).ready(function(){
 			method: "POST",
 			data: {id:id_},
 			success: function(data){
+				stock = data["stock"]
 				strategy=true
-				manageButtons(false)
+				disableButtons(false)
 				$('#stgy_btn').text('Edit Strategy');
 			}
 		});

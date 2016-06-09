@@ -10,6 +10,11 @@ class Template(Strategy):
 		super().__init__(model_name, S0, DEFAULT_q, DEFAULT_r, DEFAULT_sigma)
 
 
+class CoveredCall(Template):
+	def __init__(self, model_name): 
+		super().__init__(model_name, 100)
+		self.add_leg("short", "call", 105, 1)
+		self.set_stock(1, 0)
 
 class LongCallSpread(Template): 
 	def __init__(self, model_name): 
@@ -183,6 +188,7 @@ class DoubleDiagonal(Template):
 
 
 Templates = {
+	"CoveredCall": CoveredCall, 
 	"LongCallSpread": LongCallSpread,
 	"LongPutSpread": LongPutSpread,
 	"ShortCallSpread": ShortCallSpread,
