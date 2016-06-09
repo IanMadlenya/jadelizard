@@ -1,25 +1,25 @@
 body {
-	background-color: #efefef;
+	background-color: #efefef!important;
 }
 
 .container {
-	background-color: #f4f7f9;
+	background-color: #f4f7f9!important;
 	position: absolute;
-	width: 95%;
-	height: 97%;
+	width: 95%!important;
+	height: 97%!important;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: auto;
 	margin-bottom: auto;
 	left: 0;
 	right: 0;
-	top: .35em;
-	bottom: .55em;
+	top: .35em!important;
+	bottom: .55em!important;
 }
 
 #navbar_div {
 	position: absolute;
-	width: 100%;
+	width: 100%!important;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 0em;
@@ -30,12 +30,13 @@ body {
 .graph-container {
 	position: relative;
 	top: 6em;
-	height: 87%;
+	height: 87%!important;
+	width: 100%!important;
 }
 
 #d3_chart {
-	height: 100%;
-	width: 99%;
+	height: 100%!important;
+	width: 99%!important;
 }
 
 .btn {
