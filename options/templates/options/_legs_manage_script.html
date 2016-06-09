@@ -6,7 +6,7 @@
 			<thead>
 			  <tr>
 				<th class="col-sm-2" >Position</th>
-				<th class="col-sm-2">Kind</th>
+				<th class="col-sm-2">Type</th>
 				<th class="col-sm-2">Strike</th>
 				<th class="col-sm-4">Time to Expiration</th>
 				<th></th>
@@ -44,26 +44,26 @@
 		  <table class="table table-hover">
 			  <thead>
 			  	<tr>
-			  		<th class="col-sm-2" style="align: left">Add Stock to Strategy</th>
-			  		<th></th>
-			  		<th></th>
+			  		<th class="col-sm-2" style="align: left">Add Stock</th>
+			  		<th></th><th></th><th></th>
 			  	</tr>
 			  </thead>
 			  <tbody>
 					<tr class="active leg_row" id="stock_row">
 					  	<form id="stock_form">
-						<td class="row-align col-sm-5">
+					  	<td id="num_shares" class="row-align col-sm-2">
+					  		<strong># Shares</strong>
+					  	</td>
+						<td class="row-align col-sm-4">
 							<div class="input-group">
 	    						<div class="input-group-addon">Long</div>
-	        					<input name="longqty" id="stock-input-long" class="form-control field-input input-sm" value = {{longqty}}    form="stock_form" autocomplete="off"/>
-	        					<div class="input-group-addon">Shares</div>
+	        					<input name="longqty" id="stock-input-long" class="form-control field-input input-sm stock-input" value = {{longqty}}    form="stock_form" autocomplete="off"/>
 	        				</div>
 						</td>
-						<td class="row-align col-sm-5">
+						<td class="row-align col-sm-4">
 							<div class="input-group">
 	    						<div class="input-group-addon">Short</div>
-	        					<input name="shortqty" id="stock-input-short" class="form-control field-input input-sm" value = {{shortqty}}  form="stock_form" autocomplete="off"/>
-	        					<div class="input-group-addon">Shares</div>
+	        					<input name="shortqty" id="stock-input-short" class="form-control field-input input-sm stock-input" value = {{shortqty}}  form="stock_form" autocomplete="off"/>
 	        				</div>
 						</td>
 						</form>	
