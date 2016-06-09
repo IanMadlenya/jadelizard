@@ -1,3 +1,4 @@
+
 body {
 	background-color: #efefef!important;
 }
@@ -37,6 +38,10 @@ body {
 #d3_chart {
 	height: 100%!important;
 	width: 99%!important;
+}
+
+* {
+	font-family: 'Lato', sans-serif;
 }
 
 .btn {
