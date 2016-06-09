@@ -1,3 +1,75 @@
+body {
+	background-color: #efefef;
+}
+
+.container {
+	background-color: #f4f7f9;
+	position: absolute;
+	width: 95%;
+	height: 97%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: auto;
+	margin-bottom: auto;
+	left: 0;
+	right: 0;
+	top: .35em;
+	bottom: .55em;
+}
+
 #navbar_div {
-	margin-top: .5em;
-};
+	position: absolute;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 0em;
+	left: 0;
+	right: 0;
+}
+
+.graph-container {
+	position: relative;
+	top: 6em;
+	height: 87%;
+}
+
+#d3_chart {
+	height: 100%;
+	width: 99%;
+}
+
+.btn {
+	background-color: #477bc3!important;
+	border: none!important;
+	outline: none!important;
+}
+
+.btn:hover {
+	background-color: #00a86b!important;
+}
+/*#474444*/
+
+/*remove button outline on click*/
+*:focus {
+    outline: 0 !important;
+}
+
+input[type="button"]::-moz-focus-inner {
+   border: 0;
+}
+
+.stgy-info {
+	text-align: center;
+}
+
+.c3-axis-x-label {
+	visibility: hidden;
+}
+
+.c3-axis-y-label {
+	visibility: hidden;
+}
+
+.c3-area {
+	opacity:0.33!important;
+}

@@ -88,10 +88,6 @@ var d3_chart = c3.generate({
 		zerobased: false
 	},
 
-	size: {
-		height:640
-	},
-
 	bindto: "#d3_chart", 
 
 });
