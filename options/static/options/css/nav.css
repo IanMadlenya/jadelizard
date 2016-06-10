@@ -17,6 +17,24 @@
 	background-color:#477bc3!important;
 }
 
+#github {
+	position: absolute;
+	right: -1.5em;
+	top: .75em;
+}
+
+#gsvg {
+	height: 2em;
+}
+
+#gsvg > #octocat {
+	fill: white;
+}
+
+#gsvg > #octocat:hover{
+	fill: #ffc600;
+}
+
 #graph_btn {
 	color: white!important;
  	background-color:#474444!important;

@@ -161,13 +161,6 @@ $(document).ready(function(){
 	var range="auto"
 
 
-
-	// Project Info Modal
-	$('#logo_btn').on('click', function(event){
-		$('#project_info_modal').modal('toggle');
-	});
-
-
 	// Graph 
 	$("#graph_btn").on('click', function(event){
 		graphData()
