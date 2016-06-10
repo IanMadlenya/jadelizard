@@ -1,19 +1,21 @@
 .navbar {
-  background-color:#474444;
+  background-color:#e3e3e3;
   border: 0em;
 }
 
 .nav_button {
- 	color: white!important;
- 	background-color:#474444!important;
+ 	color: #313131!important;
+ 	background-color:#e3e3e3!important;
  	font-size: .92em;
 }
 
 .nav_button:hover{
-	background-color:#477bc3!important;
+	color: white!important;
+	background-color: #477bc3!important;
 }
 
 .nav_button:focus{
+	color: white!important;
 	background-color:#477bc3!important;
 }
 
@@ -28,27 +30,28 @@
 }
 
 #gsvg > #octocat {
-	fill: white;
+	fill: #2b3b44;
 }
 
 #gsvg > #octocat:hover{
-	fill: #ffc600;
+	fill: #477bc3;
 }
 
 #graph_btn {
-	color: white!important;
- 	background-color:#474444!important;
+	color: #313131!important;
+ 	background-color:#e3e3e3!important;
 }
 
 #graph_btn:hover{
+	color: white!important;
 	background-color:#477bc3!important;
 }
 
 #logo_btn {
-	color: white;
+	color: #494949;
 	font-family: 'Josefin Sans', 'Lato', sans-serif!important;
 	font-size: 2em;
-	font-weight: 700;
+	font-weight: 900!important;
 }
 
 #logo_btn:hover {
@@ -64,3 +67,7 @@
     overflow: hidden;
     overflow-y: auto;
 }
+
+
+
+
