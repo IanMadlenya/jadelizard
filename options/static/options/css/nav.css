@@ -48,10 +48,10 @@
 }
 
 #logo_btn {
-	color: #494949;
+	color: #313131;
 	font-family: 'Josefin Sans', 'Lato', sans-serif!important;
 	font-size: 2em;
-	font-weight: 900!important;
+	font-weight: bold;
 }
 
 #logo_btn:hover {
