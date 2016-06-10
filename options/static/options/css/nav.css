@@ -30,11 +30,11 @@
 }
 
 #gsvg > #octocat {
-	fill: #2b3b44;
+	fill: #494949!important;
 }
 
 #gsvg > #octocat:hover{
-	fill: #477bc3;
+	fill: #477bc3!important;
 }
 
 #graph_btn {
