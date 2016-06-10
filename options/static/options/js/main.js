@@ -65,7 +65,6 @@ var getLegs = function(){
 			else{
 				data['longqty'] = stock['longqty']
 				data['shortqty'] = stock['shortqty']
-				console.log(data['longqty'], data['shortqty'])
 				var template = $("#legs_manage_script").html()
 				var rendered = Mustache.render(template, data)
 				$('#manage_legs_div').html(rendered);
@@ -77,14 +76,7 @@ var getLegs = function(){
 
 var getStock = function(){
 	var template = $('#shares_script').html()
-	console.log(template)
 	var rendered = Mustache.render(template, stock)
-	//
-	//
-	console.log(rendered)
-	console.log(stock)
-	//
-	//
 	$('#stock_div').html(rendered);
 }
 
@@ -347,7 +339,6 @@ $(document).ready(function(){
 				}
 				else {
 					showInputSuccess('.stock-input')
-					console.log(data['longqty'], data['shortqty'])
 					stock['longqty'] = data['longqty']
 					stock['shortqty'] = data['shortqty']	
 				}

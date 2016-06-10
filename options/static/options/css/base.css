@@ -44,6 +44,14 @@ body {
 	font-family: 'Lato', sans-serif;
 }
 
+label {
+	font-weight: bold!important;
+}
+
+h5,h6 {
+	font-weight: bold!important;
+}
+
 .btn {
 	background-color: #477bc3!important;
 	border: none!important;
