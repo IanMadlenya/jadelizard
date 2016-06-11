@@ -1,3 +1,4 @@
+
 var render = function(templateSelector, dropZone){
 	var template = $(templateSelector).html();
 	return function(data){
@@ -5,6 +6,23 @@ var render = function(templateSelector, dropZone){
 		$(dropZone).html(rendered);
 	};
 };
+
+
+
+// Currently not supporting Safari due to issues with Bootstrap
+var disableSafari = true
+var safari =  ((navigator.vendor==="Apple Computer, Inc.") ? true : false)
+
+var browserMessage = function(){
+	$('#navbar_div').remove();
+	$('#d3_chart').remove();
+	$('html').css('height','100%');
+	$('body').css({'background-color':'#efefef', 'height':'100%', 'width':'100%'});
+	render('#browser_message', 'body')({});
+}
+
+
+
 
 // Sends JSON data to C3 for graphing
 var graphData = function(options){
@@ -149,6 +167,12 @@ var disableButtons = function(bool){
 }
 
 $(document).ready(function(){
+
+	// Currently not supporting Safari
+	if(safari===true && disableSafari===true){
+		browserMessage()
+		return
+	}
 
 	// Render navbar
 	render('#_nav', "#navbar_div")({});
