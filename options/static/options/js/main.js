@@ -12,8 +12,6 @@ var render = function(templateSelector, dropZone){
 // Currently not supporting Safari due to issues with Bootstrap
 var disableSafari = true
 var safari =  ((navigator.vendor==="Apple Computer, Inc.") ? true : false)
-console.log(navigator.vendor)
-console.log(safari)
 
 // renders full screen error message - browser error or http 4xx
 var browserMessage = function(template){
@@ -27,7 +25,8 @@ var browserMessage = function(template){
 $.ajaxSetup({
 	statusCode: {
 		404: function(){
-			render('#notfound_message', 'body')({});
+			console.log("404 Error")
+			browserMessage('#notfound_message')
 		}
 	}
 })
