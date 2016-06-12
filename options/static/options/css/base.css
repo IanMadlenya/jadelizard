@@ -44,8 +44,8 @@ body {
 	font-family: 'Lato', sans-serif;
 }
 
-label {
-	font-weight: bold!important;
+#legs_form label {
+	font-weight: 300!important;
 }
 
 h5,h6 {
@@ -61,7 +61,6 @@ h5,h6 {
 .btn:hover {
 	background-color: #00a86b!important;
 }
-/*#474444*/
 
 /*remove button outline on click*/
 *:focus {
@@ -85,5 +84,5 @@ input[type="button"]::-moz-focus-inner {
 }
 
 .c3-area {
-	opacity:0.33!important;
+	opacity:0.35!important;
 }

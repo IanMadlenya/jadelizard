@@ -10,7 +10,7 @@ var render = function(templateSelector, dropZone){
 
 
 // Currently not supporting Safari due to issues with Bootstrap
-var disableSafari = true
+var disableSafari = false
 var safari =  ((navigator.vendor==="Apple Computer, Inc.") ? true : false)
 
 var browserMessage = function(){
