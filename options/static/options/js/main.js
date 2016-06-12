@@ -22,7 +22,7 @@ var browserMessage = function(template){
 	render(template, 'body')({});
 }
 
-$.ajaxSetup({
+$(document).ajaxSetup({
 	statusCode: {
 		404: function(){
 			console.log("404 Error")
