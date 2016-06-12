@@ -2,7 +2,7 @@
 from django.conf.urls import url, handler404
 from options import views
 
-handler404 = 'views.error404'
+# handler404 = 'views.error404'
 
 urlpatterns = [
 	url(r'^$', views.Index.as_view(), name='index'),
