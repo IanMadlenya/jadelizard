@@ -13,7 +13,7 @@ var render = function(templateSelector, dropZone){
 var disableSafari = true
 var safari =  ((navigator.vendor==="Apple Computer, Inc.") ? true : false)
 
-// renders full screen error message - browser error or http 4xx
+// renders full screen error message
 var browserMessage = function(template){
 	$('#navbar_div').remove();
 	$('#d3_chart').remove();
@@ -21,16 +21,6 @@ var browserMessage = function(template){
 	$('body').css({'background-color':'#efefef', 'height':'100%', 'width':'100%'});
 	render(template, 'body')({});
 }
-
-$(document).ajaxError({
-	statusCode: {
-		404: function(){
-			console.log("404 Error")
-			browserMessage('#notfound_message')
-		}
-	}
-})
-
 
 // Sends JSON data to C3 for graphing
 var graphData = function(options){
