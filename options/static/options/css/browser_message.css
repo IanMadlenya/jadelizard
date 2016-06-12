@@ -1,4 +1,4 @@
-#browser_message_container {
+.browser_message_container {
 	position: absolute;
 	height: 7em;
 	width: 50%;
@@ -11,4 +11,9 @@
 	color: #313131;
 	background-color: #d7d7d7;
 	font-family: 'Lato', sans-serif;
+}; 
+
+#error404 {
+	font-weight: bold;
+	font-style: italic;
 }

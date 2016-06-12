@@ -10,18 +10,27 @@ var render = function(templateSelector, dropZone){
 
 
 // Currently not supporting Safari due to issues with Bootstrap
-var disableSafari = false
+var disableSafari = true
 var safari =  ((navigator.vendor==="Apple Computer, Inc.") ? true : false)
+console.log(navigator.vendor)
+console.log(safari)
 
-var browserMessage = function(){
+// renders full screen error message - browser error or http 4xx
+var browserMessage = function(template){
 	$('#navbar_div').remove();
 	$('#d3_chart').remove();
 	$('html').css('height','100%');
 	$('body').css({'background-color':'#efefef', 'height':'100%', 'width':'100%'});
-	render('#browser_message', 'body')({});
+	render(template, 'body')({});
 }
 
-
+$.ajaxSetup({
+	statusCode: {
+		404: function(){
+			render('#notfound_message', 'body')({});
+		}
+	}
+})
 
 
 // Sends JSON data to C3 for graphing
@@ -170,7 +179,7 @@ $(document).ready(function(){
 
 	// Currently not supporting Safari
 	if(safari===true && disableSafari===true){
-		browserMessage()
+		browserMessage('#browser_message')
 		return
 	}
 
