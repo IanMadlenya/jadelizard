@@ -7,11 +7,6 @@ from .models import (
 )
 from options.forms import StrategyForm, LegsForm, StockForm, PriceModelForm, VolForm, RangeForm
 
-
-def error404(request): 
-	template = loader.get_template('404.html')
-	return render(request, template, status=404)
-
 def error404(request):
 	response = render('404.html', context_instance=RequestContext(request))
 	response.status_code = 404
@@ -294,4 +289,3 @@ class ResetRange(View):
 
 
 
-				
