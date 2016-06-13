@@ -1,5 +1,5 @@
 ## jadelizard 1.0
-[![screenshot](/screenshots/jadelizard_screenshot1.png?raw=true "jadelizard screenshot")](http://jadelizard.io)
+[![screenshot](/screenshots/jadelizard_screenshot.png?raw=true "jadelizard screenshot")](http://jadelizard.io)
 ##### Live at **[jadelizard.io](http://jadelizard.io)**
 
 #### What it is
@@ -9,7 +9,7 @@ jadelizard is an interactive options strategy graphing calculator.
 * Build Custom Options Strategies
 * Generate Interactive Profit/Loss Graphs for your Strategy with D3/C3.js
 * Valuation with Black-Scholes-Merton or Binomial Tree Models 
-* User Input for Exercise Type and # Tree Steps for Binomial Tree
+* User Input for Exercise Type (American/European) and # Tree Steps for Binomial Tree
 * Calculation of Greek Values for both pricing models
 * Create your own strategy, or choose from 30 Pre-Configured Strategy Templates
 * Set your own Window for Graphing
