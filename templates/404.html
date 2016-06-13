@@ -10,48 +10,48 @@
 	<script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" 
 	crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<style type="text/css">
+	body {
+		background-color:#efefef;
+		height:100%;
+		width:100%;
+	}
+	.btn {
+		background-color: #477bc3!important;
+		border: none!important;
+		outline: none!important;
+	}
+	.btn:hover {
+		background-color: #00a86b!important;
+	}
+	.btn > a{
+		color:white;
+		text-decoration: none;
+	}
+	.browser_message_container {
+		position: absolute;
+		height: 15em;
+		width: 50%;
+		margin: auto auto auto auto;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		text-align: center;
+		color: #313131;
+		background-color: #d7d7d7;
+	}
+	.browser_message_container * {
+		font-family: 'Lato'!important;
+		text-align: center;
+	}
+	#error404 {
+		font-weight: bold;
+		font-style: italic;
+	}
+	</style>
 </head>
 
-<style type="text/css">
-body {
-	background-color:#efefef;
-	height:100%;
-	width:100%;
-}
-.btn {
-	background-color: #477bc3!important;
-	border: none!important;
-	outline: none!important;
-}
-.btn:hover {
-	background-color: #00a86b!important;
-}
-.btn > a{
-	color:white;
-	text-decoration: none;
-}
-.browser_message_container {
-	position: absolute;
-	height: 15em;
-	width: 50%;
-	margin: auto auto auto auto;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	text-align: center;
-	color: #313131;
-	background-color: #d7d7d7;
-}
-.browser_message_container * {
-	font-family: 'Lato'!important;
-	text-align: center;
-}
-#error404 {
-	font-weight: bold;
-	font-style: italic;
-}
-</style>
 <body>
 	<div class="browser_message_container">
 		<h2 id="error404">404</h2>
