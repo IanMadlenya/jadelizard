@@ -1,16 +1,10 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
-from django.template import RequestContext
+from django.http import JsonResponse
 from django.views.generic import View
 from .models import (
 	Strategy, Option, BlackScholes, BinomialTree, Utils, Templates
 )
 from options.forms import StrategyForm, LegsForm, StockForm, PriceModelForm, VolForm, RangeForm
-
-def error404(request):
-	response = render('404.html', context_instance=RequestContext(request))
-	response.status_code = 404
-	return response
 
 class Index(View): 
 	template_name = "options/base.html"
