@@ -5,7 +5,6 @@
 	<title>
 		Not Found
 	</title>
-	<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<link href='https://fonts.googleapis.com/css?family=Lato:700,700italic,400' rel='stylesheet' type='text/css'>
 	<script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" 
@@ -27,9 +26,13 @@ body {
 .btn:hover {
 	background-color: #00a86b!important;
 }
+.btn > a{
+	color:white;
+	text-decoration: none;
+}
 .browser_message_container {
 	position: absolute;
-	height: 7em;
+	height: 15em;
 	width: 50%;
 	margin: auto auto auto auto;
 	left: 0;
@@ -39,8 +42,11 @@ body {
 	text-align: center;
 	color: #313131;
 	background-color: #d7d7d7;
-	font-family: 'Lato', sans-serif;
-}; 
+}
+.browser_message_container * {
+	font-family: 'Lato'!important;
+	text-align: center;
+}
 #error404 {
 	font-weight: bold;
 	font-style: italic;
@@ -53,7 +59,7 @@ body {
 			We can&#39;t find the page you requested.
 		</h3>
 		<br>
-		<button class="btn btn-primary button-lg">
+		<button id="home_btn" class="btn btn-primary btn-lg">
 			<a href="http://jadelizard.io">Home</a>
 		</button>
 	</div>	
