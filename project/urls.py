@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.views.generic.base import RedirectView
+from options import views
 
 urlpatterns = [
 	url(r'^home/', include('options.urls', namespace='home')),
