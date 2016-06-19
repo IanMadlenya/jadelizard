@@ -9,9 +9,9 @@ var render = function(templateSelector, dropZone){
 
 
 
-// Currently not supporting Safari due to issues with Bootstrap
-var disableSafari = true
-var safari =  ((navigator.vendor==="Apple Computer, Inc.") ? true : false)
+// not supporting Safari due to issues with Bootstrap
+var disableSafari = false
+var safari =  ((navigator.vendor==="Apple Computer, Inc." && navigator.platform.includes('Mac')) ? true : false)
 
 // renders full screen error message
 var browserMessage = function(template){
