@@ -1,11 +1,11 @@
 .navbar {
-  background-color:#e3e3e3;
+  background-color:#e8e8e8;
   border: 0em;
 }
 
 .nav_button {
  	color: #313131!important;
- 	background-color:#e3e3e3!important;
+ 	background-color:#e8e8e8!important;
  	font-size: .92em;
 }
 
@@ -39,7 +39,7 @@
 
 #graph_btn {
 	color: #313131!important;
- 	background-color:#e3e3e3!important;
+ 	background-color:#e8e8e8!important;
 }
 
 #graph_btn:hover{

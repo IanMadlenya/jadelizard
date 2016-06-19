@@ -40,10 +40,6 @@ body {
 	width: 99%!important;
 }
 
-#d3_chart:hover{
-	cursor:crosshair;
-}
-
 * {
 	font-family: 'Lato', sans-serif;
 }
