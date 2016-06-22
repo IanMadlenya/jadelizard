@@ -188,7 +188,6 @@ $(document).ready(function(){
 		graphData()
 	});
 
-
 	// Creating and updating custom Options Strategies
 	$('#stgy_btn').on('click', function(event){
 		if(strategy===false){	
@@ -572,8 +571,6 @@ $(document).ready(function(){
 			}
 		});
 	});
-
-
 
 })
 

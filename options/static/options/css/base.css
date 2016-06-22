@@ -1,3 +1,6 @@
+html,body {
+	height:100%!important;
+}
 
 body {
 	background-color: #efefef!important;
@@ -36,6 +39,7 @@ body {
 }
 
 #d3_chart {
+	max-height: 100%!important;
 	height: 100%!important;
 	width: 99%!important;
 }
