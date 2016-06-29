@@ -309,7 +309,7 @@ class Strategy:
 		Returns legs-specific data for display, sorted by strike price
 		"""
 		def compare(item): 
-			return (item["K"], item["position"], item["kind"])
+			return (item["T"], item["K"], item["position"], item["kind"])
 		legs = []
 		for each in self.legs: 
 			option = each["option"]
