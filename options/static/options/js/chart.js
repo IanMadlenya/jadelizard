@@ -16,7 +16,7 @@ var d3_chart = c3.generate({
 
 		colors: {
 			strategy_profit: '#0073e5'
-			// 00a86b
+			// 00a86b jade
 		},
 
 		selection: {

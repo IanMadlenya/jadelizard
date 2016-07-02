@@ -1,11 +1,14 @@
 .navbar {
-  background-color:#e8e8e8;
-  border: 0em;
+  background-color:#f8f8f8;
+  border-left: 0;
+  border-right: 0;
+  border-top: 1px solid rgba(200, 200, 200, .30);
+  border-bottom: 1px solid rgba(200, 200, 200, .30);
 }
 
 .nav_button {
  	color: #313131!important;
- 	background-color:#e8e8e8!important;
+ 	background-color:#f8f8f8!important;
  	font-size: .92em;
 }
 
@@ -21,7 +24,7 @@
 
 #graph_btn {
 	color: #313131!important;
- 	background-color:#e8e8e8!important;
+ 	background-color:#f8f8f8!important;
 }
 
 #graph_btn:hover{
@@ -48,6 +51,11 @@
 .dropdown-menu {
     overflow: hidden;
     overflow-y: auto;
+}
+
+.navbar-toggle {
+	margin-bottom: .25em!important;
+	margin-top: .25em!important;
 }
 
 
