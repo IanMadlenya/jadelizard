@@ -24,15 +24,11 @@
 }
 
 #logo_btn {
-	color: #00a86b;
+	color: #477bc3;
 	font-family: 'Lato', sans-serif!important;
 	font-size: 1.3em;
 	font-weight: bold;
 	padding-left: 1.35em;
-}
-
-#logo_btn:hover {
-	text-decoration: underline;
 }
 
 #template-menu {
