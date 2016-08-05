@@ -49,6 +49,11 @@ class LegsForm(forms.Form):
 	K = forms.FloatField(min_value=1, max_value=1000)
 	T = forms.FloatField(min_value=.01, max_value=20)
 
+	# Convert time to expiration to years for pricing models
+	# def clean(self): 
+	# 	self.cleaned_data = super().clean()
+	# 	self.cleaned_data['T'] = self.cleaned_data['T']/365
+
 class StockForm(forms.Form): 
 	longqty = forms.IntegerField(min_value=0, max_value=100)
 	shortqty = forms.IntegerField(min_value=0, max_value=100)
