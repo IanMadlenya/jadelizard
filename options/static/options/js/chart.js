@@ -85,6 +85,10 @@ var d3_chart = c3.generate({
 		}
 	},
 
+	zoom: {
+		enabled: true,
+	},
+
 	area: {
 		zerobased: false
 	},
