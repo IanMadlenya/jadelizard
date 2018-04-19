@@ -3,8 +3,12 @@ from pandas import np
 from pandas_datareader import data
 import datetime
 from dateutil import parser
+import quandl
 
 class Utils:
+	def __init__(self):
+		api_key="JZzV7qkvGDB5xn7cqQTx"
+		quandl.ApiConfig.api_key = api_key
 
 	@staticmethod
 	def trailing_volatility(ticker, days):
@@ -13,8 +17,10 @@ class Utils:
 		(annualized std deviation of daily log returns) using market close prices.
 		Google API - data available from Jan 4, 2010 to present and is adjusted for stock splits.
 		"""
+
 		try:
-			quotes = data.DataReader(ticker, 'google')['Close'][-days:]
+			ticker_input = "WIKI/" + ticker
+			quotes = quandl.get(ticker_input,order='desc')['Close'][:days]
 		except Exception:
 			return False 
 		logreturns = np.log(quotes / quotes.shift(1))
@@ -34,8 +40,6 @@ class Utils:
 		"monthly":round(monthly,4),
 		"daily":round(daily,4), 
 		}
-
-
 
 
 
